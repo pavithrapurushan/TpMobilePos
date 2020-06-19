@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_gravity="center"
+    android:background="#237C96"
+    android:layout_height="match_parent"
+    tools:context=".CustomerInformation">
+
+    <View
+        android:id="@+id/rectangletop"
+        android:layout_width="1238dp"
+        android:layout_height="72dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/rectangletop"
+        />
+    <TextView
+        android:id="@+id/customer_in"
+        android:layout_width="385dp"
+        android:textSize="36sp"
+        android:layout_marginTop="10dp"
+        android:fontFamily="roboto"
+        android:layout_marginLeft="80dp"
+        android:textColor="#FFFFFF"
+        android:text="Customer Information"
+        android:layout_height="wrap_content" />
+
+
+    <TextView
+        android:layout_width="200dp"
+        android:layout_marginLeft="16dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="104dp"
+        android:text="MOBILE NUMBER"
+        android:textStyle="bold"
+        android:textSize="18sp"
+        android:textColor="#FFFFFF"
+        android:gravity="top"
+
+        />
+    <EditText
+        android:id="@+id/mobile_numb"
+        android:layout_width="548dp"
+        android:layout_height="36dp"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="130dp"
+        android:textSize="24sp"
+        android:textColorHint="#FFFFFF"
+        android:textColor="#FFFFFF"
+        android:alpha="0.64"
+        android:fontFamily="sans-serif-thin"
+        android:background="@android:color/transparent"
+        android:layout_alignParentTop="true"
+        android:textCursorDrawable="@drawable/color_cursor"
+        android:hint="Mobile Number"
+        android:inputType="numberDecimal"
+        />
+    <ImageButton
+        android:id="@+id/searchbtn"
+        android:background="@drawable/search"
+        android:layout_width="31dp"
+        android:layout_marginTop="130dp"
+        android:layout_marginLeft="530dp"
+        android:layout_height="31dp" />
+    <View
+
+        android:layout_width="548dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="170dp"
+        android:layout_marginLeft="16dp"
+        android:gravity="bottom"
+        android:background="@drawable/customername"/>
+
+    />
+    <TextView
+        android:layout_width="197.23dp"
+        android:layout_height="wrap_content"
+        android:textSize="18sp"
+        android:gravity="top"
+        android:textStyle="bold"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="190dp"
+        android:textColor="#FFFFFF"
+        android:text="FULL NAME"/>
+    <EditText
+        android:id="@+id/Customername"
+        android:layout_marginTop="216dp"
+        android:layout_width="640dp"
+        android:layout_height="36dp"
+        android:gravity="bottom"
+        android:fontFamily="sans-serif-thin"
+        android:layout_marginLeft="16dp"
+        android:textColorHint="#ffffff"
+        android:hint="Customer Name"
+        android:textCursorDrawable="@drawable/color_cursor"
+        android:background="@android:color/transparent"
+        android:textColor="#FFFFFF"
+        android:alpha="0.64"
+        android:textSize="24sp" />
+    <View
+        android:id="@+id/vector1"
+        android:layout_width="548dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="256dp"
+        android:layout_marginLeft="16dp"
+        android:background="@drawable/customername"
+
+        />
+
+    <TextView
+        android:id="@+id/email"
+        android:layout_width="197.23dp"
+        android:layout_height="wrap_content"
+        android:text="EMAIL"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:layout_marginTop="276dp"
+        android:layout_marginLeft="16dp"
+        android:textSize="18sp"
+        android:gravity="top"
+        />
+    <EditText
+        android:id="@+id/Customermail"
+        android:layout_width="640dp"
+        android:layout_height="36dp"
+        android:alpha="0.64"
+        android:textSize="24sp"
+        android:fontFamily="sans-serif-thin"
+        android:textCursorDrawable="@drawable/color_cursor"
+        android:hint="Prepare INBOX for amazing offers!!!"
+        android:layout_marginTop="302dp"
+        android:textColorHint="#ffffff"
+        android:background="@android:color/transparent"
+        android:layout_marginLeft="16dp"
+        android:gravity="bottom"
+        />
+    <View
+        android:layout_width="548dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="342dp"
+        android:layout_marginLeft="16dp"
+        android:background="@drawable/customername"
+
+        />
+    <TextView
+        android:id="@+id/doctor"
+        android:layout_width="197.23dp"
+        android:layout_height="wrap_content"
+        android:text="DOCTOR"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:textColor="#FFFFFF"
+        android:layout_marginLeft="16dp"
+        android:layout_marginTop="542dp"
+        android:gravity="top"
+        />
+    <EditText
+        android:id="@+id/prescribingDoctor"
+        android:layout_width="640dp"
+        android:layout_height="36dp"
+        android:layout_marginLeft="16dp"
+        android:textSize="24sp"
+        android:alpha="0.64"
+        android:fontFamily="sans-serif-thin"
+        android:hint="Prescribing Doctor"
+        android:background="@android:color/transparent"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#ffffff"
+        android:textCursorDrawable="@drawable/color_cursor"
+        android:layout_marginTop="568dp"
+        android:gravity="bottom"
+        />
+    <View
+        android:layout_width="548dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="608dp"
+        android:layout_marginLeft="16dp"
+        android:background="@drawable/vector"
+        />
+    <TextView
+        android:id="@+id/address_lin1"
+        android:layout_width="197.23dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="104dp"
+        android:layout_marginLeft="580dp"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:text="ADDRESS 1"
+        android:gravity="top"
+        />
+    <EditText
+        android:id="@+id/address1"
+        android:layout_width="640dp"
+        android:layout_height="36dp"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        android:alpha="0.64"
+        android:fontFamily="sans-serif-thin"
+        android:textColorHint="#ffffff"
+        android:textCursorDrawable="@drawable/color_cursor"
+        android:background="@android:color/transparent"
+        android:layout_marginTop="130dp"
+        android:layout_marginLeft="580dp"
+        android:hint="Address 1"
+        android:gravity="bottom"
+        />
+    <View
+
+        android:layout_width="548dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="170dp"
+        android:layout_marginLeft="580dp"
+        android:background="@drawable/vector"
+        />
+    <TextView
+
+        android:layout_width="197.23dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="190dp"
+        android:layout_marginLeft="580dp"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:text="ADDRESS 2"
+        android:gravity="top"
+        />
+    <EditText
+        android:id="@+id/address2"
+        android:layout_width="640dp"
+        android:layout_height="36dp"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        android:alpha="0.64"
+        android:fontFamily="sans-serif-thin"
+        android:textColorHint="#ffffff"
+        android:textCursorDrawable="@drawable/color_cursor"
+        android:background="@android:color/transparent"
+        android:layout_marginTop="216dp"
+        android:layout_marginLeft="580dp"
+        android:hint="Address 2"
+        android:gravity="bottom"
+        />
+
+    <View
+        android:layout_width="548dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="256dp"
+        android:layout_marginLeft="580dp"
+        android:background="@drawable/customername"
+
+        />
+    <TextView
+        android:id="@+id/address_lin3"
+        android:layout_width="197.23dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="276dp"
+        android:layout_marginLeft="580dp"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:text="ADDRESS 3"
+        android:gravity="top"
+        />
+    <EditText
+        android:id="@+id/address3"
+        android:layout_width="640dp"
+        android:layout_height="36dp"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        android:alpha="0.64"
+        android:fontFamily="sans-serif-thin"
+        android:textColorHint="#ffffff"
+        android:textCursorDrawable="@drawable/color_cursor"
+        android:background="@android:color/transparent"
+        android:layout_marginTop="302dp"
+        android:layout_marginLeft="580dp"
+        android:hint="Address 3"
+        android:gravity="bottom"
+        />
+    <View
+        android:layout_width="548dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="342dp"
+        android:layout_marginLeft="580dp"
+        android:background="@drawable/customername"
+
+        />
+    <TextView
+        android:layout_width="197.23dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="362dp"
+        android:layout_marginLeft="580dp"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:text="PHONE NUMBER 2"
+        android:textStyle="bold"
+        android:gravity="top"
+        />
+    <EditText
+        android:id="@+id/edtmobnumber2"
+        android:layout_width="640dp"
+        android:layout_height="36dp"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        android:alpha="0.64"
+        android:fontFamily="sans-serif-thin"
+        android:textCursorDrawable="@drawable/color_cursor"
+        android:background="@android:color/transparent"
+        android:layout_marginTop="388dp"
+        android:layout_marginLeft="580dp"
+        android:hint="Phone Number 2"
+        android:textColorHint="#ffffff"
+        android:gravity="bottom"
+        />
+    <View
+        android:id="@+id/stateview"
+        android:layout_width="548dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="428dp"
+        android:layout_marginLeft="580dp"
+        android:background="@drawable/customername"
+        />
+    <TextView
+        android:layout_width="197.23dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="448dp"
+        android:layout_marginLeft="580dp"
+        android:textColor="#FFFFFF"
+        android:textSize="18sp"
+        android:textStyle="bold"
+        android:text="LOYALTY CODE"
+        android:gravity="top"
+        />
+    <EditText
+        android:id="@+id/loyalty_code"
+        android:layout_width="540dp"
+        android:layout_height="36dp"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        android:alpha="0.64"
+        android:fontFamily="sans-serif-thin"
+        android:textColorHint="#ffffff"
+        android:textCursorDrawable="@drawable/color_cursor"
+        android:background="@android:color/transparent"
+        android:layout_marginTop="474dp"
+        android:layout_marginLeft="580dp"
+        android:hint="Loyalty Code"
+        android:gravity="bottom"
+
+
+        />
+    <ImageButton
+        android:id="@+id/loyaltysearch"
+        android:background="@drawable/search"
+        android:layout_width="31dp"
+        android:layout_marginTop="474dp"
+        android:layout_marginLeft="879dp"
+        android:layout_height="31dp" />
+    <View
+        android:id="@+id/viewpin"
+        android:layout_width="548dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="524dp"
+        android:layout_marginLeft="580dp"
+        android:background="@drawable/customername"
+        />
+    <View
+        android:layout_marginLeft="972dp"
+        android:id="@+id/rectangle"
+        android:layout_width="153dp"
+        android:layout_height="72dp"
+        android:layout_marginTop="608dp"
+        android:background="@drawable/rectangle"
+        />
+    <TextView
+        android:onClick="submitDetails"
+        android:id="@+id/submit2"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="620dp"
+        android:text="SUBMIT"
+        android:textStyle="bold"
+        android:gravity="center_horizontal|top"
+        android:layout_marginLeft="977dp"
+        android:textSize="36dp"
+        android:textColor="#FFFFFF"
+        />
+</RelativeLayout>

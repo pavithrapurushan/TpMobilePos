@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="1030dp"
+        android:background="#237C96"
+    android:layout_height="fill_parent">
+    <TextView
+        android:id="@+id/title"
+        android:gravity="center"
+        android:textSize="30sp"
+        android:background="#113A4E"
+        android:layout_marginTop="10dp"
+        android:textColor="@color/white"
+        android:text="CREDIT CARD LOOKUP"
+        android:layout_width="1030dp"
+        android:layout_height="50dp" />
+    <Button
+        android:id="@+id/close_dialog"
+        android:layout_marginLeft="980dp"
+        android:layout_marginTop="20dp"
+        android:onClick="closedlg"
+        android:background="@drawable/closebtn"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        />
+    <LinearLayout
+        android:layout_marginLeft="10dp"
+        android:id="@+id/l1"
+        android:layout_marginTop="10dp"
+        android:layout_below="@+id/title"
+        android:background="#113A4E"
+        android:layout_width="1010dp"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+        <TextView
+            android:text="Card Id"
+            android:gravity="right"
+            android:layout_marginLeft="50dp"
+            android:layout_width="100dp"
+            android:layout_marginTop="16dp"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:layout_height="50dp"
+            />
+
+        <TextView
+            android:text="Card Name"
+            android:gravity="left"
+            android:layout_marginLeft="200dp"
+            android:layout_width="174.45dp"
+            android:layout_marginTop="16dp"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:layout_height="50dp"
+            />
+        <TextView
+            android:text="Company"
+            android:gravity="left"
+            android:layout_marginTop="16dp"
+            android:layout_marginLeft="350dp"
+            android:layout_width="150dp"
+            android:textSize="28sp"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:layout_height="50dp"
+            />
+
+    </LinearLayout>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/cardlist"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/l1"
+        android:layout_marginLeft="10dp"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="10dp"
+        android:scrollbars="vertical" />
+
+</RelativeLayout>
+
+

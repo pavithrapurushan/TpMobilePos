@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:background="#113a4e"
+    android:layout_height="match_parent"
+    tools:context=".LoginActivity">
+<TextView
+    android:layout_width="443dp"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="102dp"
+    android:layout_marginLeft="467dp"
+    android:text="Sign In"
+    android:textStyle="bold"
+    android:fontFamily="sans-serif"
+    android:textColor="@color/white"
+    android:textSize="64sp"
+    />
+
+    <TextView
+        android:layout_width="443dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="300dp"
+        android:layout_marginLeft="467dp"
+        android:text="USER NAME"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif"
+        android:textColor="@color/white"
+        android:textSize="21sp"
+        />
+    <EditText
+        android:id="@+id/username"
+        android:layout_width="375dp"
+        android:layout_height="36dp"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        android:alpha="0.64"
+        android:fontFamily="sans-serif-thin"
+        android:textColorHint="#ffffff"
+        android:textCursorDrawable="@drawable/color_cursor"
+        android:background="@android:color/transparent"
+        android:layout_marginTop="333dp"
+        android:layout_marginLeft="467dp"
+        android:hint="Enter your user name"
+        android:gravity="bottom"
+        />
+
+    <View
+        android:layout_width="375dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="366dp"
+        android:layout_marginLeft="467dp"
+        android:background="@drawable/customername"
+
+        />
+    <TextView
+        android:layout_width="443dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="393dp"
+        android:layout_marginLeft="467dp"
+        android:text="PASSWORD"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif"
+        android:textColor="@color/white"
+        android:textSize="21sp"
+        />
+    <EditText
+        android:id="@+id/password"
+        android:layout_width="375dp"
+        android:layout_height="36dp"
+        android:textColor="#FFFFFF"
+        android:textSize="24sp"
+        android:alpha="0.64"
+        android:inputType="textPassword"
+        android:fontFamily="sans-serif-thin"
+        android:textColorHint="#ffffff"
+        android:textCursorDrawable="@drawable/color_cursor"
+        android:background="@android:color/transparent"
+        android:layout_marginTop="419dp"
+        android:layout_marginLeft="467dp"
+        android:hint="Enter Password"
+        android:gravity="bottom"
+        />
+
+    <View
+        android:layout_width="375dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="459dp"
+        android:layout_marginLeft="467dp"
+        android:background="@drawable/customername"/>
+    <View
+        android:layout_marginLeft="467dp"
+        android:id="@+id/rectangle"
+        android:layout_width="153dp"
+        android:layout_height="72dp"
+        android:layout_marginTop="497dp"
+        android:background="@drawable/rectangle"/>
+
+    <TextView
+        android:onClick="login"
+        android:id="@+id/txtlogin"
+        android:layout_width="140dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="510dp"
+        android:text="SUBMIT"
+        android:textStyle="bold"
+        android:gravity="center_horizontal|top"
+        android:layout_marginLeft="467dp"
+        android:textSize="36dp"
+        android:textColor="#FFFFFF"/>
+
+</RelativeLayout>

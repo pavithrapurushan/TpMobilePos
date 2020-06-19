@@ -1,0 +1,715 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<!--Added by 1165 on 05-05-2020-->
+
+<RelativeLayout android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".PaymentActivity"
+    android:fillViewport="true"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+
+
+    <!--Commented by 1165 on 05-05-2020-->
+<!--<ScrollView android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--xmlns:tools="http://schemas.android.com/tools"-->
+    <!--tools:context=".PaymentActivity"-->
+    <!--android:fillViewport="true"-->
+    <!--xmlns:android="http://schemas.android.com/apk/res/android" >-->
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:orientation="horizontal"
+    android:layout_alignParentLeft="true"
+    android:layout_gravity="center"
+    android:background="#237C96"
+    android:layout_height="match_parent">
+
+    <!--android:background="#237C96"-->
+
+    <View
+        android:id="@+id/rectangletop"
+        android:layout_width="1238dp"
+        android:layout_height="72dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/rectangletop"/>
+
+    <!--android:layout_height="72dp"-->
+
+
+    <TextView
+        android:id="@+id/customer_in"
+        android:layout_width="385dp"
+        android:textSize="36sp"
+        android:layout_marginTop="10dp"
+        android:fontFamily="roboto"
+        android:layout_marginLeft="80dp"
+        android:textColor="#FFFFFF"
+        android:text="Payment Window"
+        android:layout_height="wrap_content"/>
+
+    <!--<TextView-->
+        <!--android:layout_width="547dp"-->
+        <!--android:layout_height="72dp"-->
+        <!--android:fontFamily="sans-serif"-->
+        <!--android:layout_marginLeft="15dp"-->
+        <!--android:textSize="24sp"-->
+        <!--android:textColor="@android:color/background_dark"-->
+        <!--android:gravity="center"-->
+        <!--android:text="Pay Rs 212.00 through SBI Debit Card"-->
+        <!--android:layout_marginTop="92dp"-->
+        <!--android:background="@drawable/submit"-->
+        <!--android:visibility="gone"/>-->
+
+    <!--<TextView-->
+        <!--android:layout_width="561dp"-->
+        <!--android:layout_height="72dp"-->
+        <!--android:layout_marginLeft="578dp"-->
+        <!--android:textSize="24sp"-->
+        <!--android:textColor="@android:color/background_dark"-->
+        <!--android:gravity="center"-->
+        <!--android:text="Jeeth has 21350 Loyalty Points. Redeem Now."-->
+        <!--android:layout_marginTop="92dp"-->
+        <!--android:background="@drawable/submit"-->
+        <!--android:visibility="gone"/>-->
+
+    <LinearLayout
+        android:layout_width="110dp"
+        android:layout_height="400dp"
+        android:layout_marginTop="100dp"
+        android:background="#005068"
+        android:layout_marginLeft="20dp"
+        android:orientation="vertical">
+
+        <!--android:layout_marginTop="184dp"-->  <!-- previous-->
+
+        <ImageButton
+            android:id="@+id/cash"
+            android:layout_width="23.75dp"
+            android:layout_height="42dp"
+            android:layout_marginLeft="40.75dp"
+            android:layout_marginTop="24dp"
+            android:background="@drawable/cash"/>
+
+        <ImageButton
+            android:id="@+id/card"
+            android:layout_width="46.67dp"
+            android:layout_height="42dp"
+            android:layout_marginLeft="30.75dp"
+            android:layout_marginTop="38dp"
+            android:background="@drawable/pay2" />
+
+        <ImageButton
+            android:id="@+id/wallet"
+            android:layout_width="46.67dp"
+            android:layout_height="42dp"
+            android:layout_marginLeft="30.75dp"
+            android:layout_marginTop="38dp"
+            android:background="@drawable/pay3" />
+
+        <ImageButton
+            android:id="@+id/upi"
+            android:layout_width="46.67dp"
+            android:layout_height="42dp"
+            android:layout_marginLeft="30.75dp"
+            android:layout_marginTop="29dp"
+            android:background="@drawable/upi" />
+
+        <ImageButton
+            android:id="@+id/loyalty"
+            android:layout_width="46.67dp"
+            android:layout_height="42dp"
+            android:layout_marginLeft="30.75dp"
+            android:layout_marginTop="25dp"
+            android:background="@drawable/pay5" />
+
+    </LinearLayout>
+    <LinearLayout
+        android:background="#005068"
+        android:layout_width="1050dp"
+        android:layout_marginTop="100dp"
+
+        android:layout_marginLeft="160dp"
+        android:layout_height="400dp">
+        <!--android:layout_marginTop="184dp"-->
+
+    </LinearLayout>
+    <RelativeLayout
+        android:id="@+id/cardLayout"
+        android:layout_width="1000dp"
+        android:layout_height="400dp"
+        android:layout_marginLeft="150dp"
+        android:layout_marginTop="100dp"
+
+        android:background="#005068">
+
+<!--        android:layout_marginTop="184dp"
+-->
+
+        <TextView
+            android:layout_width="99dp"
+            android:layout_height="56dp"
+            android:layout_marginLeft="31dp"
+            android:layout_marginTop="32dp"
+            android:fontFamily="sans-serif"
+            android:text="Card"
+            android:textColor="@color/white"
+            android:textSize="36sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/edtcreditcard"
+            android:layout_width="586.71dp"
+            android:layout_height="60.12dp"
+            android:layout_marginLeft="178dp"
+            android:layout_marginTop="15dp"
+            android:gravity="left"
+            android:text=""
+            android:textColor="#FFBB33"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/cardsearchbtn"
+            android:layout_width="46.64dp"
+            android:layout_height="46.64dp"
+            android:layout_marginLeft="684dp"
+            android:layout_marginTop="20.12dp"
+            android:background="@drawable/search" />
+
+        <TextView
+
+            android:layout_width="146dp"
+            android:layout_height="56dp"
+            android:layout_marginLeft="31dp"
+            android:layout_marginTop="165dp"
+            android:fontFamily="sans-serif"
+            android:text="Amount:"
+            android:textColor="@color/white"
+            android:textSize="36sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/cardamount"
+            android:layout_width="161dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="178dp"
+            android:layout_marginTop="140dp"
+            android:gravity="left"
+            android:inputType="numberDecimal"
+            android:text=""
+            android:textColor="#FFBB33"
+            android:textSize="40sp"
+            android:textStyle="bold"
+            />
+
+        <!--android:layout_height="60.12dp"-->
+        <!--android:layout_marginTop="155dp"-->
+        <!--android:textSize="40sp"-->
+
+
+
+
+        <TextView
+            android:layout_width="170dp"
+            android:layout_height="56dp"
+            android:layout_marginLeft="430dp"
+            android:layout_marginTop="165dp"
+            android:fontFamily="sans-serif"
+            android:text="AU Code:"
+            android:textColor="@color/white"
+            android:textSize="36sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/etAUCode"
+            android:layout_width="344dp"
+            android:layout_height="60.12dp"
+            android:layout_marginLeft="600dp"
+            android:layout_marginTop="155dp"
+            android:gravity="left"
+            android:text=""
+            android:textColor="#FFBB33"
+            android:textSize="40sp"
+            android:textStyle="bold" />
+        <Button
+            android:id="@+id/cardsubmitbtn"
+            android:textStyle="bold"
+            android:textSize="36dp"
+            android:textColor="@color/white"
+            android:text="ADD"
+            android:background="@drawable/submit"
+            android:layout_marginLeft="700dp"
+            android:layout_marginTop="300dp"
+            android:layout_width="153dp"
+            android:layout_height="72dp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/cashLayout"
+        android:layout_width="1000dp"
+        android:layout_height="400dp"
+        android:layout_marginLeft="150dp"
+        android:layout_marginTop="100dp"
+        >
+
+        <!--android:layout_marginTop="184dp"-->
+
+        <TextView
+            android:layout_width="99dp"
+            android:layout_height="56dp"
+            android:layout_marginLeft="31dp"
+            android:layout_marginTop="32dp"
+            android:fontFamily="sans-serif"
+            android:text="Cash"
+            android:textColor="@color/white"
+            android:textSize="36sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="146dp"
+            android:layout_height="56dp"
+            android:layout_marginLeft="31dp"
+            android:layout_marginTop="165dp"
+            android:fontFamily="sans-serif"
+            android:text="Amount:"
+            android:textColor="@color/white"
+            android:textSize="36sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/cashamount"
+            android:layout_width="161dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="178dp"
+            android:layout_marginTop="140dp"
+            android:gravity="left"
+            android:inputType="numberDecimal"
+            android:text=""
+            android:textColor="#FFBB33"
+            android:textSize="40sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/cashsubmitbtn"
+            android:textStyle="bold"
+            android:textSize="36dp"
+            android:textColor="@color/white"
+            android:text="ADD"
+            android:background="@drawable/submit"
+            android:layout_marginLeft="700dp"
+            android:layout_marginTop="300dp"
+            android:layout_width="153dp"
+            android:layout_height="72dp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/walletLayout"
+        android:layout_width="1000dp"
+        android:layout_height="400dp"
+        android:layout_marginLeft="150dp"
+        android:layout_marginTop="100dp">
+
+        <TextView
+            android:layout_width="112dp"
+            android:layout_height="56dp"
+            android:layout_marginLeft="31dp"
+            android:layout_marginTop="32dp"
+            android:fontFamily="sans-serif"
+            android:text="Wallet"
+            android:textColor="@color/white"
+            android:textSize="36sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/edtwallet"
+            android:layout_width="586.71dp"
+            android:layout_height="60.12dp"
+            android:layout_marginLeft="178dp"
+            android:layout_marginTop="15dp"
+            android:gravity="left"
+            android:text=""
+            android:textColor="#FFBB33"
+            android:textSize="30sp"
+            android:textStyle="bold" />
+
+        <ImageButton
+            android:id="@+id/walletsearchbtn"
+            android:layout_width="46.64dp"
+            android:layout_height="46.64dp"
+            android:layout_marginLeft="684dp"
+            android:layout_marginTop="20.12dp"
+            android:background="@drawable/search" />
+
+        <TextView
+            android:layout_width="146dp"
+            android:layout_height="56dp"
+            android:layout_marginLeft="31dp"
+            android:layout_marginTop="165dp"
+            android:fontFamily="sans-serif"
+            android:text="Amount:"
+            android:textColor="@color/white"
+            android:textSize="36sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/walletamount"
+            android:layout_width="161dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="178dp"
+            android:layout_marginTop="140dp"
+            android:gravity="left"
+            android:inputType="numberDecimal"
+            android:text = ""
+            android:textColor="#FFBB33"
+            android:textSize="40sp"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="170dp"
+            android:layout_height="56dp"
+            android:layout_marginLeft="430dp"
+            android:layout_marginTop="165dp"
+            android:fontFamily="sans-serif"
+            android:text="AU Code:"
+            android:textColor="@color/white"
+            android:textSize="36sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:id="@+id/etWalletAUCode"
+            android:layout_width="344dp"
+            android:layout_height="60.12dp"
+            android:layout_marginLeft="600dp"
+            android:layout_marginTop="155dp"
+            android:gravity="left"
+            android:text=""
+            android:textColor="#FFBB33"
+            android:textSize="40sp"
+            android:textStyle="bold" />
+        <Button
+            android:textStyle="bold"
+            android:textSize="36dp"
+            android:textColor="@color/white"
+            android:text="ADD"
+            android:id="@+id/walletsubmitbtn"
+            android:background="@drawable/submit"
+            android:layout_marginLeft="700dp"
+            android:layout_marginTop="300dp"
+            android:layout_width="153dp"
+            android:layout_height="72dp" />
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/upiLayout"
+        android:layout_width="1000dp"
+        android:layout_height="400dp"
+        android:layout_marginLeft="150dp"
+        android:layout_marginTop="100dp">
+
+        <TextView
+            android:layout_width="99dp"
+            android:layout_height="56dp"
+            android:layout_marginLeft="31dp"
+            android:layout_marginTop="32dp"
+            android:fontFamily="sans-serif"
+            android:text="UPI"
+            android:textColor="@color/white"
+            android:textSize="36sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:layout_width="586.71dp"
+            android:layout_height="60.12dp"
+            android:layout_marginLeft="178dp"
+            android:layout_marginTop="15dp"
+            android:gravity="left"
+            android:text="abcd@gmail.com"
+            android:textColor="#FFBB33"
+            android:textSize="40sp"
+            android:textStyle="bold" />
+
+        <ImageButton
+
+            android:layout_width="46.64dp"
+            android:layout_height="46.64dp"
+            android:layout_marginLeft="684dp"
+            android:layout_marginTop="20.12dp"
+            android:background="@drawable/search" />
+
+        <TextView
+            android:layout_width="146dp"
+            android:layout_height="56dp"
+            android:layout_marginLeft="31dp"
+            android:layout_marginTop="165dp"
+            android:fontFamily="sans-serif"
+            android:text="Amount:"
+            android:textColor="@color/white"
+            android:textSize="36sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:layout_width="161dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="178dp"
+            android:layout_marginTop="140dp"
+            android:gravity="left"
+            android:text=""
+            android:textColor="#FFBB33"
+            android:textSize="40sp"
+            android:textStyle="bold" />
+
+
+        <Button
+            android:textStyle="bold"
+            android:textSize="36dp"
+            android:textColor="@color/white"
+            android:text="ADD"
+            android:background="@drawable/submit"
+            android:layout_marginLeft="700dp"
+            android:layout_marginTop="300dp"
+            android:layout_width="153dp"
+            android:layout_height="72dp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/LoyaltyLayout"
+        android:layout_width="1000dp"
+        android:layout_height="400dp"
+        android:layout_marginLeft="150dp"
+        android:layout_marginTop="100dp">
+
+        <TextView
+            android:layout_width="245dp"
+            android:layout_height="56dp"
+            android:layout_marginLeft="31dp"
+            android:layout_marginTop="32dp"
+            android:fontFamily="sans-serif"
+            android:text="Lotalty Points"
+            android:textColor="@color/white"
+            android:textSize="36sp"
+            android:textStyle="bold" />
+
+
+
+
+        <TextView
+            android:layout_width="146dp"
+            android:layout_height="56dp"
+            android:layout_marginLeft="31dp"
+            android:layout_marginTop="165dp"
+            android:fontFamily="sans-serif"
+            android:text="Amount:"
+            android:textColor="@color/white"
+            android:textSize="36sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:layout_width="161dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="178dp"
+            android:layout_marginTop="140dp"
+            android:gravity="left"
+            android:text=""
+            android:textColor="#FFBB33"
+            android:textSize="40sp"
+            android:textStyle="bold" />
+        <TextView
+            android:layout_width="289dp"
+            android:layout_height="56dp"
+            android:layout_marginLeft="410dp"
+            android:layout_marginTop="54dp"
+            android:fontFamily="sans-serif"
+            android:text=" Points available:"
+            android:textColor="@color/white"
+            android:textSize="36sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:layout_width="244dp"
+            android:layout_height="60.12dp"
+            android:layout_marginLeft="700dp"
+            android:layout_marginTop="44dp"
+            android:gravity="left"
+            android:text="2000"
+            android:textColor="#FFBB33"
+            android:textSize="40sp"
+            android:textStyle="bold" />
+        <TextView
+            android:layout_width="289dp"
+            android:layout_height="56dp"
+            android:layout_marginLeft="410dp"
+            android:layout_marginTop="165dp"
+            android:fontFamily="sans-serif"
+            android:text="Points redeemed:"
+            android:textColor="@color/white"
+            android:textSize="36sp"
+            android:textStyle="bold" />
+
+        <EditText
+            android:layout_width="244dp"
+            android:layout_height="60.12dp"
+            android:layout_marginLeft="700dp"
+            android:layout_marginTop="155dp"
+            android:gravity="left"
+            android:textColor="#FFBB33"
+            android:textSize="40sp"
+            android:textStyle="bold" />
+        <Button
+            android:textStyle="bold"
+            android:textSize="36dp"
+            android:textColor="@color/white"
+            android:text="ADD"
+            android:background="@drawable/submit"
+            android:layout_marginLeft="700dp"
+            android:layout_marginTop="300dp"
+            android:layout_width="153dp"
+            android:layout_height="72dp" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:background="#005068"
+        android:layout_marginTop="520dp"
+        android:layout_width="1238dp"
+        android:layout_height="200dp"
+        >
+        <!--android:layout_height="180dp"-->
+        <!--android:layout_marginTop="604dp"-->  <!-- Prev when having scrolling-->
+
+
+        <!--android:layout_height="200dp"-->
+
+
+        <!--android:background="#005068"-->
+
+
+        <!--android:layout_height="164dp">-->
+
+
+        <!--android:layout_marginTop="604dp"-->
+
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginLeft="42dp">
+
+            <TextView
+                android:layout_marginLeft="12dp"
+                android:textSize="28sp"
+                android:textColor="@color/white"
+                android:layout_width="75dp"
+                android:layout_height="36dp"
+                android:text="Items"/>
+            <TextView
+                android:layout_marginLeft="197dp"
+                android:textSize="28sp"
+                android:textColor="@color/white"
+                android:layout_width="123dp"
+                android:layout_height="36dp"
+                android:text="Bill Total"/>
+            <TextView
+                android:layout_marginLeft="202dp"
+                android:textSize="28sp"
+                android:textColor="@color/white"
+                android:layout_width="200dp"
+                android:layout_height="36dp"
+                android:text="Payment Total"/>
+            <TextView
+                android:layout_marginLeft="181dp"
+                android:textSize="28sp"
+                android:textColor="@color/white"
+                android:layout_width="200dp"
+                android:layout_height="36dp"
+                android:text="Balance"/>
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_marginTop="50dp"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_marginLeft="42dp"
+            android:id="@+id/llBillTotalBalnce">
+
+            <!--android:layout_marginTop="80dp"-->
+
+            <!--android:textSize="64sp"-->
+
+            <TextView
+                android:id="@+id/items"
+                android:layout_marginLeft="12dp"
+                android:textSize="44sp"
+                android:textColor="#FFBB33"
+                android:layout_width="75dp"
+                android:layout_height="66dp"
+                android:text=""
+                />
+            <TextView
+                android:id="@+id/billtotal"
+                android:layout_marginLeft="197dp"
+                android:textSize="44sp"
+                android:textColor="#FFBB33"
+                android:layout_width="200dp"
+                android:layout_height="66dp"
+                android:text=""/>
+            <!--android:layout_width="135dp"-->
+
+            <!--android:layout_width="123dp"-->
+
+            <TextView
+                android:id="@+id/paymenttotal"
+                android:layout_marginLeft="202dp"
+                android:textSize="44sp"
+                android:textColor="#00FF00"
+                android:layout_width="200dp"
+                android:layout_height="68dp"
+                android:text=""/>
+            <TextView
+                android:id="@+id/balance"
+                android:layout_marginLeft="115dp"
+                android:textSize="44sp"
+                android:gravity="right"
+                android:textColor="#FF073A"
+                android:layout_width="200dp"
+                android:layout_height="66dp"
+                android:text=""
+                android:paddingRight="15dp"/>
+
+            <!--android:layout_height="66dp"-->
+
+        </LinearLayout>
+
+        <Button
+            android:layout_width="225dp"
+            android:layout_height="50dp"
+            android:id="@+id/btnPaymntTndrList"
+            android:text="Payment TenderList"
+            android:layout_toLeftOf="@+id/btnSaveBill"
+            android:background="@drawable/submit"
+            android:textColor="@color/white"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="15dp"
+            android:layout_marginRight="10dp"
+            android:padding="2dp"
+            android:textSize="20dp" />
+
+        <Button
+            android:layout_width="153dp"
+            android:layout_height="50dp"
+            android:id="@+id/btnSaveBill"
+            android:text="save"
+            android:textSize="36dp"
+            android:textColor="@color/white"
+            android:background="@drawable/submit"
+            android:layout_alignRight="@+id/llBillTotalBalnce"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="15dp"
+            android:layout_marginRight="15dp"/>
+        <!--android:layout_alignParentBottom="true"-->
+
+    </RelativeLayout>
+</RelativeLayout>
+</RelativeLayout>
