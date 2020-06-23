@@ -351,6 +351,7 @@ public class ProductLookupAdapter extends ArrayAdapter<ProductModel> implements 
             super.onPostExecute(str);
             Prdetail = new ProductDetailsResponsePL();
             gson = new Gson();
+
             if(strGetPrdetails.equals("")||strGetPrdetails == null){
                 Toast.makeText(mContext, "No result from GetProductDetailsAsync", Toast.LENGTH_SHORT).show();
             }else {

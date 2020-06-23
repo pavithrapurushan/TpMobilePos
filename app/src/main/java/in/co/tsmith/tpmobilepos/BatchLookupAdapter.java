@@ -526,10 +526,11 @@ public class BatchLookupAdapter extends ArrayAdapter<BatchModel> implements View
 
                 if(isRepeatItem){
                     billdetail.QtyInPacks = String.valueOf(new_qty);
-                }else{
+                }else {
 //                    billdetail.QtyInPacks = "1";
                     billdetail.QtyInPacks = String.valueOf(packquantity);
                 }
+
 
                 billdetail.QtyInUnits = "0";
                 billdetail.UPerPack = listProducts.get(0).UPERPACK;
@@ -653,12 +654,27 @@ public class BatchLookupAdapter extends ArrayAdapter<BatchModel> implements View
                         if(isRepeatItem){
 
                         }else {
+
+                            //Commented by Pavithra on 22-06-2020
+//                            listModel.add(0, new Model(listProducts.get(0).ITEMID, "" + listProducts.get(0).ITEMCODE, "" + listProducts.get(0).MRP,
+//                                    "" + listProducts.get(0).PACKNAME, "" + listProducts.get(0).UNITNAME, "" + listProducts.get(0).COMPANY, "" + listProducts.get(0).TAXRATE,
+//                                    "" + listProducts.get(0).TAXID, "" + batchDetailsObj.BatchCode, "" + batchDetailsObj.BatchId
+//                                    , "" + batchDetailsObj.ExpiryDate, "" + batchDetailsObj.PackRate, "" + batchDetailsObj.MRP
+//                                    , "" + listProducts.get(0).SOHINUNITS, "" + listProducts.get(0).SOHINPACKS, "" + listProducts.get(0).ITEMNAME, "" + batchDetailsObj.UnitRate,
+//                                    "" + listProducts.get(0).UPERPACK, String.valueOf(packquantity)));
+
+
+
+                            //Added by Pavithra on 22-06-2020
+                            // for the time being local Batchid added instead of from API
+
                             listModel.add(0, new Model(listProducts.get(0).ITEMID, "" + listProducts.get(0).ITEMCODE, "" + listProducts.get(0).MRP,
                                     "" + listProducts.get(0).PACKNAME, "" + listProducts.get(0).UNITNAME, "" + listProducts.get(0).COMPANY, "" + listProducts.get(0).TAXRATE,
-                                    "" + listProducts.get(0).TAXID, "" + batchDetailsObj.BatchCode, "" + batchDetailsObj.BatchId
+                                    "" + listProducts.get(0).TAXID, "" + batchDetailsObj.BatchCode, "" + batchId
                                     , "" + batchDetailsObj.ExpiryDate, "" + batchDetailsObj.PackRate, "" + batchDetailsObj.MRP
                                     , "" + listProducts.get(0).SOHINUNITS, "" + listProducts.get(0).SOHINPACKS, "" + listProducts.get(0).ITEMNAME, "" + batchDetailsObj.UnitRate,
                                     "" + listProducts.get(0).UPERPACK, String.valueOf(packquantity)));
+
                         }
 
 
@@ -1037,7 +1053,7 @@ public class BatchLookupAdapter extends ArrayAdapter<BatchModel> implements View
                     billroundoff.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.RoundOff)));
                     billtotal.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.NetAmount)));
 
-                    //To pass to Payementactivity
+                    //To pass to Paymentactivity
 
                     SalessummaryDetail salessummaryDetailObj = new SalessummaryDetail();
 
@@ -1046,13 +1062,13 @@ public class BatchLookupAdapter extends ArrayAdapter<BatchModel> implements View
 
 //                    salessummaryDetailObj.BillSeries = billAmountResponse.SalesSummary.BillSeries;
 //                    salessummaryDetailObj.BillNo = billAmountResponse.SalesSummary.BillNo;//Original  cant us  since same bill number coming
+
                     salessummaryDetailObj.BillDate = billAmountResponse.SalesSummary.BillDate;
 
                     if(loyalty_code.equals("")) {
                         salessummaryDetailObj.Customer = customerDetailObj.Customer;
                         if (customerDetailObj.CustId != null) {
                             salessummaryDetailObj.CustId = Integer.parseInt(customerDetailObj.CustId);
-
                         }
                         salessummaryDetailObj.LoyaltyId = "0";
                         salessummaryDetailObj.LoyaltyCode = "";

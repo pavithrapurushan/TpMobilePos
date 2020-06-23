@@ -2,13 +2,12 @@ package in.co.tsmith.tpmobilepos;
 
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
+import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,7 +18,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ListView;
-import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -35,14 +33,11 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.URL;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.List;
 
+public class PaymentActivityNew extends AppCompatActivity {
 
-//Modified by Pavithra on 18-06-2020
-
-public class PaymentActivity extends AppCompatActivity {
     public static final String JSON_STRING="{\"CARD\":{\"CARDID\":\"9\",\"CARDNAME\":\"COD\",\"COMPANY\":\"\"}}";
     ImageButton btncash,btncard,btnwallet,btnupi,btnloyalty;
     Button cashsubmitbtn,cardsubmitbtn,walltsubmitbtn;
@@ -95,6 +90,16 @@ public class PaymentActivity extends AppCompatActivity {
     boolean isDeletd = false;
 
     boolean IsSaveEnabled = false;
+
+    Paymentdetail paymentdetailObj;
+
+    //Added by Pavithra on 23-06-2020
+    Double dblbalance = 0.00;
+    Double dblpaymenttotal = 0.00; //Paymenttotal from corresponding textviews
+    String old_payment_total = ""; //Paymenttotal from prefs(sum of all payments made by user)
+
+    Double totalAmountCustomerGiven = 0.00;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -182,14 +187,12 @@ public class PaymentActivity extends AppCompatActivity {
             btnSaveBill.setEnabled(true);
         } else {
             btnSaveBill.setEnabled(false);
-
         }
-
 
         // Below items and billtotal settext added by 1165 on 05-05-2020
 
         if (SalesdetailPLObjStr.equals("") || SalessummaryDetailObjStr.equals("")) {
-            Toast.makeText(PaymentActivity.this, "No items added for payment", Toast.LENGTH_SHORT).show();
+            Toast.makeText(PaymentActivityNew.this, "No items added for payment", Toast.LENGTH_SHORT).show();
         } else {
             Double dblbalance = 0.00;
             items.setText(NumberOfItemsStr);
@@ -229,32 +232,32 @@ public class PaymentActivity extends AppCompatActivity {
                     public void onClick(View view) {
 
                         if (cashamount.getText().toString().equals("")) {
-                            Toast.makeText(PaymentActivity.this, "Fields cannot be empty", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(PaymentActivityNew.this, "Fields cannot be empty", Toast.LENGTH_SHORT).show();
                         } else {
 
-                            Paymentdetail paymentdetailObj = new Paymentdetail();
-                            prefs = PreferenceManager.getDefaultSharedPreferences(PaymentActivity.this);
+                            paymentdetailObj = new Paymentdetail();
+                            prefs = PreferenceManager.getDefaultSharedPreferences(PaymentActivityNew.this);
 
                             SalesdetailPLObjStr = prefs.getString("SalesdetailPLObjStr", "");
                             SalessummaryDetailObjStr = prefs.getString("SalessummaryDetailObjStr", "");
 
                             if (SalesdetailPLObjStr.equals("") || SalessummaryDetailObjStr.equals("")) {
-                                Toast.makeText(PaymentActivity.this, "No items added for payment", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(PaymentActivityNew.this, "No items added for payment", Toast.LENGTH_SHORT).show();
                             } else {
-                                Double dblbalance = 0.00;
+                                dblbalance = 0.00;
                                 items.setText(NumberOfItemsStr);
                                 billtotal.setText(String.format("%.2f", Double.valueOf(salessummaryDetail.NetAmount)));
 
-                                Double dblpaymenttotal = Double.valueOf(cashamount.getText().toString());
+                                dblpaymenttotal = Double.valueOf(cashamount.getText().toString());
 
-                                String old_payment_total = prefs.getString("PaymentTotal", "");
+                                old_payment_total = prefs.getString("PaymentTotal", "");
 
                                 if (old_payment_total.equals(""))
                                     old_payment_total = "0.00";
 
                                 if (Double.valueOf(old_payment_total) >= Double.valueOf(salessummaryDetail.NetAmount)) {
 
-                                    Toast.makeText(PaymentActivity.this, "No Need to add more money", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(PaymentActivityNew.this, "No Need to add more money", Toast.LENGTH_SHORT).show();
 
                                 } else {
                                     //added by 1165 on 20-02-2020  for invalid double ""
@@ -265,13 +268,15 @@ public class PaymentActivity extends AppCompatActivity {
                                     paymenttotal.setText(String.format("%.2f", dblpaymenttotal));
                                     editor = prefs.edit();
                                     editor.putString("PaymentTotal", String.valueOf(dblpaymenttotal));
+                                    editor.putString("TotAmountCustomerGiven", String.valueOf(dblpaymenttotal));
                                     editor.commit();
-
 
                                     if (shprfsBalance.equals("") || shprfsBalance.equals("0.0")) {
                                         paymenttotal.setText(String.format("%.2f", dblpaymenttotal));
                                         editor = prefs.edit();
                                         editor.putString("PaymentTotal", paymenttotal.getText().toString());
+                                        editor.putString("TotAmountCustomerGiven", paymenttotal.getText().toString());
+
                                         editor.commit();
                                         Double dblbilltotal = Double.valueOf(billtotal.getText().toString());
                                         if (dblbilltotal > dblpaymenttotal) {
@@ -281,8 +286,8 @@ public class PaymentActivity extends AppCompatActivity {
                                         } else {
                                             dblbalance = dblpaymenttotal - dblbilltotal;
                                             balance.setTextColor(Color.GREEN);
-
                                         }
+
                                         balance.setText(String.format("%.2f", dblbalance));
                                     } else {
                                         Double tempbalance = Double.parseDouble(shprfsBalance);
@@ -291,14 +296,18 @@ public class PaymentActivity extends AppCompatActivity {
                                         if (dblbilltotal > dblpaymenttotal) {
                                             dblbalance = dblbilltotal - dblpaymenttotal;
                                             balance.setTextColor(Color.RED);
+
                                         } else {
                                             dblbalance = dblpaymenttotal - dblbilltotal;
                                             balance.setTextColor(Color.GREEN);
-
                                         }
+
                                         paymenttotal.setText(String.format("%.2f", dblpaymenttotal));
                                         editor = prefs.edit();
                                         editor.putString("PaymentTotal", paymenttotal.getText().toString());
+                                        editor.putString("TotAmountCustomerGiven", paymenttotal.getText().toString());
+
+
                                         editor.commit();
                                         balance.setText(String.format("%.2f", dblbalance));
                                     }
@@ -377,13 +386,13 @@ public class PaymentActivity extends AppCompatActivity {
                     public void onClick(View view) {
 
                         if (cardamount.getText().toString().equals("")) {
-                            Toast.makeText(PaymentActivity.this, "Fields cannot be empty", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(PaymentActivityNew.this, "Fields cannot be empty", Toast.LENGTH_SHORT).show();
                         } else {
 
                             SalesdetailPLObjStr = prefs.getString("SalesdetailPLObjStr", "");
                             SalessummaryDetailObjStr = prefs.getString("SalessummaryDetailObjStr", "");
                             if (SalesdetailPLObjStr.equals("") || SalessummaryDetailObjStr.equals("")) {
-                                Toast.makeText(PaymentActivity.this, "No items added for payment", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(PaymentActivityNew.this, "No items added for payment", Toast.LENGTH_SHORT).show();
 
                             } else {
 
@@ -397,7 +406,7 @@ public class PaymentActivity extends AppCompatActivity {
                                 }
                                 if (Double.valueOf(old_payment_total) >= Double.valueOf(salessummaryDetail.NetAmount)) {
 
-                                    Toast.makeText(PaymentActivity.this, "No Need to add more money", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(PaymentActivityNew.this, "No Need to add more money", Toast.LENGTH_SHORT).show();
 
                                 } else {
 
@@ -456,7 +465,7 @@ public class PaymentActivity extends AppCompatActivity {
                                     editor.commit();
 
                                     //Added by 1165 on 24-01-2020
-                                    Paymentdetail paymentdetailObj = new Paymentdetail();
+                                    paymentdetailObj = new Paymentdetail();
                                     paymentdetailObj.CurrencyId = "";
                                     paymentdetailObj.CurrencyNumber = "";
                                     paymentdetailObj.CurrencyDenom = "";
@@ -478,7 +487,6 @@ public class PaymentActivity extends AppCompatActivity {
                                     receivedAmt = dblpaymenttotal;
 
                                     String tempTender = "";
-
 
                                     if (receivedAmt < Double.valueOf(salessummaryDetail.NetAmount)) {
                                         paymentdetailObj.PaidAmount = cardamount.getText().toString();
@@ -524,13 +532,13 @@ public class PaymentActivity extends AppCompatActivity {
                     public void onClick(View view) {
 
                         if (walletamount.getText().toString().equals("")) {
-                            Toast.makeText(PaymentActivity.this, "Fields cannot be empty", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(PaymentActivityNew.this, "Fields cannot be empty", Toast.LENGTH_SHORT).show();
                         } else {
 
                             SalesdetailPLObjStr = prefs.getString("SalesdetailPLObjStr", "");
                             SalessummaryDetailObjStr = prefs.getString("SalessummaryDetailObjStr", "");
                             if (SalesdetailPLObjStr.equals("") || SalessummaryDetailObjStr.equals("")) {
-                                Toast.makeText(PaymentActivity.this, "No items added for payment", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(PaymentActivityNew.this, "No items added for payment", Toast.LENGTH_SHORT).show();
                             } else {
                                 Double dblbalance = 0.00;
                                 items.setText(NumberOfItemsStr);
@@ -545,7 +553,7 @@ public class PaymentActivity extends AppCompatActivity {
                                 }
 
                                 if (Double.valueOf(old_payment_total) >= Double.valueOf(salessummaryDetail.NetAmount)) {
-                                    Toast.makeText(PaymentActivity.this, "No Need to add more money", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(PaymentActivityNew.this, "No Need to add more money", Toast.LENGTH_SHORT).show();
                                 } else {
                                     if (old_payment_total.equals(""))
                                         old_payment_total = "0.00";
@@ -591,7 +599,7 @@ public class PaymentActivity extends AppCompatActivity {
                                     editor.putString(shrbalance, strblns);
                                     editor.commit();
                                     //Added by 1165 on 24-01-2020
-                                    Paymentdetail paymentdetailObj = new Paymentdetail();
+                                    paymentdetailObj = new Paymentdetail();
                                     paymentdetailObj.CurrencyId = "";
                                     paymentdetailObj.CurrencyNumber = "";
                                     paymentdetailObj.CurrencyDenom = "";
@@ -688,13 +696,13 @@ public class PaymentActivity extends AppCompatActivity {
             public void onClick(View view) {
 
                 if (cashamount.getText().toString().equals("")) {
-                    Toast.makeText(PaymentActivity.this, "Fields cannot be empty", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PaymentActivityNew.this, "Fields cannot be empty", Toast.LENGTH_SHORT).show();
                 } else {
 
                     SalesdetailPLObjStr = prefs.getString("SalesdetailPLObjStr", "");
                     SalessummaryDetailObjStr = prefs.getString("SalessummaryDetailObjStr", "");
                     if (SalesdetailPLObjStr.equals("") || SalessummaryDetailObjStr.equals("")) {
-                        Toast.makeText(PaymentActivity.this, "No items added for payment", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PaymentActivityNew.this, "No items added for payment", Toast.LENGTH_SHORT).show();
                     } else {
                         final String shprfsBalance = prefs.getString(shrbalance, "");
 
@@ -714,7 +722,7 @@ public class PaymentActivity extends AppCompatActivity {
 
                         if (Double.valueOf(old_payment_total) >= Double.valueOf(salessummaryDetail.NetAmount)) {
 
-                            Toast.makeText(PaymentActivity.this, "No Need to add more money", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(PaymentActivityNew.this, "No Need to add more money", Toast.LENGTH_SHORT).show();
 
 
                         } else {
@@ -765,7 +773,7 @@ public class PaymentActivity extends AppCompatActivity {
                             editor.putString(shrbalance, strblns);
                             editor.commit();
 
-                            Paymentdetail paymentdetailObj = new Paymentdetail();
+                            paymentdetailObj = new Paymentdetail();
 
                             paymentdetailObj.CurrencyId = "";
                             paymentdetailObj.CurrencyNumber = "";
@@ -820,7 +828,7 @@ public class PaymentActivity extends AppCompatActivity {
                 editor.commit();
 
 
-                dialog = new Dialog(PaymentActivity.this);
+                dialog = new Dialog(PaymentActivityNew.this);
                 dialog.setContentView(R.layout.payment_tenderlist_row);
                 dialog.setCanceledOnTouchOutside(false);
                 dialog.setTitle("Product Lookup");
@@ -839,7 +847,7 @@ public class PaymentActivity extends AppCompatActivity {
                 btnCancelPopUP.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(PaymentActivity.this, "Cancelling...", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PaymentActivityNew.this, "Cancelling...", Toast.LENGTH_SHORT).show();
                         dialog.dismiss();
 
                         isDeletd = prefs.getBoolean("IsDeleted", false);
@@ -850,15 +858,6 @@ public class PaymentActivity extends AppCompatActivity {
                             for (int i = 0; i < paymentdetailsList.size(); i++) {
                                 pay_total = pay_total + Double.valueOf(paymentdetailsList.get(i).PaidAmount);
                             }
-
-
-                            //Commented by Pavithra on 19-06-2020
-
-//                            Double blnce = Double.valueOf(salessummaryDetail.NetAmount) - pay_total;
-//                            paymenttotal.setText(String.valueOf(pay_total));
-//                            balance.setText(String.valueOf(blnce));
-
-                            //check greater or smmall
 
                             if (Double.valueOf(salessummaryDetail.NetAmount) > pay_total) {
                                 Double blance = Double.valueOf(salessummaryDetail.NetAmount) - pay_total;
@@ -884,7 +883,7 @@ public class PaymentActivity extends AppCompatActivity {
                         arr[j] = paymentdetailsList.get(j).CardName;
                     }
 
-                    paymentTenderListAdapter = new PaymentTenderListAdapter(PaymentActivity.this, arr, paymentdetailsList);
+                    paymentTenderListAdapter = new PaymentTenderListAdapter(PaymentActivityNew.this, arr, paymentdetailsList);
                     paymentTenderListView.setAdapter(paymentTenderListAdapter);
 
                 }
@@ -903,14 +902,12 @@ public class PaymentActivity extends AppCompatActivity {
                 }
                 Double netamount = Double.valueOf(salessummaryDetail.NetAmount);
                 Log.d("PA", "NetAmount = " + netamount + " PaidAmount = " + paidAmountTotal);
-//                if(paid_amount.equals(salessummaryDetail.NetAmount )) {
                 if (paidAmountTotal.equals(netamount)) {
 
-//                    salessummaryDetail  update billno and bill series of the particular field
                     new MobPosGetNextBillNumberTask().execute();
 
                 } else {
-                    Toast.makeText(PaymentActivity.this, "Netamount and paidamount should be same", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PaymentActivityNew.this, "Netamount and paidamount should be same", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -923,7 +920,7 @@ public class PaymentActivity extends AppCompatActivity {
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-            pDialog = new ProgressDialog(PaymentActivity.this);
+            pDialog = new ProgressDialog(PaymentActivityNew.this);
             pDialog.setMessage("Loading...");
             pDialog.setCancelable(false);
             pDialog.show();
@@ -950,7 +947,7 @@ public class PaymentActivity extends AppCompatActivity {
                 try {
                     if (nextBillNoResponsePLObj.ErrorStatus == 0) {
 
-                        prefs = PreferenceManager.getDefaultSharedPreferences(PaymentActivity.this);
+                        prefs = PreferenceManager.getDefaultSharedPreferences(PaymentActivityNew.this);
                         SharedPreferences.Editor editor = prefs.edit();
 
                         editor.putString("BillSeries",nextBillNoResponsePLObj.NextBillNo.get(0).BillSeries);
@@ -960,13 +957,13 @@ public class PaymentActivity extends AppCompatActivity {
                         new MobPosSaveBillTask().execute();
 
                     } else {
-                        Toast.makeText(PaymentActivity.this, "" + nextBillNoResponsePLObj.Message, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PaymentActivityNew.this, "" + nextBillNoResponsePLObj.Message, Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception ex) {
-                    Toast.makeText(PaymentActivity.this, "" + ex, Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PaymentActivityNew.this, "" + ex, Toast.LENGTH_SHORT).show();
                 }
             } else {
-                Toast.makeText(PaymentActivity.this, "No result from web", Toast.LENGTH_SHORT).show();
+                Toast.makeText(PaymentActivityNew.this, "No result from web", Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -1030,7 +1027,7 @@ public class PaymentActivity extends AppCompatActivity {
 
 
         if (SalesdetailPLObjStr.equals("") || SalessummaryDetailObjStr.equals("")) {
-            Toast.makeText(PaymentActivity.this, "No items added for payment", Toast.LENGTH_SHORT).show();
+            Toast.makeText(PaymentActivityNew.this, "No items added for payment", Toast.LENGTH_SHORT).show();
         } else {
             Double dblbalance = 0.00;
 
@@ -1088,7 +1085,7 @@ public class PaymentActivity extends AppCompatActivity {
     }
 
     private class MobPosSaveBillTask extends AsyncTask<String,String,String> {
-        ProgressDialog progressDialog = new ProgressDialog(PaymentActivity.this);
+        ProgressDialog progressDialog = new ProgressDialog(PaymentActivityNew.this);
 
         @Override
         protected void onPreExecute() {
@@ -1111,7 +1108,7 @@ public class PaymentActivity extends AppCompatActivity {
             }
 
             if(strSaveBillResponse.equals("")||strSaveBillResponse == null){
-                Toast.makeText(PaymentActivity.this, "No result from web Save", Toast.LENGTH_SHORT).show();
+                Toast.makeText(PaymentActivityNew.this, "No result from web Save", Toast.LENGTH_SHORT).show();
             } else {
                 try {
                     JSONObject jresponse = new JSONObject(strSaveBillResponse);
@@ -1119,7 +1116,7 @@ public class PaymentActivity extends AppCompatActivity {
                     String message = jresponse.getString("Message");
 
                     if(error_status.equals("0")){
-                        Toast.makeText(PaymentActivity.this, ""+message, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PaymentActivityNew.this, ""+message, Toast.LENGTH_SHORT).show();
                         String bill_id = jresponse.getString("Billid");
                         String bill_series = jresponse.getString("BillSeries");
                         String bill_no = jresponse.getString("BillNo");
@@ -1147,7 +1144,7 @@ public class PaymentActivity extends AppCompatActivity {
 //                        etAUCodeWallet.setText("");
 
                     }else{
-                        Toast.makeText(PaymentActivity.this, ""+message, Toast.LENGTH_SHORT).show();
+                        Toast.makeText(PaymentActivityNew.this, ""+message, Toast.LENGTH_SHORT).show();
                     }
                 } catch (JSONException e) {
                     e.printStackTrace();
@@ -1243,166 +1240,9 @@ public class PaymentActivity extends AppCompatActivity {
         balance.setText("");
     }
 
-   /* public void cardLook(View view) {
-        EditText edtcreditCard=(EditText)findViewById(R.id.edtcreditcard);
-        final Dialog dialog = new Dialog(PaymentActivity.this);
-
-        dialog.setContentView(R.layout.payment_card_lookup_layout);
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.setTitle("Credit card Lookup");
-        final CreditCardList[] myListData = new CreditCardList[]{
-                new CreditCardList("9", "COD", " "),
-                new CreditCardList("11", "COD - Blue Dart", ""),
-                new CreditCardList("10", "eCommerce Portal Payments", ""),
-        };
-        final RecyclerView recyclerView   = (RecyclerView) dialog.findViewById(R.id.cardlist);
-         final CreditCardLookupAdapter adapter = new CreditCardLookupAdapter(myListData,edtcreditCard);
-
-        SearchView searchView = (SearchView) dialog.findViewById(R.id.searchView);
-        Button okbtn=(Button)dialog.findViewById(R.id.ok_button);
-        Button cancelbtn=(Button)dialog.findViewById(R.id.cancel_button);
-        //  Button closebtn=(Button)dialog.findViewById(R.id.close_dialog);
-       recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        //  View h+
-        //  headerView = dialog.getLayoutInflater().inflate(R.layout.loyaltycustomer_header, null);
-
-      //  recyclerView.setAdapter(adapter);
-        //searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-          //  @Override
-        //    public boolean onQueryTextSubmit(String query) {
-
-           /*     if(myListData.c.contains(query)){
-                    adapter.getFilter().filter(query);
-                }else{
-                    Toast.makeText(MainActivity.this, "No Match found",Toast.LENGTH_LONG).show();
-                } */
-         //       return false;
-          //  }
-
-      /*  try {
-            JSONObject emp = (new JSONObject(JSON_STRING)).getJSONObject("CARD");
-            String cardid = emp.getString("CARDID");
-            String cardname = emp.getString("CARDNAME");
-            Toast.makeText(this, ""+cardid, Toast.LENGTH_SHORT).show();
-        } catch (Exception e)
-        {
-
-        } */
-    /*    okbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-        cancelbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
-
-
-        }  */
-
-   /* public void walletlookup(View view) {
-
-        EditText edtwallet=(EditText)findViewById(R.id.edtwallet);
-        final Dialog dialog = new Dialog(PaymentActivity.this);
-        dialog.setContentView(R.layout.walletlookup);
-        dialog.setCanceledOnTouchOutside(false);
-        dialog.setTitle("Wallet Lookup");
-        final Walletlist[] myListData = new Walletlist[]{
-                new Walletlist("6", "Mobikwik Wallet", " "),
-                new Walletlist("7", "PayTM", ""),
-        };
-        final RecyclerView recyclerView = (RecyclerView) dialog.findViewById(R.id.walletlist);
-        SearchView searchView = (SearchView) dialog.findViewById(R.id.searchView);
-        Button okbtn=(Button)dialog.findViewById(R.id.ok_button);
-        Button cancelbtn=(Button)dialog.findViewById(R.id.cancel_button);
-        //  Button closebtn=(Button)dialog.findViewById(R.id.close_dialog);
-        final WalletLookupAdapter adapter = new WalletLookupAdapter(myListData,edtwallet);
-        recyclerView.setHasFixedSize(true);
-        recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        //  View h+
-        //  headerView = dialog.getLayoutInflater().inflate(R.layout.loyaltycustomer_header, null);
-
-        recyclerView.setAdapter(adapter);
-        //searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
-        //  @Override
-        //    public boolean onQueryTextSubmit(String query) {
-
-           /*     if(myListData.c.contains(query)){
-                    adapter.getFilter().filter(query);
-                }else{
-                    Toast.makeText(MainActivity.this, "No Match found",Toast.LENGTH_LONG).show();
-                } */
-        //       return false;
-        //  }
-
-     /*  try {
-
-           JSONObject jObj = new JSONObject(JSON_STRING);
-           JSONArray jsonArry = jObj.getJSONArray("CARD");
-
-           for(int i=0;i<jsonArry.length();i++){
-
-               //HashMap<String,String> user = new HashMap<>();
-               JSONObject obj = jsonArry.getJSONObject(i);
-               Toast.makeText(this, ""+obj.getString("CARDID"), Toast.LENGTH_SHORT).show();
-               //user.put("name",obj.getString("name"));
-             //  user.put("designation",obj.getString("designation"));
-               //user.put("location",obj.getString("location"));
-              // userList.add(user);
-           }
-
-            JSONObject emp = (new JSONObject(JSON_STRING)).getJSONObject("CARD");
-            String cardid = emp.getString("CARDID");
-            String cardname = emp.getString("CARDNAME");
-           // Toast.makeText(this, ""+cardid, Toast.LENGTH_SHORT).show();
-        } catch (Exception e)
-        {
-
-        }
-        okbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-        cancelbtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
-
-
-    } */
-
-
-    public void submitwallet(View view) {
-
-        items.setText("3");
-        billtotal.setText("212");
-        paymenttotal.setText("120.00");
-        balance.setText("92");
-
-    }
-
-    public void submitcard(View view) {
-
-        items.setText("3");
-        billtotal.setText("212");
-        paymenttotal.setText("120.00");
-        balance.setText("92");
-    }
-
     private class CreditcardSearchAsyncTask  extends AsyncTask<String, String, String> {
 
-        ProgressDialog progressDialog = new ProgressDialog(PaymentActivity.this);
+        ProgressDialog progressDialog = new ProgressDialog(PaymentActivityNew.this);
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -1411,7 +1251,7 @@ public class PaymentActivity extends AppCompatActivity {
         }
         @Override
         protected String doInBackground(String... strings) {
-             edtcreditCard=(EditText)findViewById(R.id.edtcreditcard);
+            edtcreditCard=(EditText)findViewById(R.id.edtcreditcard);
 //            Url = "http://tsmith.co.in/MobPOS/api/GetCreditCardLookUp";
             Url = AppConfig.app_url+"GetCreditCardLookUp"; //Modified by 1165 on 30-05-2020
 
@@ -1454,14 +1294,14 @@ public class PaymentActivity extends AppCompatActivity {
                     progressDialog.dismiss();
                 }
                 gson = new Gson();
-                 CREDITCARDLOOKUP creditcardlookup=new CREDITCARDLOOKUP();
+                CREDITCARDLOOKUP creditcardlookup=new CREDITCARDLOOKUP();
 
                 ArrayList<CARD> creditcardlist = new ArrayList<>();
                 CreditCardLookUpResponse creditCardLookUpResponse = new CreditCardLookUpResponse();
                 creditCardLookUpResponse = gson.fromJson(s, CreditCardLookUpResponse.class);
                 ArrayList<CreditCardList> creditcarditems = new ArrayList<>();
                 List<CARD>   Card= creditCardLookUpResponse.CreditCardlookup.Card;
-               // LoyaltyCustomerList[] myListData = new LoyaltyCustomerList[0];
+                // LoyaltyCustomerList[] myListData = new LoyaltyCustomerList[0];
                 // Toast.makeText(CustomerInformation.this, "helloo", Toast.LENGTH_SHORT).show();
                 if(creditcardlookup.ErrorStatus==1)
                 {
@@ -1469,18 +1309,18 @@ public class PaymentActivity extends AppCompatActivity {
                 }
                 //   name=LoyaltyCustomer.get(i).Name;
                 else {
-                    final Dialog dialog = new Dialog(PaymentActivity.this);
+                    final Dialog dialog = new Dialog(PaymentActivityNew.this);
                     dialog.setContentView(R.layout.payment_card_lookup_layout);
                     dialog.setCanceledOnTouchOutside(false);
                     dialog.setTitle("Credit Card Lookup");
                     final RecyclerView recyclerView  = (RecyclerView) dialog.findViewById(R.id.cardlist);
-                  final CreditCardLookupAdapter adapter = new CreditCardLookupAdapter(creditcarditems,edtcreditCard,dialog);
-                   recyclerView.setAdapter(adapter);
-                  for (int i = 0; i < Card.size(); i++) {
+                    final CreditCardLookupAdapter adapter = new CreditCardLookupAdapter(creditcarditems,edtcreditCard,dialog);
+                    recyclerView.setAdapter(adapter);
+                    for (int i = 0; i < Card.size(); i++) {
                         CARD card = Card.get(i);
 
-                       creditcarditems.add(new CreditCardList("" + card.CARDID, "" + card.CARDNAME, "" +card.COMPANY));
-                       adapter.notifyDataSetChanged();
+                        creditcarditems.add(new CreditCardList("" + card.CARDID, "" + card.CARDNAME, "" +card.COMPANY));
+                        adapter.notifyDataSetChanged();
 
 
                         // myListData = new LoyaltyCustomerList[]{
@@ -1508,7 +1348,7 @@ public class PaymentActivity extends AppCompatActivity {
     }
 
     private class WalletSearchAsyncTask extends AsyncTask<String,String,String> {
-        ProgressDialog progressDialog = new ProgressDialog(PaymentActivity.this);
+        ProgressDialog progressDialog = new ProgressDialog(PaymentActivityNew.this);
         protected void onPreExecute() {
             super.onPreExecute();
             progressDialog.setMessage("processing...");
@@ -1571,7 +1411,7 @@ public class PaymentActivity extends AppCompatActivity {
                 }
                 //   name=LoyaltyCustomer.get(i).Name;
                 else {
-                    final Dialog dialog = new Dialog(PaymentActivity.this);
+                    final Dialog dialog = new Dialog(PaymentActivityNew.this);
                     dialog.setContentView(R.layout.walletlookup);
                     dialog.setCanceledOnTouchOutside(false);
                     dialog.setTitle("Wallet Card Lookup");
@@ -1606,10 +1446,11 @@ public class PaymentActivity extends AppCompatActivity {
                     // Toast.makeText(CustomerInformation.this, ""+myListData, Toast.LENGTH_SHORT).show();
                 }
 
-               // Toast.makeText(PaymentActivity.this, ""+s, Toast.LENGTH_SHORT).show();
+                // Toast.makeText(PaymentActivity.this, ""+s, Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
 
             }
         }
     }
+
 }

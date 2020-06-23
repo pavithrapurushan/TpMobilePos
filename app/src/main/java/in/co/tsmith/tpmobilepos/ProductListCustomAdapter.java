@@ -286,11 +286,14 @@ public class ProductListCustomAdapter extends ArrayAdapter<Model> implements Vie
                 connection.setConnectTimeout(30000);
                 CalcRow c = new CalcRow();
                 Billrow billdetail = new Billrow();
-                billdetail.SlNo = "1";
+//                billdetail.SlNo = "1";
+//                billdetail.SlNo = String.valueOf(list.size());;
+                billdetail.SlNo = String.valueOf(pos + 1);
                 billdetail.ItemId = list.get(pos).ItemId;
                 billdetail.ItemName = list.get(pos).tvItemName;
                 billdetail.ItemCode = list.get(pos).ItemCode;
-                billdetail.BatchId = "0";
+//                billdetail.BatchId = "0";
+                billdetail.BatchId = list.get(pos).BatchId;
                 billdetail.BatchCode = list.get(pos).BatchCode;
                 billdetail.TaxId = list.get(pos).TaxId;
                 billdetail.QtyInPacks = list.get(pos).etQty;

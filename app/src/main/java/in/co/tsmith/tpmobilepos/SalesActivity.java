@@ -825,7 +825,7 @@ public class SalesActivity extends AppCompatActivity {
         billAmountResponse = gson1.fromJson(strBillAmountResponse, BillAmountResponse.class);
 
 //        billno.setText(String.valueOf(billAmountResponse.SalesSummary.BillSeries + "" + billAmountResponse.SalesSummary.BillNo));
-        billno.setText(String.valueOf(bill_series+ "" + bill_no));
+        billno.setText(String.valueOf(bill_series + "" + bill_no));
         num = l2.getAdapter().getCount();
         numofitems.setText(String.valueOf(num));
         itemtotal.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.TotalAmount)));
@@ -848,7 +848,7 @@ public class SalesActivity extends AppCompatActivity {
 //        salessummaryDetailObj.Customer = "Test";
 //        salessummaryDetailObj.CustId = 0;
 
-        if(loyalty_code.equals("")) {
+        if (loyalty_code.equals("")) {
             salessummaryDetailObj.Customer = customerDetailObj.Customer;
             if (customerDetailObj.CustId != null) {
                 salessummaryDetailObj.CustId = Integer.parseInt(customerDetailObj.CustId);
@@ -856,13 +856,12 @@ public class SalesActivity extends AppCompatActivity {
 
             salessummaryDetailObj.LoyaltyId = "0";
             salessummaryDetailObj.LoyaltyCode = "";
-        }else{
+        } else {
             salessummaryDetailObj.Customer = loyaltyCustomerObj.Name;
 //            salessummaryDetailObj.CustId = Integer.parseInt(loyaltyCustomerObj.LoyaltyId);
 
             salessummaryDetailObj.LoyaltyId = loyaltyCustomerObj.LoyaltyId;
             salessummaryDetailObj.LoyaltyCode = loyaltyCustomerObj.EmpCode;
-
         }
 //        salessummaryDetailObj.CustId = Integer.parseInt(billAmountResponse.SalesSummary.Customer.CustId);
         salessummaryDetailObj.CustType = billAmountResponse.SalesSummary.CustType;
@@ -892,8 +891,8 @@ public class SalesActivity extends AppCompatActivity {
         editor.putString("SalessummaryDetailObjStr", salessummaryDetailObjStr);
         editor.putString("NumberOfItems", String.valueOf(num));
         editor.commit();
-       }
-    }
+     }
+   }
 
     private void mobPosCalculateBillAmount() {
 
@@ -907,7 +906,6 @@ public class SalesActivity extends AppCompatActivity {
             CalcBillAmount calcBillAmount = new CalcBillAmount();
             Salesbill salesbill = new Salesbill();
             Salesdetail salesdetail = new Salesdetail();
-
 
 
             CustomerPL customerPL = new CustomerPL();
