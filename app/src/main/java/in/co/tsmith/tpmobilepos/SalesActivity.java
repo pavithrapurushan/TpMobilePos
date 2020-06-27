@@ -194,7 +194,8 @@ public class SalesActivity extends AppCompatActivity {
             new MobPosGetNextBillNumberTask().execute();
         }
 
-        adapter = new ProductListCustomAdapter(listModel, SalesActivity.this, l2, billno,numofitems, itemtotal, taxtotal, billtotal, billroundoff);
+//        adapter = new ProductListCustomAdapter(listModel, SalesActivity.this, l2, billno,numofitems, itemtotal, taxtotal, billtotal, billroundoff);
+        adapter = new ProductListCustomAdapter(listModel, SalesActivity.this, l2, billno,numofitems, itemtotal,disctotal, taxtotal,billdisc, billtotal, billroundoff);
 
         //On EnterKey Press in EditText of BarCode
 
@@ -507,7 +508,7 @@ public class SalesActivity extends AppCompatActivity {
 
                     CalcRow c = new CalcRow();
                     Billrow billdetail = new Billrow();
-                    billdetail.SlNo = String.valueOf(listModel.size());//Same Serial number generated duplicate key row error from procedure
+//                    billdetail.SlNo = String.valueOf(listModel.size()+1);//Same Serial number generated duplicate key row error from procedure
                     billdetail.ItemId = listProductDetail.get(0).ItemId;
                     billdetail.ItemName = listProductDetail.get(0).ItemName;
                     billdetail.ItemCode = listProductDetail.get(0).ItemCode;
@@ -518,9 +519,12 @@ public class SalesActivity extends AppCompatActivity {
                     billdetail.ExpiryDate = listProductDetail.get(0).BatchExpiry;
 
                     if(isRepeatItem){
+                        Log.d("Value OF P = ",""+p);
                         billdetail.QtyInPacks = String.valueOf(new_qty);
-                    }else{
+                        billdetail.SlNo = String.valueOf(listModel.size()- p);
+                    }else {
                         billdetail.QtyInPacks = "1";
+                        billdetail.SlNo = String.valueOf(listModel.size() + 1);
                     }
 
                     billdetail.QtyInUnits = "0";

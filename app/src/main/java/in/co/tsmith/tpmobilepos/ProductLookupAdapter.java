@@ -313,7 +313,7 @@ public class ProductLookupAdapter extends ArrayAdapter<ProductModel> implements 
             strGetPrdetails = "";
             try {
 //                URL url = new URL("http://tsmith.co.in/MobPOS/api/GetProductDetails?filter=" + pmid);
-                URL url = new URL(AppConfig.app_url+"GetProductDetails?filter=" + pmid); //Modified by Pavithra on 30-05-2020
+                URL url = new URL(AppConfig.app_url + "GetProductDetails?filter=" + pmid); //Modified by Pavithra on 30-05-2020
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
                 connection.setReadTimeout(15000);
@@ -321,15 +321,19 @@ public class ProductLookupAdapter extends ArrayAdapter<ProductModel> implements 
                 connection.setRequestProperty("Content-Type", "application/json");
                 connection.setRequestProperty("auth_key", "BFD2E5AC-101F-47ED-AB49-C2D18EE5EA97");
                 connection.connect();
+
                 try {
                     InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
                     BufferedReader reader = new BufferedReader(streamReader);
                     StringBuilder sb = new StringBuilder();
                     String inputLine = "";
+
+
                     while ((inputLine = reader.readLine()) != null) {
                         sb.append(inputLine);
                         break;
                     }
+
                     reader.close();
 //                    result1 = sb.toString();
                     strGetPrdetails = sb.toString();
@@ -337,15 +341,18 @@ public class ProductLookupAdapter extends ArrayAdapter<ProductModel> implements 
                 } finally {
                     connection.disconnect();
                 }
+
             } catch (Exception e) {
                 Log.e("ERROR", e.getMessage(), e);
                 return null;
             }
+
 //            return result1;
             return strGetPrdetails;
         }
 
         @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+
         @Override
         protected void onPostExecute(String str) {
             super.onPostExecute(str);

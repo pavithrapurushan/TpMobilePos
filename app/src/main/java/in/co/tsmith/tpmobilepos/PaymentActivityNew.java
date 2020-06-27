@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -30,6 +31,7 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.lang.reflect.Type;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.URL;
@@ -65,6 +67,8 @@ public class PaymentActivityNew extends AppCompatActivity {
     SalessummaryDetail salessummaryDetail;
 
     List<Paymentdetail> paymentdetailsList;
+    List<Paymentdetail> paymentdetailsListForAPISave;
+
     EditText edtcardname;
     EditText etAUCode;
     EditText etWalletname;
@@ -124,6 +128,8 @@ public class PaymentActivityNew extends AppCompatActivity {
 
         setContentView(R.layout.activity_payment);
 
+        Toast.makeText(this, "New PaymentActivity", Toast.LENGTH_SHORT).show();
+
         salessummaryDetail = new SalessummaryDetail();
         salesdetailPLObj = new Salesdetail();
 
@@ -181,6 +187,7 @@ public class PaymentActivityNew extends AppCompatActivity {
         btncash.setAlpha(0.30f);
 
         paymentdetailsList = new ArrayList<>(); //Added by 1165 on 08-02-2020
+        paymentdetailsListForAPISave = new ArrayList<>(); //Added by 1165 on 08-02-2020
 
         IsSaveEnabled = prefs.getBoolean("SaveEnabled", false);
         if (IsSaveEnabled) {
@@ -234,7 +241,6 @@ public class PaymentActivityNew extends AppCompatActivity {
                         if (cashamount.getText().toString().equals("")) {
                             Toast.makeText(PaymentActivityNew.this, "Fields cannot be empty", Toast.LENGTH_SHORT).show();
                         } else {
-
                             paymentdetailObj = new Paymentdetail();
                             prefs = PreferenceManager.getDefaultSharedPreferences(PaymentActivityNew.this);
 
@@ -260,22 +266,20 @@ public class PaymentActivityNew extends AppCompatActivity {
                                     Toast.makeText(PaymentActivityNew.this, "No Need to add more money", Toast.LENGTH_SHORT).show();
 
                                 } else {
-                                    //added by 1165 on 20-02-2020  for invalid double ""
                                     if (old_payment_total.equals(""))
                                         old_payment_total = "0.00";
+
                                     dblpaymenttotal = dblpaymenttotal + Double.valueOf(old_payment_total);
 
                                     paymenttotal.setText(String.format("%.2f", dblpaymenttotal));
                                     editor = prefs.edit();
                                     editor.putString("PaymentTotal", String.valueOf(dblpaymenttotal));
-                                    editor.putString("TotAmountCustomerGiven", String.valueOf(dblpaymenttotal));
                                     editor.commit();
 
                                     if (shprfsBalance.equals("") || shprfsBalance.equals("0.0")) {
                                         paymenttotal.setText(String.format("%.2f", dblpaymenttotal));
                                         editor = prefs.edit();
                                         editor.putString("PaymentTotal", paymenttotal.getText().toString());
-                                        editor.putString("TotAmountCustomerGiven", paymenttotal.getText().toString());
 
                                         editor.commit();
                                         Double dblbilltotal = Double.valueOf(billtotal.getText().toString());
@@ -290,7 +294,6 @@ public class PaymentActivityNew extends AppCompatActivity {
 
                                         balance.setText(String.format("%.2f", dblbalance));
                                     } else {
-                                        Double tempbalance = Double.parseDouble(shprfsBalance);
                                         Double dblbilltotal = Double.valueOf(billtotal.getText().toString());
 
                                         if (dblbilltotal > dblpaymenttotal) {
@@ -305,9 +308,6 @@ public class PaymentActivityNew extends AppCompatActivity {
                                         paymenttotal.setText(String.format("%.2f", dblpaymenttotal));
                                         editor = prefs.edit();
                                         editor.putString("PaymentTotal", paymenttotal.getText().toString());
-                                        editor.putString("TotAmountCustomerGiven", paymenttotal.getText().toString());
-
-
                                         editor.commit();
                                         balance.setText(String.format("%.2f", dblbalance));
                                     }
@@ -315,46 +315,80 @@ public class PaymentActivityNew extends AppCompatActivity {
                                     editor.putString(shrbalance, strblns);
                                     editor.commit();
 
-                                    //Added by 1165 on 24-01-2020
-                                    paymentdetailObj.CurrencyId = "";
-                                    paymentdetailObj.CurrencyNumber = "";
-                                    paymentdetailObj.CurrencyDenom = "";
-                                    paymentdetailObj.CurrencyType = "0";
-                                    paymentdetailObj.CreditType = "0";
-                                    paymentdetailObj.PayType = "0";
-                                    paymentdetailObj.ExchangeRate = "";
-                                    paymentdetailObj.ChequeNo = "";
-                                    paymentdetailObj.ChequeDate = "";
-                                    paymentdetailObj.CQIssuedBank = "";
-                                    paymentdetailObj.CardName = "";
-                                    paymentdetailObj.CardType = "";
-                                    paymentdetailObj.CardNo = "";
-                                    paymentdetailObj.CardAuthorisationNo = "";
-                                    paymentdetailObj.CardOwner = "";
+                                    boolean isCashAdded = false;
+                                    if (paymentdetailsList.size() != 0) {
+                                        for (int i = 0; i < paymentdetailsList.size(); i++) {
+                                            if (paymentdetailsList.get(i).PayType.equals("0")) {
 
+                                                isCashAdded = true;
+                                                String CashAmt = paymentdetailsList.get(i).PaidAmount;
 
-                                    Double receivedAmt = 0.00d;
-                                    receivedAmt = dblpaymenttotal;
+                                                String tempTender = "";
+                                                tempTender = cashamount.getText().toString();
+                                                Double totalCashRecvd = Double.valueOf(CashAmt) + Double.valueOf(tempTender);
 
-                                    String tempTender = "";
+                                                paymentdetailsList.get(i).PaidAmount = String.valueOf(totalCashRecvd);
+                                                paymentdetailsList.get(i).Tender = String.valueOf(totalCashRecvd);
+                                            }
+                                        }
+                                        if (!isCashAdded) {
+                                            paymentdetailObj.CurrencyId = "";
+                                            paymentdetailObj.CurrencyNumber = "";
+                                            paymentdetailObj.CurrencyDenom = "";
+                                            paymentdetailObj.CurrencyType = "0";
+                                            paymentdetailObj.CreditType = "0";
+                                            paymentdetailObj.PayType = "0";
+                                            paymentdetailObj.ExchangeRate = "";
+                                            paymentdetailObj.ChequeNo = "";
+                                            paymentdetailObj.ChequeDate = "";
+                                            paymentdetailObj.CQIssuedBank = "";
+                                            paymentdetailObj.CardName = "";
+                                            paymentdetailObj.CardType = "";
+                                            paymentdetailObj.CardNo = "";
+                                            paymentdetailObj.CardAuthorisationNo = "";
+                                            paymentdetailObj.CardOwner = "";
 
-                                    if (receivedAmt < Double.valueOf(salessummaryDetail.NetAmount)) {
-                                        paymentdetailObj.PaidAmount = cashamount.getText().toString();
-                                        tempTender = cashamount.getText().toString();
+                                            String tempTender = "";
+                                            tempTender = cashamount.getText().toString();
+
+                                            paymentdetailObj.PaidAmount = tempTender;
+
+                                            paymentdetailObj.ForexType = "";
+                                            paymentdetailObj.Tender = tempTender;
+                                            paymentdetailObj.PlutusId = "0";
+                                            paymentdetailObj.WalletId = "0";
+                                            paymentdetailsList.add(paymentdetailObj);
+                                        }
                                     } else {
-                                        paymentdetailObj.PaidAmount = String.valueOf(Double.valueOf(cashamount.getText().toString()) - dblbalance);
-                                        tempTender = String.valueOf(Double.valueOf(cashamount.getText().toString()) - dblbalance);
+
+                                        paymentdetailObj.CurrencyId = "";
+                                        paymentdetailObj.CurrencyNumber = "";
+                                        paymentdetailObj.CurrencyDenom = "";
+                                        paymentdetailObj.CurrencyType = "0";
+                                        paymentdetailObj.CreditType = "0";
+                                        paymentdetailObj.PayType = "0";
+                                        paymentdetailObj.ExchangeRate = "";
+                                        paymentdetailObj.ChequeNo = "";
+                                        paymentdetailObj.ChequeDate = "";
+                                        paymentdetailObj.CQIssuedBank = "";
+                                        paymentdetailObj.CardName = "";
+                                        paymentdetailObj.CardType = "";
+                                        paymentdetailObj.CardNo = "";
+                                        paymentdetailObj.CardAuthorisationNo = "";
+                                        paymentdetailObj.CardOwner = "";
+
+                                        String tempTender = "";
+                                        tempTender = cashamount.getText().toString();
+                                        paymentdetailObj.PaidAmount = tempTender;
+
+                                        paymentdetailObj.ForexType = "";
+                                        paymentdetailObj.Tender = tempTender;
+                                        paymentdetailObj.PlutusId = "0";
+                                        paymentdetailObj.WalletId = "0";
+                                        paymentdetailsList.add(paymentdetailObj);
+
+                                        Log.d("PA", "One payment added to paymenttenderlist");
                                     }
-
-                                    paymentdetailObj.ForexType = "";
-//                                    paymentdetailObj.Tender = "100";
-//                                    paymentdetailObj.Tender = "Cash";// this genereatd error while saving
-                                    paymentdetailObj.Tender = tempTender;
-                                    paymentdetailObj.PlutusId = "0";
-                                    paymentdetailObj.WalletId = "0";
-                                    paymentdetailsList.add(paymentdetailObj);
-                                    Log.d("PA", "One payment added to paymenttenderlist");
-
 
                                 }
                             }
@@ -393,9 +427,7 @@ public class PaymentActivityNew extends AppCompatActivity {
                             SalessummaryDetailObjStr = prefs.getString("SalessummaryDetailObjStr", "");
                             if (SalesdetailPLObjStr.equals("") || SalessummaryDetailObjStr.equals("")) {
                                 Toast.makeText(PaymentActivityNew.this, "No items added for payment", Toast.LENGTH_SHORT).show();
-
                             } else {
-
                                 Double dblbalance = 0.00;
                                 items.setText(NumberOfItemsStr);
                                 billtotal.setText(String.format("%.2f", Double.valueOf(salessummaryDetail.NetAmount)));
@@ -432,7 +464,6 @@ public class PaymentActivityNew extends AppCompatActivity {
                                         }
                                         balance.setText(String.format("%.2f", dblbalance));
                                     } else {
-                                        Double tempbalance = Double.parseDouble(shprfsBalance);
                                         String temp = paymenttotal.getText().toString();
 
                                         editor = prefs.edit();
@@ -483,26 +514,17 @@ public class PaymentActivityNew extends AppCompatActivity {
                                     paymentdetailObj.CardAuthorisationNo = etAUCode.getText().toString();
                                     paymentdetailObj.CardOwner = "";
 
-                                    Double receivedAmt = 0.00d;
-                                    receivedAmt = dblpaymenttotal;
 
                                     String tempTender = "";
+                                    tempTender = cardamount.getText().toString();
 
-                                    if (receivedAmt < Double.valueOf(salessummaryDetail.NetAmount)) {
-                                        paymentdetailObj.PaidAmount = cardamount.getText().toString();
-                                        tempTender = cardamount.getText().toString();
-                                    } else {
-                                        paymentdetailObj.PaidAmount = String.valueOf(Double.valueOf(cardamount.getText().toString()) - dblbalance);
-                                        tempTender = String.valueOf(Double.valueOf(cardamount.getText().toString()) - dblbalance);
-
-                                    }
+                                    paymentdetailObj.PaidAmount = tempTender;
                                     paymentdetailObj.ForexType = "";
                                     paymentdetailObj.Tender = tempTender;
                                     paymentdetailObj.PlutusId = "0";
                                     paymentdetailObj.WalletId = "0";
                                     paymentdetailsList.add(paymentdetailObj);
                                     Log.d("PA", "One payment added to paymenttenderlist");
-
                                 }
                             }
                         }
@@ -616,32 +638,22 @@ public class PaymentActivityNew extends AppCompatActivity {
                                     paymentdetailObj.CardAuthorisationNo = etAUCodeWallet.getText().toString();
                                     paymentdetailObj.CardOwner = "";
 
-                                    Double receivedAmt = 0.00d;
-                                    receivedAmt = dblpaymenttotal;
 
                                     String tempTender = "";
+                                    tempTender = walletamount.getText().toString();
 
-                                    if (receivedAmt < Double.valueOf(salessummaryDetail.NetAmount)) {
-                                        paymentdetailObj.PaidAmount = walletamount.getText().toString();
-                                        tempTender = walletamount.getText().toString();
-                                    } else {
-                                        paymentdetailObj.PaidAmount = String.valueOf(Double.valueOf(walletamount.getText().toString()) - dblbalance);
-                                        tempTender = String.valueOf(Double.valueOf(walletamount.getText().toString()) - dblbalance);
-                                    }
-
+                                    paymentdetailObj.PaidAmount = tempTender;
                                     paymentdetailObj.ForexType = "";
                                     paymentdetailObj.Tender = tempTender;
                                     paymentdetailObj.PlutusId = "0";
                                     paymentdetailObj.WalletId = "0";
                                     paymentdetailsList.add(paymentdetailObj);
                                     Log.d("PA", "One payment added to paymenttenderlist");
-
                                 }
                             }
                         }
                     }
                 });
-
             }
         });
         btnupi.setOnClickListener(new View.OnClickListener() {
@@ -750,7 +762,6 @@ public class PaymentActivityNew extends AppCompatActivity {
                                 }
                                 balance.setText(String.format("%.2f", dblbalance));
                             } else {
-                                Double tempbalance = Double.parseDouble(shprfsBalance);
                                 Double dblbilltotal = Double.valueOf(billtotal.getText().toString());
 
                                 if (dblbilltotal > dblpaymenttotal) {
@@ -775,44 +786,84 @@ public class PaymentActivityNew extends AppCompatActivity {
 
                             paymentdetailObj = new Paymentdetail();
 
-                            paymentdetailObj.CurrencyId = "";
-                            paymentdetailObj.CurrencyNumber = "";
-                            paymentdetailObj.CurrencyDenom = "";
-                            paymentdetailObj.CurrencyType = "0";
-                            paymentdetailObj.CreditType = "0";
-                            paymentdetailObj.PayType = "0";
-                            paymentdetailObj.ExchangeRate = "";
-                            paymentdetailObj.ChequeNo = "";
-                            paymentdetailObj.ChequeDate = "";
-                            paymentdetailObj.CQIssuedBank = "";
-                            paymentdetailObj.CardName = "";
-                            paymentdetailObj.CardType = "";
-                            paymentdetailObj.CardNo = "";
-                            paymentdetailObj.CardAuthorisationNo = "";
-                            paymentdetailObj.CardOwner = "";
 
+                            boolean isCashAdded = false;
+                            if (paymentdetailsList.size() != 0) {
+                                for (int i = 0; i < paymentdetailsList.size(); i++) {
+                                    if (paymentdetailsList.get(i).PayType.equals("0")) {
+                                        isCashAdded = true;
 
-                            Double receivedAmt = 0.00d;
-                            receivedAmt = dblpaymenttotal;
+                                        String CashAmt = paymentdetailsList.get(i).PaidAmount;
 
-                            String tempTender = "";
+                                        String tempTender = "";
+                                        tempTender = cashamount.getText().toString();
+                                        Double totalCashRecvd = Double.valueOf(CashAmt) + Double.valueOf(tempTender);
 
+                                        paymentdetailsList.get(i).PaidAmount = String.valueOf(totalCashRecvd);
+                                        paymentdetailsList.get(i).Tender = String.valueOf(totalCashRecvd);
+                                    }
+                                }
+                                if (!isCashAdded) {
+                                    paymentdetailObj.CurrencyId = "";
+                                    paymentdetailObj.CurrencyNumber = "";
+                                    paymentdetailObj.CurrencyDenom = "";
+                                    paymentdetailObj.CurrencyType = "0";
+                                    paymentdetailObj.CreditType = "0";
+                                    paymentdetailObj.PayType = "0";
+                                    paymentdetailObj.ExchangeRate = "";
+                                    paymentdetailObj.ChequeNo = "";
+                                    paymentdetailObj.ChequeDate = "";
+                                    paymentdetailObj.CQIssuedBank = "";
+                                    paymentdetailObj.CardName = "";
+                                    paymentdetailObj.CardType = "";
+                                    paymentdetailObj.CardNo = "";
+                                    paymentdetailObj.CardAuthorisationNo = "";
+                                    paymentdetailObj.CardOwner = "";
 
-                            if (receivedAmt < Double.valueOf(salessummaryDetail.NetAmount)) {
-                                paymentdetailObj.PaidAmount = cashamount.getText().toString();
-                                tempTender = cashamount.getText().toString();
+                                    String tempTender = "";
+                                    tempTender = cashamount.getText().toString();
+
+                                    paymentdetailObj.PaidAmount = tempTender;
+
+                                    paymentdetailObj.ForexType = "";
+                                    paymentdetailObj.Tender = tempTender;
+                                    paymentdetailObj.PlutusId = "0";
+                                    paymentdetailObj.WalletId = "0";
+                                    paymentdetailsList.add(paymentdetailObj);
+
+                                }
                             } else {
-                                paymentdetailObj.PaidAmount = String.valueOf(Double.valueOf(cashamount.getText().toString()) - dblbalance);
-                                tempTender = String.valueOf(Double.valueOf(cashamount.getText().toString()) - dblbalance);
+
+                                paymentdetailObj.CurrencyId = "";
+                                paymentdetailObj.CurrencyNumber = "";
+                                paymentdetailObj.CurrencyDenom = "";
+                                paymentdetailObj.CurrencyType = "0";
+                                paymentdetailObj.CreditType = "0";
+                                paymentdetailObj.PayType = "0";
+                                paymentdetailObj.ExchangeRate = "";
+                                paymentdetailObj.ChequeNo = "";
+                                paymentdetailObj.ChequeDate = "";
+                                paymentdetailObj.CQIssuedBank = "";
+                                paymentdetailObj.CardName = "";
+                                paymentdetailObj.CardType = "";
+                                paymentdetailObj.CardNo = "";
+                                paymentdetailObj.CardAuthorisationNo = "";
+                                paymentdetailObj.CardOwner = "";
+
+                                String tempTender = "";
+                                tempTender = cashamount.getText().toString();
+
+
+                                paymentdetailObj.PaidAmount = tempTender;
+
+                                paymentdetailObj.ForexType = "";
+                                paymentdetailObj.Tender = tempTender;
+                                paymentdetailObj.PlutusId = "0";
+                                paymentdetailObj.WalletId = "0";
+                                paymentdetailsList.add(paymentdetailObj);
+
+                                Log.d("PA", "One payment added to paymenttenderlist");
                             }
-
-                            paymentdetailObj.ForexType = "";
-                            paymentdetailObj.Tender = tempTender;
-                            paymentdetailObj.PlutusId = "0";
-                            paymentdetailObj.WalletId = "0";
-                            paymentdetailsList.add(paymentdetailObj);
-                            Log.d("PA", "One payment added to paymenttenderlist");
-
                         }
                     }
                 }
@@ -885,7 +936,6 @@ public class PaymentActivityNew extends AppCompatActivity {
 
                     paymentTenderListAdapter = new PaymentTenderListAdapter(PaymentActivityNew.this, arr, paymentdetailsList);
                     paymentTenderListView.setAdapter(paymentTenderListAdapter);
-
                 }
 
                 dialog.show();
@@ -902,12 +952,52 @@ public class PaymentActivityNew extends AppCompatActivity {
                 }
                 Double netamount = Double.valueOf(salessummaryDetail.NetAmount);
                 Log.d("PA", "NetAmount = " + netamount + " PaidAmount = " + paidAmountTotal);
-                if (paidAmountTotal.equals(netamount)) {
 
-                    new MobPosGetNextBillNumberTask().execute();
+                if (netamount <= paidAmountTotal) {
+
+                    //Duplicate the list
+                    //modify the new list and send to API
+                    paymentdetailsListForAPISave = paymentdetailsList;
+                    //Stor paymentdetaillist locally to display further in tab switch
+//                    Payment paymentObj = new PAym
+
+                    Gson gson = new Gson();
+                    String jsonPaymntDetailListLocal = gson.toJson(paymentdetailsList);
+                    prefs = PreferenceManager.getDefaultSharedPreferences(PaymentActivityNew.this);
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putString("PaymentDetailListJsonStr", jsonPaymntDetailListLocal);
+                    editor.commit();
+
+                    Double blnce = 0.00;
+                    blnce = paidAmountTotal - netamount;
+
+                    boolean IsCashExist = false;
+
+                    if (blnce == 0) {
+                        new MobPosGetNextBillNumberTask().execute();
+
+                    } else {
+
+                        for (int i = 0; i < paymentdetailsListForAPISave.size(); i++) {
+                            if (paymentdetailsListForAPISave.get(i).PayType.equals("0")) {
+                                //reduce blnce from cash
+                                //what to do if blnce is greater than cash..?
+                                //Check if two cash fields are added in same list..?how to subtract..?
+                                IsCashExist = true;
+                                Double paidAmt = Double.valueOf(paymentdetailsListForAPISave.get(i).PaidAmount);
+                                Double new_paidAmt = paidAmt - blnce;
+                                paymentdetailsListForAPISave.get(i).PaidAmount = String.valueOf(new_paidAmt);
+                                new MobPosGetNextBillNumberTask().execute();
+                                // pass paymentdetailsListForAPISave SaveBillAPI
+                            }
+                        }
+                        if (!IsCashExist) {
+                            Toast.makeText(PaymentActivityNew.this, "No cash values added to subtract the balance", Toast.LENGTH_SHORT).show();
+                        }
+                    }
 
                 } else {
-                    Toast.makeText(PaymentActivityNew.this, "Netamount and paidamount should be same", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PaymentActivityNew.this, "Add more money", Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -1024,6 +1114,9 @@ public class PaymentActivityNew extends AppCompatActivity {
         //Below line added by Pavithra on 23-06-2020 to avoid billrow missing in SaveBill
         SalesdetailPLObjStr = prefs.getString("SalesdetailPLObjStr", "");
         SalessummaryDetailObjStr = prefs.getString("SalessummaryDetailObjStr", "");
+        Log.d("OnResume SalesDetail",SalesdetailPLObjStr);
+
+        Toast.makeText(this, "New PaymentActivity", Toast.LENGTH_SHORT).show();
 
 
         if (SalesdetailPLObjStr.equals("") || SalessummaryDetailObjStr.equals("")) {
@@ -1046,6 +1139,7 @@ public class PaymentActivityNew extends AppCompatActivity {
 
             Gson gson = new Gson();
             salessummaryDetail = gson.fromJson(SalessummaryDetailObjStr, SalessummaryDetail.class);
+            salesdetailPLObj = gson.fromJson(SalesdetailPLObjStr, Salesdetail.class);
 
             Double bill_tot_temp = Double.valueOf(salessummaryDetail.NetAmount);
             String strBillTotal = String.format("%.2f",bill_tot_temp);
@@ -1053,6 +1147,12 @@ public class PaymentActivityNew extends AppCompatActivity {
             billtotal.setText(strBillTotal);
 
             //Added by  pavithra on 15-06-2020 to update paytotal blnce whenever paymentactivity loads
+//            String paymentDetailListJsonStr = prefs.getString("PaymentDetailListJsonStr", "");
+//            gson = new Gson();
+//            Type type = new TypeToken<List<Paymentdetail>>() {
+//            }.getType();
+//            paymentdetailsList = gson.fromJson("PaymentDetailListJsonStr",type);
+//
 
             Double pay_total = 0d;
 
@@ -1060,17 +1160,17 @@ public class PaymentActivityNew extends AppCompatActivity {
                 pay_total = pay_total + Double.valueOf(paymentdetailsList.get(i).PaidAmount);
             }
 
-            if( Double.valueOf(salessummaryDetail.NetAmount)>pay_total) {
+            if( Double.valueOf(salessummaryDetail.NetAmount) > pay_total) {
                 Double blnce = Double.valueOf(salessummaryDetail.NetAmount) - pay_total;
                 paymenttotal.setText(String.format("%.2f",pay_total));
                 balance.setText(String.format("%.2f",blnce));
                 balance.setTextColor(Color.RED);
 
-            }else{//else case added by Pavithra on 19-06-2020
-                Double blnce = pay_total- Double.valueOf(salessummaryDetail.NetAmount);
-                paymenttotal.setText(String.format("%.2f",pay_total));
-                balance.setText(String.format("%.2f",blnce));
+            }else {//else case added by Pavithra on 19-06-2020
 
+                Double blnce = pay_total - Double.valueOf(salessummaryDetail.NetAmount);
+                paymenttotal.setText(String.format("%.2f", pay_total));
+                balance.setText(String.format("%.2f", blnce));
                 balance.setTextColor(Color.GREEN);
             }
 
@@ -1079,7 +1179,6 @@ public class PaymentActivityNew extends AppCompatActivity {
 //            billtotal.setText(""+ new DecimalFormat("#.##").format(bill_tot_temp));
 
 //            itemtotal.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.TotalAmount)));
-
 
         }
     }
@@ -1168,7 +1267,8 @@ public class PaymentActivityNew extends AppCompatActivity {
             paymentsummaryObj.PendingAmt = balance.getText().toString();  //Balance
 
             Payment payment = new Payment();
-            payment.PaymentDetail = paymentdetailsList;
+//            payment.PaymentDetail = paymentdetailsList;
+            payment.PaymentDetail = paymentdetailsListForAPISave; //new  list Added by Pavithra on 24-06-2020
             payment.PaymentSummary = paymentsummaryObj;
 
             CustomerPL customerPLObj = new CustomerPL();

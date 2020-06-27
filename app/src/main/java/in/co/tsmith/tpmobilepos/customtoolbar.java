@@ -129,7 +129,8 @@ public class customtoolbar extends TabActivity {
         
                 TabSpec spec5 = tabHost.newTabSpec("Tab4");
                 spec5.setIndicator("Tab4");
-                Intent Intent5 = new Intent(this, PaymentActivity.class);
+//                Intent Intent5 = new Intent(this, PaymentActivity.class);
+                Intent Intent5 = new Intent(this, PaymentActivityNew.class);
                 spec5.setContent(Intent5);
                 tabHost.addTab(spec5);
 

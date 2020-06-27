@@ -76,7 +76,7 @@ public class ProductListCustomAdapter extends ArrayAdapter<Model> implements Vie
         LinearLayout saleslist;
     }
 
-    public ProductListCustomAdapter(ArrayList<Model> listdata, Context context, ListView l2, TextView billno, TextView numofitems, TextView itemtotal, TextView taxtotal, TextView billtotal, TextView billroundoff) {
+    public ProductListCustomAdapter(ArrayList<Model> listdata, Context context, ListView l2, TextView billno, TextView numofitems, TextView itemtotal, TextView disc_total,TextView taxtotal, TextView bill_disc,TextView billtotal, TextView billroundoff) {
 
         /********** Take passed values **********/
         super(context, R.layout.list_row, listdata);
@@ -89,6 +89,9 @@ public class ProductListCustomAdapter extends ArrayAdapter<Model> implements Vie
         this.taxtotal = taxtotal;
         this.billtotal = billtotal;
         this.billroundoff = billroundoff;
+        this.disctotal = disc_total;
+        this.billdisc = bill_disc ;
+//        this.disctotal = disctot;
 
         prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
 
@@ -127,6 +130,7 @@ public class ProductListCustomAdapter extends ArrayAdapter<Model> implements Vie
                 @Override
                 public boolean onKey(View view, int i, KeyEvent keyEvent) {
                     pos = (Integer) view.getTag();
+                    Toast.makeText(mContext, "Pos = "+pos, Toast.LENGTH_SHORT).show();
                     if ((keyEvent.getAction() == KeyEvent.ACTION_DOWN) && (i == KeyEvent.KEYCODE_ENTER)) {
                         try {
                             Qty = Integer.parseInt(holder.etQty.getText().toString());
@@ -288,7 +292,8 @@ public class ProductListCustomAdapter extends ArrayAdapter<Model> implements Vie
                 Billrow billdetail = new Billrow();
 //                billdetail.SlNo = "1";
 //                billdetail.SlNo = String.valueOf(list.size());;
-                billdetail.SlNo = String.valueOf(pos + 1);
+//                billdetail.SlNo = String.valueOf(pos + 1);
+                billdetail.SlNo = String.valueOf(list.size() - pos); //To get the correct serial number
                 billdetail.ItemId = list.get(pos).ItemId;
                 billdetail.ItemName = list.get(pos).tvItemName;
                 billdetail.ItemCode = list.get(pos).ItemCode;
@@ -320,6 +325,7 @@ public class ProductListCustomAdapter extends ArrayAdapter<Model> implements Vie
                 connection.setRequestProperty("bill_detail", requestjson);
                 connection.setRequestProperty("cust_detail", "{\"Customer\": {\"CustId\": \"823\",\"CustName\": \"XXX\",\"BillDate\": \"26/07/2019\",\"CustType\": \"LOCAL\",\"StoreId\": \"5\"}}");
                 connection.connect();
+
                 try {
                     InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
                     BufferedReader reader = new BufferedReader(streamReader);
@@ -461,9 +467,9 @@ public class ProductListCustomAdapter extends ArrayAdapter<Model> implements Vie
                 numofitems.setText(String.valueOf(num));
 
                 itemtotal.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.TotalAmount)));
-//                disctotal.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.DiscountAmt)));
+                disctotal.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.DiscountAmt)));//Added by Pavithra on 27-06-2020
                 taxtotal.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.TotalLinewiseTax)));
-//                billdisc.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.TotalDiscount)));
+                billdisc.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.TotalDiscount)));
                 billroundoff.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.RoundOff)));
                 billtotal.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.NetAmount)));
 

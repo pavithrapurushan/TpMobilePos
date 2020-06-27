@@ -139,7 +139,8 @@ public class BatchLookupAdapter extends ArrayAdapter<BatchModel> implements View
         bill_series = prefs.getString("BillSeries","");
         bill_no = prefs.getString("BillNo","");
 
-        productListCustomAdapterObj = new ProductListCustomAdapter(listModel, context, l2, billno,numofitems, itemtotal, taxtotal, billtotal, billroundoff);
+//        productListCustomAdapterObj = new ProductListCustomAdapter(listModel, context, l2, billno,numofitems, itemtotal, taxtotal, billtotal, billroundoff);
+        productListCustomAdapterObj = new ProductListCustomAdapter(listModel, context, l2, billno,numofitems, itemtotal,disctotal, taxtotal,billdisc, billtotal, billroundoff);
 
         //l2 is the productlist listview to finally show in salesactivity
     }
@@ -512,7 +513,7 @@ public class BatchLookupAdapter extends ArrayAdapter<BatchModel> implements View
 
                 CalcRow c = new CalcRow();
                 Billrow billdetail = new Billrow();
-                billdetail.SlNo = String.valueOf(listModel.size());//Same Serial number generated duplicate key row error from procedure
+//                billdetail.SlNo = String.valueOf(listModel.size()+1);//Same Serial number generated duplicate key row error from procedure
                 billdetail.ItemId = listProducts.get(0).ITEMID;
                 billdetail.ItemName = listProducts.get(0).ITEMNAME;
                 billdetail.ItemCode = listProducts.get(0).ITEMCODE;
@@ -526,9 +527,12 @@ public class BatchLookupAdapter extends ArrayAdapter<BatchModel> implements View
 
                 if(isRepeatItem){
                     billdetail.QtyInPacks = String.valueOf(new_qty);
+                    billdetail.SlNo = String.valueOf(listModel.size()- p);
+
                 }else {
 //                    billdetail.QtyInPacks = "1";
                     billdetail.QtyInPacks = String.valueOf(packquantity);
+                    billdetail.SlNo = String.valueOf(listModel.size()+1);
                 }
 
 
@@ -611,9 +615,10 @@ public class BatchLookupAdapter extends ArrayAdapter<BatchModel> implements View
                                 if (BillRow.get(0).ItemCode.equals(billrowList.get(i).ItemCode)) { //Checking for same item in the old list
                                     if (BillRow.get(0).BatchCode.equals(billrowList.get(i).BatchCode)) {
 
-                                        int new_qty = Integer.valueOf( BillRow.get(0).QtyInPacks )+1;
+//                                        int new_qty = Integer.valueOf( BillRow.get(0).QtyInPacks )+1; //Commented on 25-06-2020 by Pavithra
+                                        int new_qty = Integer.valueOf(BillRow.get(0).QtyInPacks); //Added by Pavithra on 25-06-2020
 
-                                        Double temp_rowtotal = Double.valueOf(BillRow.get(0).Mrp )*new_qty;
+                                        Double temp_rowtotal = Double.valueOf(BillRow.get(0).Mrp) * new_qty;
 
                                         BillRow.get(0).QtyInPacks = String.valueOf(new_qty);
                                         BillRow.get(0).RowTotal = String.valueOf(temp_rowtotal);
@@ -664,7 +669,6 @@ public class BatchLookupAdapter extends ArrayAdapter<BatchModel> implements View
 //                                    "" + listProducts.get(0).UPERPACK, String.valueOf(packquantity)));
 
 
-
                             //Added by Pavithra on 22-06-2020
                             // for the time being local Batchid added instead of from API
 
@@ -674,9 +678,7 @@ public class BatchLookupAdapter extends ArrayAdapter<BatchModel> implements View
                                     , "" + batchDetailsObj.ExpiryDate, "" + batchDetailsObj.PackRate, "" + batchDetailsObj.MRP
                                     , "" + listProducts.get(0).SOHINUNITS, "" + listProducts.get(0).SOHINPACKS, "" + listProducts.get(0).ITEMNAME, "" + batchDetailsObj.UnitRate,
                                     "" + listProducts.get(0).UPERPACK, String.valueOf(packquantity)));
-
                         }
-
 
                         for (y = 0; y < BillRow.size(); y++) {
                             tot = BillRow.get(y).RowTotal;
@@ -691,8 +693,8 @@ public class BatchLookupAdapter extends ArrayAdapter<BatchModel> implements View
                                 listModel.get(0).tvDisc = disc;
                             }
 
-
-                            productListCustomAdapterObj = new ProductListCustomAdapter(listModel, mContext, l2, billno, numofitems, itemtotal, taxtotal, billtotal, billroundoff);
+//                            productListCustomAdapterObj = new ProductListCustomAdapter(listModel, mContext, l2, billno, numofitems, itemtotal taxtotal, billtotal, billroundoff);
+                            productListCustomAdapterObj = new ProductListCustomAdapter(listModel, mContext, l2, billno,numofitems, itemtotal,disctotal, taxtotal,billdisc, billtotal, billroundoff);
                             l2.setAdapter(productListCustomAdapterObj);
 
 //                            l2.setAdapter(productListCustomAdapterObj);
@@ -700,7 +702,6 @@ public class BatchLookupAdapter extends ArrayAdapter<BatchModel> implements View
                             editor.putString("Total", tot);
                             productListCustomAdapterObj.notifyDataSetChanged();
                             num = l2.getAdapter().getCount();
-
 
                             productListCustomAdapterObj.notifyDataSetChanged();
                             listModelJsonStr = gson.toJson(listModel);
@@ -722,16 +723,13 @@ public class BatchLookupAdapter extends ArrayAdapter<BatchModel> implements View
                             editor.putString("SalesdetailPLObjStr", salesdetailPLObjStr);
                             editor.commit();
 
-                            try {
 
+                            try {
                                 new MobPosCalculateBillAmountTask().execute();
-                            }catch (Exception ex){
-                                Toast.makeText(mContext, ""+ex, Toast.LENGTH_SHORT).show();
+                            } catch (Exception ex) {
+                                Toast.makeText(mContext, "" + ex, Toast.LENGTH_SHORT).show();
                             }
                         }
-
-
-
 
 //                        if (listModel.size() == 0) {
 //                            for (y = 0; y < BillRow.size(); y++) {
@@ -1041,6 +1039,7 @@ public class BatchLookupAdapter extends ArrayAdapter<BatchModel> implements View
                     billAmountResponse = gson1.fromJson(strBillAmountResponse, BillAmountResponse.class);
 
 //                    billno.setText(String.valueOf(billAmountResponse.SalesSummary.BillSeries + "" + billAmountResponse.SalesSummary.BillNo));
+
                     billno.setText(String.valueOf(bill_series + "" + bill_no));
                     num = l2.getAdapter().getCount();
                     numofitems.setText(String.valueOf(num));
