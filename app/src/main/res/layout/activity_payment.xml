@@ -197,13 +197,13 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="178dp"
             android:layout_marginTop="140dp"
-            android:gravity="left"
+            android:gravity="right"
             android:inputType="numberDecimal"
             android:text=""
             android:textColor="#FFBB33"
             android:textSize="40sp"
             android:textStyle="bold"
-            />
+            /> <!-- gravity Modified by Pavithra on 02-07-2020-->
 
         <!--android:layout_height="60.12dp"-->
         <!--android:layout_marginTop="155dp"-->
@@ -285,12 +285,12 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="178dp"
             android:layout_marginTop="140dp"
-            android:gravity="left"
+            android:gravity="right"
             android:inputType="numberDecimal"
             android:text=""
             android:textColor="#FFBB33"
             android:textSize="40sp"
-            android:textStyle="bold" />
+            android:textStyle="bold" />  <!-- Modified by Pavithra on 02-07-2020-->
 
         <Button
             android:id="@+id/cashsubmitbtn"
@@ -360,12 +360,12 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="178dp"
             android:layout_marginTop="140dp"
-            android:gravity="left"
+            android:gravity="right"
             android:inputType="numberDecimal"
             android:text = ""
             android:textColor="#FFBB33"
             android:textSize="40sp"
-            android:textStyle="bold" />
+            android:textStyle="bold" />   <!-- Modified by Pavithra on 02-07-2020-->
 
         <TextView
             android:layout_width="170dp"
@@ -607,23 +607,31 @@
                 android:layout_marginLeft="197dp"
                 android:textSize="28sp"
                 android:textColor="@color/white"
-                android:layout_width="123dp"
+                android:layout_width="200dp"
                 android:layout_height="36dp"
-                android:text="Bill Total"/>
+                android:text="Bill Total"
+                /><!-- Added byPavithra on 02-07-2020 android:gravity="right"-->
+
+            <!--earlier width 123-->
+
             <TextView
                 android:layout_marginLeft="202dp"
                 android:textSize="28sp"
                 android:textColor="@color/white"
                 android:layout_width="200dp"
                 android:layout_height="36dp"
-                android:text="Payment Total"/>
+                android:text="Payment Total"
+                /> <!-- Added byPavithra on 02-07-2020-->
             <TextView
-                android:layout_marginLeft="181dp"
+                android:layout_marginLeft="115dp"
                 android:textSize="28sp"
                 android:textColor="@color/white"
                 android:layout_width="200dp"
                 android:layout_height="36dp"
-                android:text="Balance"/>
+                android:text="Balance"
+                android:paddingRight="15dp" /> <!-- Added byPavithra on 02-07-2020-->
+            <!--android:layout_marginLeft="181dp"-->
+
 
         </LinearLayout>
         <LinearLayout
@@ -646,7 +654,7 @@
                 android:layout_width="75dp"
                 android:layout_height="66dp"
                 android:text=""
-                />
+                android:gravity="center"/> <!--Added by Pavithra on 02-07-2020-->
             <TextView
                 android:id="@+id/billtotal"
                 android:layout_marginLeft="197dp"
@@ -654,7 +662,9 @@
                 android:textColor="#FFBB33"
                 android:layout_width="200dp"
                 android:layout_height="66dp"
-                android:text=""/>
+                android:text=""
+                android:gravity="right"/> <!--Added by Pavithra on 02-07-2020-->
+
             <!--android:layout_width="135dp"-->
 
             <!--android:layout_width="123dp"-->
@@ -666,7 +676,9 @@
                 android:textColor="#00FF00"
                 android:layout_width="200dp"
                 android:layout_height="68dp"
-                android:text=""/>
+                android:text=""
+                android:gravity="right"/>    <!--Added by Pavithra on 02-07-2020-->
+
             <TextView
                 android:id="@+id/balance"
                 android:layout_marginLeft="115dp"
@@ -676,25 +688,73 @@
                 android:layout_width="200dp"
                 android:layout_height="66dp"
                 android:text=""
-                android:paddingRight="15dp"/>
+                android:paddingRight="15dp" />
 
             <!--android:layout_height="66dp"-->
 
         </LinearLayout>
 
-        <Button
-            android:layout_width="225dp"
-            android:layout_height="50dp"
-            android:id="@+id/btnPaymntTndrList"
-            android:text="Payment TenderList"
+
+
+
+        <RelativeLayout
+            android:id="@+id/badge_layout1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_toLeftOf="@+id/btnSaveBill"
-            android:background="@drawable/submit"
-            android:textColor="@color/white"
             android:layout_alignParentBottom="true"
             android:layout_marginBottom="15dp"
             android:layout_marginRight="10dp"
-            android:padding="2dp"
-            android:textSize="20dp" />
+            android:padding="2dp">
+
+            <RelativeLayout
+                android:id="@+id/relative_layout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
+                <Button
+                    android:layout_width="225dp"
+                    android:layout_height="50dp"
+                    android:id="@+id/btnPaymntTndrList"
+                    android:text="Payment TenderList"
+                    android:background="@drawable/submit"
+                    android:textColor="@color/white"
+                    android:textSize="20dp" />
+
+            </RelativeLayout>
+
+            <TextView
+                android:id="@+id/badge_count_tenderlist"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:background="@drawable/item_count"
+                android:text="16"
+                android:textColor="#FFF"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="15dp"/>
+
+            <!--android:layout_alignRight="@id/relative_layout"-->
+
+
+        </RelativeLayout>
+
+
+        <!--<Button-->
+            <!--android:layout_width="225dp"-->
+            <!--android:layout_height="50dp"-->
+            <!--android:id="@+id/btnPaymntTndrList"-->
+            <!--android:text="Payment TenderList"-->
+            <!--android:layout_toLeftOf="@+id/btnSaveBill"-->
+            <!--android:background="@drawable/submit"-->
+            <!--android:textColor="@color/white"-->
+            <!--android:layout_alignParentBottom="true"-->
+            <!--android:layout_marginBottom="15dp"-->
+            <!--android:layout_marginRight="10dp"-->
+            <!--android:padding="2dp"-->
+            <!--android:textSize="20dp" />-->
+        <!---->
+
 
         <Button
             android:layout_width="153dp"

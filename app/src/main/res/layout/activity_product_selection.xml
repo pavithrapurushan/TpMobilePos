@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!--Modified by Pavithra on 01-07-2020-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -78,12 +80,14 @@
             android:layout_height="23dp"/>
         <TextView
             android:layout_marginLeft="30.32dp"
-            android:layout_width="175.45dp"
+            android:layout_width="275.45dp"
             android:text="Product Name"
             android:textStyle="bold"
             android:textColor="@color/white"
             android:layout_marginTop="16dp"
             android:layout_height="23dp"/>
+        <!--android:layout_width="175.45dp"  earlier width-->
+
         <TextView
             android:layout_marginLeft="85.32dp"
             android:layout_width="145.12dp"
@@ -107,7 +111,9 @@
             android:textStyle="bold"
             android:textColor="@color/white"
             android:layout_marginTop="16dp"
-            android:layout_height="23dp"/>
+            android:layout_height="23dp"
+            android:visibility="gone"/>   <!--Added by Pavithra on 01-07-2020-->
+
         <TextView
             android:layout_marginLeft="10.24dp"
             android:layout_width="100dp"

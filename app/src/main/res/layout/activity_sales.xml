@@ -78,7 +78,10 @@
         android:layout_height="wrap_content"
         android:dividerHeight="2dp"
         android:divider="#2A4F4B"
-        android:layout_below="@+id/l1">
+        android:layout_below="@+id/l1"
+        android:layout_marginBottom="50dp">
+        <!--marginBottom 10dp added by Pavithra on 29-06-2020-->
+
     </ListView>
     <LinearLayout
 
@@ -102,7 +105,8 @@
             android:layout_marginLeft="12dp"
             android:layout_marginTop="8dp"
             android:id="@+id/edtbarcode"
-            android:singleLine="true" />
+            android:singleLine="true"
+            android:inputType="numberDecimal"/>
 
        <ImageButton
             android:background="@drawable/selection"
@@ -112,6 +116,7 @@
             android:layout_height="56dp" />
 
        <ImageButton
+           android:id="@+id/imgBtnSearchProductFromLookup"
             android:background="@drawable/searchicon"
             android:layout_marginTop="8dp"
             android:layout_marginLeft="10dp"

@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!--Modified by Pavithra  on 02-07-2020-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -65,7 +67,8 @@
             android:textColor="#000000"
             android:layout_marginTop="16dp"
             android:layout_height="23dp"
-            android:id="@+id/batchid"/>
+            android:id="@+id/batchid"
+            android:visibility="gone"/> <!--Added by Pavithra on 02-07-2020  -->
         <!--<TextView-->
             <!--android:layout_marginLeft="31dp"-->
             <!--android:layout_width="82dp"-->

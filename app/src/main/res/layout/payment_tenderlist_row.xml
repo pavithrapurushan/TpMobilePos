@@ -103,13 +103,19 @@
                 android:layout_height="23dp"/>
             <!--                android:layout_width="145.12dp"-->
             <TextView
-                android:layout_marginLeft="35.38dp"
-                android:layout_width="150dp"
+                android:layout_marginLeft="80dp"
+                android:layout_width="100dp"
                 android:text="Value"
                 android:textStyle="bold"
                 android:textColor="@color/white"
                 android:layout_marginTop="16dp"
-                android:layout_height="24dp"/>
+                android:layout_height="24dp"
+                android:gravity="center"
+              />
+
+            <!--android:layout_marginLeft="35.38dp"-->
+
+            <!--width 150dp-->
 
         </LinearLayout>
         <ListView

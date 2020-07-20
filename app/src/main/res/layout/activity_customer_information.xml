@@ -14,8 +14,7 @@
         android:layout_height="72dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentTop="true"
-        android:background="@drawable/rectangletop"
-        />
+        android:background="@drawable/rectangletop" />
     <TextView
         android:id="@+id/customer_in"
         android:layout_width="385dp"
@@ -27,7 +26,6 @@
         android:text="Customer Information"
         android:layout_height="wrap_content" />
 
-
     <TextView
         android:layout_width="200dp"
         android:layout_marginLeft="16dp"
@@ -37,9 +35,7 @@
         android:textStyle="bold"
         android:textSize="18sp"
         android:textColor="#FFFFFF"
-        android:gravity="top"
-
-        />
+        android:gravity="top"/>
     <EditText
         android:id="@+id/mobile_numb"
         android:layout_width="548dp"
@@ -55,8 +51,7 @@
         android:layout_alignParentTop="true"
         android:textCursorDrawable="@drawable/color_cursor"
         android:hint="Mobile Number"
-        android:inputType="numberDecimal"
-        />
+        android:inputType="numberDecimal" />
     <ImageButton
         android:id="@+id/searchbtn"
         android:background="@drawable/search"
@@ -98,16 +93,16 @@
         android:background="@android:color/transparent"
         android:textColor="#FFFFFF"
         android:alpha="0.64"
-        android:textSize="24sp" />
+        android:textSize="24sp"
+        android:singleLine="true"
+        android:inputType="textFilter|textNoSuggestions"/>
     <View
         android:id="@+id/vector1"
         android:layout_width="548dp"
         android:layout_height="1dp"
         android:layout_marginTop="256dp"
         android:layout_marginLeft="16dp"
-        android:background="@drawable/customername"
-
-        />
+        android:background="@drawable/customername" />
 
     <TextView
         android:id="@+id/email"
@@ -132,10 +127,12 @@
         android:hint="Prepare INBOX for amazing offers!!!"
         android:layout_marginTop="302dp"
         android:textColorHint="#ffffff"
+        android:textColor="#FFFFFF"
         android:background="@android:color/transparent"
         android:layout_marginLeft="16dp"
         android:gravity="bottom"
-        />
+        android:singleLine="true"
+        android:inputType="textFilter|textNoSuggestions"/>
     <View
         android:layout_width="548dp"
         android:layout_height="1dp"
@@ -171,7 +168,8 @@
         android:textCursorDrawable="@drawable/color_cursor"
         android:layout_marginTop="568dp"
         android:gravity="bottom"
-        />
+        android:singleLine="true"
+        android:inputType="textFilter|textNoSuggestions"/>
     <View
         android:layout_width="548dp"
         android:layout_height="1dp"
@@ -206,6 +204,7 @@
         android:layout_marginLeft="580dp"
         android:hint="Address 1"
         android:gravity="bottom"
+        android:singleLine="true"
         />
     <View
 
@@ -242,16 +241,16 @@
         android:layout_marginLeft="580dp"
         android:hint="Address 2"
         android:gravity="bottom"
-        />
+        android:singleLine="true"
+        android:inputType="textFilter|textNoSuggestions"/>
 
     <View
         android:layout_width="548dp"
         android:layout_height="1dp"
         android:layout_marginTop="256dp"
         android:layout_marginLeft="580dp"
-        android:background="@drawable/customername"
+        android:background="@drawable/customername"/>
 
-        />
     <TextView
         android:id="@+id/address_lin3"
         android:layout_width="197.23dp"
@@ -279,15 +278,14 @@
         android:layout_marginLeft="580dp"
         android:hint="Address 3"
         android:gravity="bottom"
-        />
+        android:singleLine="true"
+        android:inputType="textFilter|textNoSuggestions"/>
     <View
         android:layout_width="548dp"
         android:layout_height="1dp"
         android:layout_marginTop="342dp"
         android:layout_marginLeft="580dp"
-        android:background="@drawable/customername"
-
-        />
+        android:background="@drawable/customername"/>
     <TextView
         android:layout_width="197.23dp"
         android:layout_height="wrap_content"
@@ -314,7 +312,8 @@
         android:hint="Phone Number 2"
         android:textColorHint="#ffffff"
         android:gravity="bottom"
-        />
+        android:singleLine="true"
+        android:inputType="textFilter|textNoSuggestions"/>
     <View
         android:id="@+id/stateview"
         android:layout_width="548dp"
@@ -349,32 +348,32 @@
         android:layout_marginLeft="580dp"
         android:hint="Loyalty Code"
         android:gravity="bottom"
+        android:singleLine="true" />
 
-
-        />
     <ImageButton
         android:id="@+id/loyaltysearch"
         android:background="@drawable/search"
         android:layout_width="31dp"
         android:layout_marginTop="474dp"
-        android:layout_marginLeft="879dp"
-        android:layout_height="31dp" />
+        android:layout_marginLeft="910dp"
+        android:layout_height="31dp"
+        android:layout_alignRight="@+id/loyalty_code" />
+    <!--android:layout_marginLeft="879dp"-->
+
     <View
         android:id="@+id/viewpin"
         android:layout_width="548dp"
         android:layout_height="1dp"
         android:layout_marginTop="524dp"
         android:layout_marginLeft="580dp"
-        android:background="@drawable/customername"
-        />
+        android:background="@drawable/customername" />
     <View
         android:layout_marginLeft="972dp"
         android:id="@+id/rectangle"
         android:layout_width="153dp"
         android:layout_height="72dp"
         android:layout_marginTop="608dp"
-        android:background="@drawable/rectangle"
-        />
+        android:background="@drawable/rectangle" />
     <TextView
         android:onClick="submitDetails"
         android:id="@+id/submit2"
@@ -386,6 +385,6 @@
         android:gravity="center_horizontal|top"
         android:layout_marginLeft="977dp"
         android:textSize="36dp"
-        android:textColor="#FFFFFF"
-        />
+        android:textColor="#FFFFFF" />
+    
 </RelativeLayout>

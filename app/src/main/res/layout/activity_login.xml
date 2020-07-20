@@ -1,113 +1,322 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--Modified by Pavithra on 09-07-2020-->
+
+
+<!--Added by PAvithra on 09-07-2020-->
+
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:background="#113a4e"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity">
-<TextView
-    android:layout_width="443dp"
-    android:layout_height="wrap_content"
-    android:layout_marginTop="102dp"
-    android:layout_marginLeft="467dp"
-    android:text="Sign In"
-    android:textStyle="bold"
-    android:fontFamily="sans-serif"
-    android:textColor="@color/white"
-    android:textSize="64sp"
-    />
+    tools:context=".LoginActivity"
+    android:gravity="center">
 
-    <TextView
-        android:layout_width="443dp"
+    <LinearLayout
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="300dp"
-        android:layout_marginLeft="467dp"
-        android:text="USER NAME"
-        android:textStyle="bold"
-        android:fontFamily="sans-serif"
-        android:textColor="@color/white"
-        android:textSize="21sp"
-        />
-    <EditText
-        android:id="@+id/username"
-        android:layout_width="375dp"
-        android:layout_height="36dp"
-        android:textColor="#FFFFFF"
-        android:textSize="24sp"
-        android:alpha="0.64"
-        android:fontFamily="sans-serif-thin"
-        android:textColorHint="#ffffff"
-        android:textCursorDrawable="@drawable/color_cursor"
-        android:background="@android:color/transparent"
-        android:layout_marginTop="333dp"
-        android:layout_marginLeft="467dp"
-        android:hint="Enter your user name"
-        android:gravity="bottom"
-        />
+        android:orientation="vertical">
 
-    <View
-        android:layout_width="375dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="366dp"
-        android:layout_marginLeft="467dp"
-        android:background="@drawable/customername"
+        <TextView
+            android:layout_width="443dp"
+            android:layout_height="wrap_content"
+            android:text="Sign In"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif"
+            android:textColor="@color/white"
+            android:textSize="64sp"
+            android:layout_marginBottom="10dp"
+            android:gravity="center"
+            />
 
-        />
-    <TextView
-        android:layout_width="443dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="393dp"
-        android:layout_marginLeft="467dp"
-        android:text="PASSWORD"
-        android:textStyle="bold"
-        android:fontFamily="sans-serif"
-        android:textColor="@color/white"
-        android:textSize="21sp"
-        />
-    <EditText
-        android:id="@+id/password"
-        android:layout_width="375dp"
-        android:layout_height="36dp"
-        android:textColor="#FFFFFF"
-        android:textSize="24sp"
-        android:alpha="0.64"
-        android:inputType="textPassword"
-        android:fontFamily="sans-serif-thin"
-        android:textColorHint="#ffffff"
-        android:textCursorDrawable="@drawable/color_cursor"
-        android:background="@android:color/transparent"
-        android:layout_marginTop="419dp"
-        android:layout_marginLeft="467dp"
-        android:hint="Enter Password"
-        android:gravity="bottom"
-        />
+        <TextView
+            android:layout_width="443dp"
+            android:layout_height="wrap_content"
+            android:text="BILLING DATE"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif"
+            android:textColor="@color/white"
+            android:textSize="21sp"
+            android:layout_marginTop="25dp"/>
 
-    <View
-        android:layout_width="375dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="459dp"
-        android:layout_marginLeft="467dp"
-        android:background="@drawable/customername"/>
-    <View
-        android:layout_marginLeft="467dp"
-        android:id="@+id/rectangle"
-        android:layout_width="153dp"
-        android:layout_height="72dp"
-        android:layout_marginTop="497dp"
-        android:background="@drawable/rectangle"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="10dp">
 
-    <TextView
-        android:onClick="login"
-        android:id="@+id/txtlogin"
-        android:layout_width="140dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="510dp"
-        android:text="SUBMIT"
-        android:textStyle="bold"
-        android:gravity="center_horizontal|top"
-        android:layout_marginLeft="467dp"
-        android:textSize="36dp"
-        android:textColor="#FFFFFF"/>
+            <EditText
+                android:id="@+id/etBillingDate"
+                android:layout_width="375dp"
+                android:layout_height="wrap_content"
+                android:hint="Add Billing Date"
+                android:textColor="#FFFFFF"
+                android:textSize="24sp"
+                android:alpha="0.64"
+                android:fontFamily="sans-serif-thin"
+                android:textColorHint="#ffffff"
+                android:textCursorDrawable="@drawable/color_cursor"
+                android:background="@android:color/transparent" />
+
+            <ImageButton
+                android:id="@+id/imageButtonCalender"
+                android:layout_width="50dp"
+                android:layout_height="40dp"
+                android:layout_alignBottom="@+id/etBillingDate"
+                android:layout_toRightOf="@+id/etBillingDate"
+                android:cropToPadding="true"
+                android:src="@drawable/calendar_icon"
+                android:onClick="showDatePickerDialog"
+                android:background="@null"/>
+
+        </LinearLayout>
+
+        <TextView
+            android:layout_width="443dp"
+            android:layout_height="wrap_content"
+            android:text="USER NAME"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif"
+            android:textColor="@color/white"
+            android:textSize="21sp"
+            android:layout_marginTop="10dp"/>
+
+        <EditText
+            android:id="@+id/etUsername"
+            android:layout_width="375dp"
+            android:layout_height="36dp"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"
+            android:alpha="0.64"
+            android:fontFamily="sans-serif-thin"
+            android:textColorHint="#ffffff"
+            android:textCursorDrawable="@drawable/color_cursor"
+            android:background="@android:color/transparent"
+            android:layout_marginTop="10dp"
+            android:hint="Enter your user name"
+            android:gravity="bottom"
+            android:singleLine="true"/>
+
+        <TextView
+            android:layout_width="443dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:text="PASSWORD"
+            android:textStyle="bold"
+            android:fontFamily="sans-serif"
+            android:textColor="@color/white"
+            android:textSize="21sp" />
+
+        <EditText
+            android:id="@+id/etPassword"
+            android:layout_width="375dp"
+            android:layout_height="36dp"
+            android:textColor="#FFFFFF"
+            android:textSize="24sp"
+            android:alpha="0.64"
+            android:inputType="textPassword"
+            android:fontFamily="sans-serif-thin"
+            android:textColorHint="#ffffff"
+            android:textCursorDrawable="@drawable/color_cursor"
+            android:background="@android:color/transparent"
+            android:layout_marginTop="10dp"
+            android:hint="Enter Password"
+            android:gravity="bottom"
+            android:singleLine="true"/>
+
+        <TextView
+            android:layout_width="375dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvValidateLoginMsg"
+            android:text=""
+            android:textColor="#FF0000"
+            android:layout_marginTop="15dp"
+            android:background="@null"
+            />
+
+        <Button
+            android:onClick="login"
+            android:id="@+id/btnLogin"
+            android:layout_width="160dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="25dp"
+            android:text="SUBMIT"
+            android:textStyle="bold"
+            android:gravity="center"
+            android:textSize="36dp"
+            android:textColor="#FFFFFF"
+            android:background="@drawable/rectangle"
+            android:layout_gravity="center_horizontal"
+            android:padding="5dp"/>
+
+
+
+
+
+
+
+    </LinearLayout>
 
 </RelativeLayout>
+
+
+
+
+<!--Commented by Pavithra on 09-07-2020-->
+
+<!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--xmlns:tools="http://schemas.android.com/tools"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:background="#113a4e"-->
+    <!--android:layout_height="match_parent"-->
+    <!--tools:context=".LoginActivity">-->
+<!--<TextView-->
+    <!--android:layout_width="443dp"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:layout_marginTop="102dp"-->
+    <!--android:layout_marginLeft="467dp"-->
+    <!--android:text="Sign In"-->
+    <!--android:textStyle="bold"-->
+    <!--android:fontFamily="sans-serif"-->
+    <!--android:textColor="@color/white"-->
+    <!--android:textSize="64sp"-->
+    <!--android:layout_marginBottom="10dp"/>-->
+
+
+    <!--<TextView-->
+        <!--android:layout_width="443dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="200dp"-->
+        <!--android:layout_marginLeft="467dp"-->
+        <!--android:text="BILLING DATE"-->
+        <!--android:textStyle="bold"-->
+        <!--android:fontFamily="sans-serif"-->
+        <!--android:textColor="@color/white"-->
+        <!--android:textSize="21sp" />-->
+
+    <!--<EditText-->
+        <!--android:id="@+id/etBillingDate"-->
+        <!--android:layout_width="375dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:hint="Add Billing Date"-->
+        <!--android:textColor="#FFFFFF"-->
+        <!--android:textSize="24sp"-->
+        <!--android:alpha="0.64"-->
+        <!--android:fontFamily="sans-serif-thin"-->
+        <!--android:textColorHint="#ffffff"-->
+        <!--android:textCursorDrawable="@drawable/color_cursor"-->
+        <!--android:background="@android:color/transparent"-->
+        <!--android:layout_marginTop="240dp"-->
+        <!--android:layout_marginLeft="467dp"/>-->
+    <!--<ImageButton-->
+        <!--android:id="@+id/imageButtonCalender"-->
+        <!--android:layout_width="50dp"-->
+        <!--android:layout_height="40dp"-->
+        <!--android:layout_alignBottom="@+id/etBillingDate"-->
+        <!--android:layout_toRightOf="@+id/etBillingDate"-->
+        <!--android:cropToPadding="true"-->
+        <!--android:src="@drawable/calendar_icon"-->
+        <!--android:onClick="showDatePickerDialog"-->
+        <!--android:background="@null"/>-->
+
+
+    <!--<TextView-->
+        <!--android:layout_width="443dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="300dp"-->
+        <!--android:layout_marginLeft="467dp"-->
+        <!--android:text="USER NAME"-->
+        <!--android:textStyle="bold"-->
+        <!--android:fontFamily="sans-serif"-->
+        <!--android:textColor="@color/white"-->
+        <!--android:textSize="21sp" />-->
+
+    <!--<EditText-->
+        <!--android:id="@+id/etUsername"-->
+        <!--android:layout_width="375dp"-->
+        <!--android:layout_height="36dp"-->
+        <!--android:textColor="#FFFFFF"-->
+        <!--android:textSize="24sp"-->
+        <!--android:alpha="0.64"-->
+        <!--android:fontFamily="sans-serif-thin"-->
+        <!--android:textColorHint="#ffffff"-->
+        <!--android:textCursorDrawable="@drawable/color_cursor"-->
+        <!--android:background="@android:color/transparent"-->
+        <!--android:layout_marginTop="333dp"-->
+        <!--android:layout_marginLeft="467dp"-->
+        <!--android:hint="Enter your user name"-->
+        <!--android:gravity="bottom"-->
+        <!--android:singleLine="true"/>  &lt;!&ndash; Added by Pavithra on 09-07-2020&ndash;&gt;-->
+    <!--<View-->
+        <!--android:layout_width="375dp"-->
+        <!--android:layout_height="1dp"-->
+        <!--android:layout_marginTop="366dp"-->
+        <!--android:layout_marginLeft="467dp"-->
+        <!--android:background="@drawable/customername"-->
+        <!--/>-->
+    <!--<TextView-->
+        <!--android:layout_width="443dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="393dp"-->
+        <!--android:layout_marginLeft="467dp"-->
+        <!--android:text="PASSWORD"-->
+        <!--android:textStyle="bold"-->
+        <!--android:fontFamily="sans-serif"-->
+        <!--android:textColor="@color/white"-->
+        <!--android:textSize="21sp" />-->
+    <!--<EditText-->
+        <!--android:id="@+id/etPassword"-->
+        <!--android:layout_width="375dp"-->
+        <!--android:layout_height="36dp"-->
+        <!--android:textColor="#FFFFFF"-->
+        <!--android:textSize="24sp"-->
+        <!--android:alpha="0.64"-->
+        <!--android:inputType="textPassword"-->
+        <!--android:fontFamily="sans-serif-thin"-->
+        <!--android:textColorHint="#ffffff"-->
+        <!--android:textCursorDrawable="@drawable/color_cursor"-->
+        <!--android:background="@android:color/transparent"-->
+        <!--android:layout_marginTop="419dp"-->
+        <!--android:layout_marginLeft="467dp"-->
+        <!--android:hint="Enter Password"-->
+        <!--android:gravity="bottom"-->
+        <!--android:singleLine="true"/>  &lt;!&ndash; Added by Pavithra on 09-07-2020&ndash;&gt;-->
+
+    <!--<View-->
+        <!--android:layout_width="375dp"-->
+        <!--android:layout_height="1dp"-->
+        <!--android:layout_marginTop="459dp"-->
+        <!--android:layout_marginLeft="467dp"-->
+        <!--android:background="@drawable/customername"/>-->
+    <!--<View-->
+        <!--android:layout_marginLeft="467dp"-->
+        <!--android:id="@+id/rectangle"-->
+        <!--android:layout_width="153dp"-->
+        <!--android:layout_height="72dp"-->
+        <!--android:layout_marginTop="497dp"-->
+        <!--android:background="@drawable/rectangle"/>-->
+
+    <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_width="140dp"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:id="@+id/tvLoginValidateMessage"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:textColor="#FF0000"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:text="wrong password"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_above="@+id/txtlogin"/>&ndash;&gt;-->
+
+    <!--<TextView-->
+        <!--android:onClick="login"-->
+        <!--android:id="@+id/txtlogin"-->
+        <!--android:layout_width="140dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="510dp"-->
+        <!--android:text="SUBMIT"-->
+        <!--android:textStyle="bold"-->
+        <!--android:gravity="center_horizontal|top"-->
+        <!--android:layout_marginLeft="467dp"-->
+        <!--android:textSize="36dp"-->
+        <!--android:textColor="#FFFFFF"/>-->
+
+<!--</RelativeLayout>-->

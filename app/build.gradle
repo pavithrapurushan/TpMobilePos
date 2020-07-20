@@ -3,7 +3,8 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 28
     defaultConfig {
-        applicationId "in.co.tsmith.tpmobilepos"
+//        applicationId "in.co.tsmith.tpmobilepos"
+        applicationId "in.co.techsmith.tpmobilepos"
         minSdkVersion 15
         targetSdkVersion 28
         versionCode 1

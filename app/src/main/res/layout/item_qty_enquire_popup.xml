@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Added by Pavithra on 18-07-2020-->
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height ="wrap_content"
+    android:background="#add8e6">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:id="@+id/txvEnquireTitleDialog"
+        android:text="Item name"
+        android:textColor="@color/white"
+        android:background="@color/yellow"
+        android:padding="5dp"
+        android:textStyle="bold"
+        android:textSize="12sp"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvMrp"
+        android:text="MRP : Rs.38.28"
+        android:layout_margin="10dp"
+        android:textColor="#000000"
+        android:layout_below="@+id/txvEnquireTitleDialog"/>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/llCountPacks"
+        android:layout_below="@+id/tvMrp"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:visibility="visible">
+        <Button
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/btnCountMinus"
+            android:background="@drawable/rounded_button"
+            android:text="-"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
+        <EditText
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/etCount"
+            android:text="1"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:inputType="numberDecimal"/>
+        <Button
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/btnCountPlus"
+            android:background="@drawable/rounded_button"
+            android:text="+"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_toRightOf="@+id/etCount"
+            android:layout_marginRight="5dp"/>
+
+        <TextView
+            android:id="@+id/tvPacks"
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:text="packs" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/llCountUnits"
+        android:layout_below="@+id/llCountPacks"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal"
+        android:gravity="center">
+        <Button
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/btnCountMinusUnits"
+            android:background="@drawable/rounded_button"
+            android:text="-"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:textStyle="bold"/>
+        <EditText
+            android:layout_width="150dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/etCountUnits"
+            android:text="0"
+            android:layout_centerHorizontal="true"
+            android:gravity="center"
+            android:inputType="numberDecimal"/>
+        <Button
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:id="@+id/btnCountPlusUnits"
+            android:background="@drawable/rounded_button"
+            android:text="+"
+            android:textColor="#000000"
+            android:textSize="20sp"
+            android:textStyle="bold"
+            android:layout_toRightOf="@+id/etCount"
+            android:layout_marginRight="5dp"/>
+
+        <TextView
+            android:layout_width="40dp"
+            android:layout_height="wrap_content"
+            android:text="units"/>
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvUnit"
+        android:text="Qty in units : 40"
+        android:layout_below="@+id/llCountUnits"
+        android:visibility="visible"
+        android:layout_centerHorizontal="true"
+        android:textColor="#000000"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tvTotalAmt"
+        android:text="Total Amount: Rs.70.56"
+        android:layout_below="@+id/tvUnit"
+        android:textColor="#000000"
+        android:layout_centerInParent="true"
+        android:visibility="gone"/>
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_centerInParent="true"
+        android:layout_below="@+id/tvTotalAmt"
+        android:layout_marginBottom="10dp"
+        android:layout_marginTop="20dp">
+
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:id="@+id/btnCancelPopUp"
+            android:textColor="#000000"
+            android:background="@drawable/button1"
+            android:text="Cancel"/>
+        <Button
+            android:layout_width="100dp"
+            android:layout_height="30dp"
+            android:id="@+id/btnEnquirePopUp"
+            android:textColor="#000000"
+            android:background="@drawable/button1"
+            android:text="Ok"
+            android:layout_marginLeft="10dp"/>
+
+    </LinearLayout>
+
+</RelativeLayout>
+
+
+
+
+

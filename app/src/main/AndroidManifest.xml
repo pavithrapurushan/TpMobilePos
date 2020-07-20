@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="in.co.tsmith.tpmobilepos">
+    package="in.co.techsmith.tpmobilepos">
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
@@ -12,15 +12,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".customtoolbar"/>
-        <activity android:name=".SalesActivity" />
-        <activity android:name=".RetrieveActivity" />
+        <activity android:name="in.co.techsmith.tpmobilepos.customtoolbar"/>
+        <activity android:name="in.co.techsmith.tpmobilepos.SalesActivity" />
+        <activity android:name="in.co.techsmith.tpmobilepos.RetrieveActivity" />
         <activity android:name=".PaymentActivity" />
-        <activity android:name=".CustomerInformation" />
-        <activity android:name=".SalesReturnActivity" />
-        <activity android:name=".PaymentActivityNew" />
+        <activity android:name="in.co.techsmith.tpmobilepos.CustomerInformation" />
+        <activity android:name="in.co.techsmith.tpmobilepos.SalesReturnActivity" />
+        <activity android:name="in.co.techsmith.tpmobilepos.PaymentActivityNew"
+            android:windowSoftInputMode="stateAlwaysVisible"/>
         <activity
-            android:name=".LoginActivity"
+            android:name="in.co.techsmith.tpmobilepos.LoginActivity"
             android:configChanges="screenLayout|orientation|screenSize"
             android:windowSoftInputMode="adjustResize">
             <intent-filter>

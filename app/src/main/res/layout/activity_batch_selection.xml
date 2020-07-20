@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!--Modified by Pavithra on 02-07-2020-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -125,7 +127,8 @@
                 android:textStyle="bold"
                 android:textColor="@color/white"
                 android:layout_marginTop="16dp"
-                android:layout_height="23dp"/>
+                android:layout_height="23dp"
+                android:visibility="gone"/> <!--Added by Pavithra on 02-07-2020-->
             <!--<TextView-->
                 <!--android:layout_marginLeft="31dp"-->
                 <!--android:layout_width="82dp"-->
