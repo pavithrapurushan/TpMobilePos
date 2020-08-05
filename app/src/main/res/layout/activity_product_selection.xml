@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!--Modified by Pavithra on 01-07-2020-->
+<!--Modified by Pavithra on 28-07-2020-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -98,12 +99,13 @@
             android:layout_height="23dp"/>
         <TextView
             android:layout_marginLeft="35.38dp"
-            android:layout_width="150dp"
+            android:layout_width="180dp"
             android:text="Manufacturer"
             android:textStyle="bold"
             android:textColor="@color/white"
             android:layout_marginTop="16dp"
-            android:layout_height="24dp"/>
+            android:layout_height="24dp"/> <!--width edited by pavithra on 28-07-2020 -->
+        <!--width 150-->
         <TextView
             android:layout_marginLeft="82.12dp"
             android:layout_width="100dp"
@@ -124,12 +126,14 @@
             android:layout_height="23dp"/>
         <TextView
             android:layout_marginLeft="44.95dp"
-            android:layout_width="62.81dp"
+            android:layout_width="32.81dp"
             android:text="SOH"
             android:textStyle="bold"
             android:textColor="@color/white"
             android:layout_marginTop="16dp"
-            android:layout_height="23dp"/>
+            android:layout_height="23dp"/>  <!--width edited by pavithra on 28-07-2020 -->
+        <!--android:layout_width="62.81dp"  previous-->
+
         <!--<TextView-->
             <!--android:layout_marginLeft="44.95dp"-->
             <!--android:layout_width="82dp"-->

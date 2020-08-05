@@ -3,8 +3,8 @@ package in.co.techsmith.tpmobilepos;
 import java.util.ArrayList;
 import java.util.List;
 
-public class CalcRowResponse
-{
+public class CalcRowResponse {
+
     public CalcRowResponse()
     {
         BillRow= new ArrayList<Billrow>();

@@ -13,6 +13,7 @@ import android.support.annotation.RequiresApi;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.Gravity;
@@ -20,6 +21,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -49,6 +51,12 @@ import java.util.List;
 //Modified by Pavithra on 08-07-2020
 //Modified by Pavithra on 11-07-2020
 //Modified by Pavithra on 15-07-2020
+//Modified by Pavithra on 22-07-2020
+//Modified by Pavithra on 28-07-2020
+//Modified by Pavithra on 29-07-2020
+//Modified by Pavithra on 31-07-2020
+//Modified by Pavithra on 04-08-2020
+//Modified by Pavithra on 05-08-2020
 
 public class SalesActivity extends AppCompatActivity {
 
@@ -75,7 +83,8 @@ public class SalesActivity extends AppCompatActivity {
     ProductListCustomAdapter adapter;
     String item_code,tot,disc,tot1;
     TextView tvTotal;
-    EditText etQty;
+//    EditText etQty; //Masked by Pavithra on 20-07-2020
+    TextView etQty;  //Added by Pavithra on 20-07-2020
     Gson g;
     int qty1;
     String tqty;
@@ -94,7 +103,7 @@ public class SalesActivity extends AppCompatActivity {
     int slno = 0;
 
     Dialog dialog;
-    TextView billno,numofitems,itemtotal,disctotal,taxtotal,billdisc,misccharges,billroundoff,billtotal;
+    TextView billno,numofitems,itemtotal,disctotal,taxtotal,billdisc,misccharges,billroundoff,billtotal,tvtotalLinewiseDiscount;
     Button btnSaveBill;
 
     String strBillAmountResponse = "";
@@ -128,12 +137,13 @@ public class SalesActivity extends AppCompatActivity {
     TsCommonMethods tsCommonMethods;
     List<Productdetail> listProductDetail;
     boolean isRepeatItem = false;
+    boolean isDiscountAdded = false;
 
     int new_qty = 0 ;
 
-
     CustomerDetail customerDetailObj;
     LoyaltyCustomer loyaltyCustomerObj;
+    LoyaltycustomerDetailsResponse loyaltycustomerDetailsResponseObj; //Added by Pavithra on 04-08-2020
 
     String loyalty_code = "";
     String billing_date = "";
@@ -151,6 +161,12 @@ public class SalesActivity extends AppCompatActivity {
     EditText etQty_dlg;  //Added by Pavithra on 18-07-2020
     String qty_dlg = ""; //Added by Pavithra on 18-07-2020
 
+    ImageButton imgBtnScanBarcode;
+
+    String discount_percentage = "0";
+
+    int posDisc;
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -167,14 +183,21 @@ public class SalesActivity extends AppCompatActivity {
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         this.getWindow().getDecorView().setSystemUiVisibility(
 
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+//                View.SYSTEM_UI_FLAG_LAYOUT_STABLE                         Commented by Pavithra on 28-07-2020
+//                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+//                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+//                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+//                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE                   //Added by Pavithra on 28-07-2020
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
 
-        setContentView(R.layout.activity_sales);
+
+//        setContentView(R.layout.activity_sales);  //Commented by Pavithra on 29-07-2020
+        setContentView(R.layout.activity_sales_new);  //Added by Pavithra on 29-07-2020
         tsCommonMethods = new TsCommonMethods(this);
 
 
@@ -186,12 +209,14 @@ public class SalesActivity extends AppCompatActivity {
 
 
         etBarcode = (EditText) findViewById(R.id.edtbarcode);
+        imgBtnScanBarcode = (ImageButton) findViewById(R.id.imgBtnScanBarcode);
 
         l2 = (ListView) findViewById(R.id.productlist);
         sp = getSharedPreferences("Myprefs", MODE_PRIVATE);
         tvTotal = (TextView) findViewById(R.id.tvTotal);
 
-        etQty = (EditText) findViewById(R.id.etQty);
+//        etQty = (EditText) findViewById(R.id.etQty);
+        etQty = (TextView) findViewById(R.id.etQty);
         main = (RelativeLayout) findViewById(R.id.main);
 
         billno = (TextView) findViewById(R.id.billno);
@@ -203,10 +228,23 @@ public class SalesActivity extends AppCompatActivity {
         billdisc = (TextView) findViewById(R.id.billdisc);
         billroundoff = (TextView) findViewById(R.id.billroundoff);
         billtotal = (TextView) findViewById(R.id.billtotal);
+        tvtotalLinewiseDiscount = (TextView) findViewById(R.id.tvtotalLinewiseDiscount);
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         SalesdetailPLObjStr = prefs.getString("SalesdetailPLObjStr", "");
         SalessummaryDetailObjStr = prefs.getString("SalessummaryDetailObjStr", "");
+
+
+
+/*******************************************Added by Pavithra on 29-07-2020 following ***********************************************/
+        TextView tvStoreId = (TextView) findViewById(R.id.storeid);
+        TextView tvShiftId = (TextView) findViewById(R.id.shiftid);
+
+        int shiftId = prefs.getInt("ShiftId",0);
+        String store_id = "3";
+        tvStoreId.setText(store_id);
+        tvShiftId.setText(""+shiftId);
+/****************************************************************************************************************************/
 
 
         bill_series = prefs.getString("BillSeries", "");
@@ -217,7 +255,30 @@ public class SalesActivity extends AppCompatActivity {
         }
 
 //        adapter = new ProductListCustomAdapter(listModel, mContext, l2, billno,numofitems, itemtotal, taxtotal, billtotal, billroundoff);
-        adapter = new ProductListCustomAdapter(listModel, SalesActivity.this, l2, billno, numofitems, itemtotal, disctotal, taxtotal, billdisc, billtotal, billroundoff,String.valueOf(uper_pack)); //Edited by Pavithra on 18-07-2020
+        adapter = new ProductListCustomAdapter(listModel, SalesActivity.this, l2, billno, numofitems, itemtotal, disctotal, taxtotal, billdisc, billtotal, billroundoff,String.valueOf(uper_pack),tvtotalLinewiseDiscount); //Edited by Pavithra on 18-07-2020
+
+        //Added by Pavithra on 20-07-2020
+        imgBtnScanBarcode.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+
+        //Added by Pavithra on 28-07-2020
+
+        l2.setLongClickable(true);
+        l2.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+            @Override
+            public boolean onItemLongClick(AdapterView<?> arg0, View arg1,
+                                           int pos, long id) {
+                // TODO Auto-generated method stub
+                Toast.makeText(SalesActivity.this, "Long clicked", Toast.LENGTH_SHORT).show();
+                showDiscountEnquirePopUP(pos);
+                return true;
+            }
+        });
 
         //On EnterKey Press in EditText of BarCode
 
@@ -317,8 +378,10 @@ public class SalesActivity extends AppCompatActivity {
                 itemtotal.setText("0");
                 disctotal.setText("0");
                 taxtotal.setText("0");
+                tvtotalLinewiseDiscount.setText("0"); //Added by Pavithra on 30-07-2020
                 billdisc.setText("0");
                 billroundoff.setText("0");
+                billtotal.setText("0");
                 billtotal.setText("0");
             }
 
@@ -332,6 +395,37 @@ public class SalesActivity extends AppCompatActivity {
 
 //            l2.getChildAt(0).setEnabled(false);
         }
+    }
+
+    //Added by Pavithra on 29-07-2020
+    public void tsErrorMessage(String error_massage){
+
+        final Dialog dialog = new Dialog(SalesActivity.this);
+        dialog.setContentView(R.layout.custom_save_popup);
+        final String title = "Message";
+
+        TextView dialogTitle = (TextView)dialog.findViewById(R.id.txvSaveTitleDialog);
+        dialogTitle.setText(title);
+        dialog.getWindow().setBackgroundDrawableResource(R.color.colorPrimary);
+        dialog. getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        int height_of_popup = 500;
+        int width_of_popup = 400;
+        dialog.getWindow().setLayout(width_of_popup, height_of_popup);
+        dialog.show();
+
+        final TextView tvSaveStatus = (TextView) dialog.findViewById(R.id.tvSaveStatus);
+//        tvSaveStatus.setText("Successfully saved \n Token No = "+tokenNo);
+        tvSaveStatus.setText(""+error_massage);
+
+        Button btnOkPopup = (Button)dialog.findViewById(R.id.btnOkPopUp);
+
+        btnOkPopup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
     }
 
     public void gotoproductlookup(View view) {
@@ -370,7 +464,7 @@ public class SalesActivity extends AppCompatActivity {
 
         //Added by 1165 on 22-02-2020
         productlistview = (ListView) dialog.findViewById(R.id.product_listview);
-        productLookupAdapter = new ProductLookupAdapter(productlist, listModel, l2, billno, numofitems, itemtotal, disctotal, taxtotal, billdisc, billroundoff, billtotal, SalesActivity.this, dialog);
+        productLookupAdapter = new ProductLookupAdapter(productlist, listModel, l2, billno, numofitems, itemtotal, disctotal, taxtotal, billdisc, billroundoff, billtotal, SalesActivity.this, dialog,tvtotalLinewiseDiscount);
         productlistview.setAdapter(productLookupAdapter);
 
         WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
@@ -467,10 +561,12 @@ public class SalesActivity extends AppCompatActivity {
                     detailsPL = gson.fromJson(strGetPrDetails, ProductDetailsResponse.class);
 
                     if (detailsPL.ErrorStatus == 0) {  //check errorcode too if gets from aPI
+
+                        isDiscountAdded = false;   // Added by Pavithra on 30-07-2020
+
                         listProductDetail = new ArrayList<>();
                         listProductDetail = detailsPL.ProductDetail;
                         item_code = listProductDetail.get(0).ItemCode;
-
 
                         /**************************************Added by Pavithra on 10-07-2020**********************************************************/
 
@@ -522,6 +618,7 @@ public class SalesActivity extends AppCompatActivity {
                                     new MobPosGetDefaultBatchAPITask().execute();
                                 }
 
+                                discount_percentage = "0";
                                 CalculateRow rowDetails = new CalculateRow();
                                 rowDetails.execute();
                             } else {  //if list not equals empty
@@ -554,6 +651,7 @@ public class SalesActivity extends AppCompatActivity {
                         }
                     } else {
                         Toast.makeText(SalesActivity.this, "" + detailsPL.Message, Toast.LENGTH_SHORT).show();
+                        tsErrorMessage(detailsPL.Message); //Added by Pavithra on 29-07-2020
                         showPopUP("" + detailsPL.Message);
                     }
                 }
@@ -563,6 +661,76 @@ public class SalesActivity extends AppCompatActivity {
         }
     }
 
+
+
+    //Added by Pavithra on 28-07-2020
+    public void showDiscountEnquirePopUP(int position){
+
+        posDisc = position;
+
+        final Dialog dialog = new Dialog(SalesActivity.this);
+        dialog.setContentView(R.layout.discount_enquire_popup);
+        final String title = "Add Discount";
+
+        TextView dialogTitle = (TextView)dialog.findViewById(R.id.txvDiscEnquireTitleDialog);
+        dialogTitle.setText(title);
+        dialog.getWindow().setBackgroundDrawableResource(R.color.colorPrimary);
+        dialog. getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+//        int height_of_popup = (int) getResources().getDimension(R.dimen.popup_height);
+//        int width_of_popup = (int) getResources().getDimension(R.dimen.popup_width);
+
+//        int height_of_popup = 450;
+//        int width_of_popup = 300;
+
+        int height_of_popup = 500;
+        int width_of_popup = 400;
+        dialog.getWindow().setLayout(width_of_popup, height_of_popup);
+        dialog.show();
+
+        final EditText etDiscountAdded = (EditText)dialog.findViewById(R.id.etAddDisc);
+
+//        final TextView tvSaveStatus = (TextView) dialog.findViewById(R.id.tvSaveStatus);
+////        tvSaveStatus.setText("Successfully saved \n Token No = "+tokenNo);
+//        tvSaveStatus.setText(""+str);
+
+        Button btnOkPopup = (Button)dialog.findViewById(R.id.btnOkPopUp);
+        Button btnCancelPopup = (Button)dialog.findViewById(R.id.btnCancelPopUp);
+
+        btnOkPopup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                try {
+                    discount_percentage = etDiscountAdded.getText().toString();
+
+   /*************************************Added by Pavithra on 05-08-2020************************************************************/
+                    prefs = PreferenceManager.getDefaultSharedPreferences(SalesActivity.this);
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putString("DiscPer",discount_percentage);
+                    editor.commit();
+   /**********************************************************************************************************************************/
+
+                    int discount_perc = Integer.parseInt(discount_percentage);
+                    if(discount_perc > 100){      //this condition added by Pavithra on 31-07-2020
+                        Toast.makeText(SalesActivity.this, "Discount percentage should be in between the range 0-100", Toast.LENGTH_SHORT).show();
+                    }else {
+                        isRepeatItem = true;
+                        isDiscountAdded = true;
+                        new CalculateRow().execute();     //Added  by Pavithra on 29-07-2020
+                        dialog.dismiss();
+                    }
+                }catch (Exception ex){
+                    Toast.makeText(SalesActivity.this, ""+ex, Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        btnCancelPopup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+    }
 
     public void showPopUP(String str){
 
@@ -1059,56 +1227,184 @@ public class SalesActivity extends AppCompatActivity {
                     connection.setReadTimeout(15000);
                     connection.setConnectTimeout(30000);
 
+
+                    //Commented by Pavithra on 29-07-2020
+//                    CalcRow c = new CalcRow();
+//                    Billrow billdetail = new Billrow();
+//
+//
+//                    billdetail.ItemId = listProductDetail.get(0).ItemId;
+//                    billdetail.ItemName = listProductDetail.get(0).ItemName;
+//                    billdetail.ItemCode = listProductDetail.get(0).ItemCode;
+//                    billdetail.BatchId = listProductDetail.get(0).BatchId;
+//                    billdetail.BatchCode = listProductDetail.get(0).BatchCode;
+//                    billdetail.TaxId = listProductDetail.get(0).TaxId;
+//                    billdetail.HSNCode = "";
+//                    billdetail.ExpiryDate = listProductDetail.get(0).BatchExpiry;
+//
+//                    if(isRepeatItem){
+//                        Log.d("Value OF P = ",""+p);
+//                        //new condition added by Pavithra on 29-07-2020
+//                        if(isDiscountAdded){
+//                            billdetail.QtyInPacks = listModel.get(p).etQty;
+//                        }else{
+//                            billdetail.QtyInPacks = String.valueOf(new_qty);
+//                        }
+////                        billdetail.QtyInPacks = String.valueOf(new_qty);
+//                        billdetail.SlNo = String.valueOf(listModel.size()- p);
+//                        billdetail.DiscPer = discount_percentage;
+//                    }else {
+//                        billdetail.QtyInPacks = "1";
+//                        billdetail.SlNo = String.valueOf(listModel.size() + 1);
+//                        billdetail.DiscPer = "0";
+//                    }
+//
+//                    billdetail.QtyInUnits = "0";
+//                    billdetail.UPerPack = listProductDetail.get(0).UPerPack;
+//                    billdetail.Mrp = listProductDetail.get(0).MRP;
+//                    billdetail.Rate = listProductDetail.get(0).PackRate;
+//                    billdetail.BillingRate = "";
+//                    billdetail.FreeFlag = "0";
+//                    billdetail.CustType = "LOCAL";
+//                    billdetail.Amount = "0";
+////                    billdetail.DiscPer = "0";   //Commented by Pavithra on 29-07-2020
+////                    billdetail.DiscPer = discount_percentage;
+////                    billdetail.DiscPer = "10";
+//                    billdetail.DiscPerAmt = "0";
+//                    billdetail.TaxableAmt = "0";
+//                    billdetail.TaxPer = listProductDetail.get(0).TaxRate;
+//
+//                    billdetail.TaxType = "INCL";
+//                    billdetail.TaxAmount = "0";
+//                    billdetail.LineROff = "0";
+//                    billdetail.RowTotal = "0";
+//                    c.BillRow = billdetail;
+
+                    //Added by pavithra on 29-07-2020
+
                     CalcRow c = new CalcRow();
                     Billrow billdetail = new Billrow();
-//                    billdetail.SlNo = String.valueOf(listModel.size()+1);//Same Serial number generated duplicate key row error from procedure
-                    billdetail.ItemId = listProductDetail.get(0).ItemId;
-                    billdetail.ItemName = listProductDetail.get(0).ItemName;
-                    billdetail.ItemCode = listProductDetail.get(0).ItemCode;
-                    billdetail.BatchId = listProductDetail.get(0).BatchId;
-                    billdetail.BatchCode = listProductDetail.get(0).BatchCode;
-                    billdetail.TaxId = listProductDetail.get(0).TaxId;
-                    billdetail.HSNCode = "";
-                    billdetail.ExpiryDate = listProductDetail.get(0).BatchExpiry;
 
-                    if(isRepeatItem){
-                        Log.d("Value OF P = ",""+p);
-                        billdetail.QtyInPacks = String.valueOf(new_qty);
-                        billdetail.SlNo = String.valueOf(listModel.size()- p);
-                    }else {
-                        billdetail.QtyInPacks = "1";
-                        billdetail.SlNo = String.valueOf(listModel.size() + 1);
+                    //foloowing conditions if --else added by Pavithra on 29-07-2020
+
+                    if(isDiscountAdded){
+
+                        billdetail.ItemId = listModel.get(posDisc).ItemId;
+                        billdetail.ItemName = listModel.get(posDisc).tvItemName;
+                        billdetail.ItemCode = listModel.get(posDisc).ItemCode;
+                        billdetail.BatchId = listModel.get(posDisc).BatchId;
+                        billdetail.BatchCode = listModel.get(posDisc).BatchCode;
+                        billdetail.TaxId = listModel.get(posDisc).TaxId;
+                        billdetail.HSNCode = "";
+                        billdetail.ExpiryDate = listModel.get(posDisc).BatchExpiry;
+                        billdetail.QtyInUnits = "0";  //Added by Pavithra on 31-07-2020
+
+
+                        if(isRepeatItem){
+                            Log.d("Value OF P = ",""+p);
+                            //new condition added by Pavithra on 29-07-2020
+                            if(isDiscountAdded){
+//                                billdetail.QtyInPacks = listModel.get(p).etQty; //Commented by Pavithra on 31-07-2020
+                                billdetail.QtyInUnits = listModel.get(p).etQty;   //added by Pavithra on 31-07-2020
+                                billdetail.QtyInPacks = "0";                      //added by Pavithra on 31-07-2020
+//                                Double qtyPacks =  Double.valueOf(listModel.get(p).etQty)/Double.valueOf( listModel.get(p).tvUOM); //added by Pavithra on 31-07-2020
+//                                billdetail.QtyInPacks = String.valueOf(qtyPacks);   //added by Pavithra on 31-07-2020
+                            }else{
+                                billdetail.QtyInPacks = String.valueOf(new_qty);
+                            }
+//                        billdetail.QtyInPacks = String.valueOf(new_qty);
+                            billdetail.SlNo = String.valueOf(listModel.size()- p);
+                            billdetail.DiscPer = discount_percentage;
+                        }else {
+                            billdetail.QtyInPacks = "1";
+                            billdetail.SlNo = String.valueOf(listModel.size() + 1);
+                            billdetail.DiscPer = "0";
+                        }
+
+//                        billdetail.QtyInUnits = "0"; //Masked by Pavithra on 31-07-2020
+                        billdetail.UPerPack = listModel.get(posDisc).tvUOM; //may need some corrections here
+                        billdetail.Mrp = listModel.get(posDisc).MRP;
+                        billdetail.Rate = listModel.get(posDisc).PackRate;
+                        billdetail.BillingRate = "";
+                        billdetail.FreeFlag = "0";
+                        billdetail.CustType = "LOCAL";
+                        billdetail.Amount = "0";
+                        billdetail.DiscPerAmt = "0";
+                        billdetail.TaxableAmt = "0";
+                        billdetail.TaxPer = listModel.get(posDisc).TaxRate;
+
+                        billdetail.TaxType = "INCL";
+                        billdetail.TaxAmount = "0";
+                        billdetail.LineROff = "0";
+                        billdetail.RowTotal = "0";
+
+                    }else{
+
+                        billdetail.ItemId = listProductDetail.get(0).ItemId;
+                        billdetail.ItemName = listProductDetail.get(0).ItemName;
+                        billdetail.ItemCode = listProductDetail.get(0).ItemCode;
+                        billdetail.BatchId = listProductDetail.get(0).BatchId;
+                        billdetail.BatchCode = listProductDetail.get(0).BatchCode;
+                        billdetail.TaxId = listProductDetail.get(0).TaxId;
+                        billdetail.HSNCode = "";
+                        billdetail.ExpiryDate = listProductDetail.get(0).BatchExpiry;
+
+                        if(isRepeatItem){
+                            Log.d("Value OF P = ",""+p);
+                            //new condition added by Pavithra on 29-07-2020
+                            if(isDiscountAdded){
+                                billdetail.QtyInPacks = listModel.get(p).etQty;
+                            }else{
+                                billdetail.QtyInPacks = String.valueOf(new_qty);
+                            }
+//                        billdetail.QtyInPacks = String.valueOf(new_qty);
+                            billdetail.SlNo = String.valueOf(listModel.size()- p);
+                            billdetail.DiscPer = discount_percentage;
+                        }else {
+                            billdetail.QtyInPacks = "1";
+                            billdetail.SlNo = String.valueOf(listModel.size() + 1);
+                            billdetail.DiscPer = "0";
+                        }
+
+                        billdetail.QtyInUnits = "0";
+                        billdetail.UPerPack = listProductDetail.get(0).UPerPack;
+                        billdetail.Mrp = listProductDetail.get(0).MRP;
+                        billdetail.Rate = listProductDetail.get(0).PackRate;
+                        billdetail.BillingRate = "";
+                        billdetail.FreeFlag = "0";
+                        billdetail.CustType = "LOCAL";
+                        billdetail.Amount = "0";
+                        billdetail.DiscPerAmt = "0";
+                        billdetail.TaxableAmt = "0";
+                        billdetail.TaxPer = listProductDetail.get(0).TaxRate;
+
+                        billdetail.TaxType = "INCL";
+                        billdetail.TaxAmount = "0";
+                        billdetail.LineROff = "0";
+                        billdetail.RowTotal = "0";
+
                     }
 
-                    billdetail.QtyInUnits = "0";
-                    billdetail.UPerPack = listProductDetail.get(0).UPerPack;
-                    billdetail.Mrp = listProductDetail.get(0).MRP;
-                    billdetail.Rate = listProductDetail.get(0).PackRate;
-                    billdetail.BillingRate = "";
-                    billdetail.FreeFlag = "0";
-                    billdetail.CustType = "LOCAL";
-                    billdetail.Amount = "0";
-                    billdetail.DiscPer = "0";
-                    billdetail.DiscPerAmt = "0";
-                    billdetail.TaxableAmt = "0";
-                    billdetail.TaxPer = listProductDetail.get(0).TaxRate;
 
-                    billdetail.TaxType = "INCL";
-                    billdetail.TaxAmount = "0";
-                    billdetail.LineROff = "0";
-                    billdetail.RowTotal = "0";
+
+
+
                     c.BillRow = billdetail;
+
+
+
+
+
+
 
                     Customer customer = new Customer();
                     customer.CustId = prefs.getString("CustomerId", "");
                     customer.CustName = prefs.getString("CustomerName", "");
-//                    customer.BillDate = "26/07/2019"; //Date of billing..it may also need some interface to get it, Commentd by Pavithra on 08-07-2020
 
                     billing_date = prefs.getString("BillingDate", "");
-
                     customer.BillDate = billing_date; //Added by Pavithra on 08-07-2020
                     customer.CustType = "LOCAL";//For the time being need further interface
-                    customer.StoreId = "5"; //alomost constant
+                    customer.StoreId = "5"; //almost constant
                     List<Customer> listCustomer = new ArrayList<>();
                     listCustomer.add(customer);
 
@@ -1224,14 +1520,28 @@ public class SalesActivity extends AppCompatActivity {
                             for (y = 0; y < BillRow.size(); y++) {
                                 tot = BillRow.get(y).RowTotal;
                                 disc = BillRow.get(y).DiscPer;
+                                String discperamount = BillRow.get(y).DiscPerAmt;
                                 //copying tot and disc to listmodel because adpter passes listmodel
 
                                 if(isRepeatItem){
-                                    listModel.get(p).tvTotal = tot;
-                                    listModel.get(p).tvDisc = disc;
+                                    //This if condition added by Pavithra on 29-07-2020
+                                    if(isDiscountAdded){
+                                        listModel.get(posDisc).tvTotal = tot;
+                                        listModel.get(posDisc).tvDisc = disc;
+                                        listModel.get(posDisc).DiscPer = disc;   //Added by Pavithra on 30-07-2020
+                                        listModel.get(posDisc).DiscPerAmt = discperamount;   //Added by Pavithra on 30-07-2020
+                                    }else{
+                                        listModel.get(p).tvTotal = tot;
+                                        listModel.get(p).tvDisc = disc;
+                                        listModel.get(p).DiscPer = disc;  //Added by Pavithra on 30-07-2020
+                                        listModel.get(p).DiscPerAmt = discperamount;  //Added by Pavithra on 30-07-2020
+                                    }
+
                                 }else {
                                     listModel.get(0).tvTotal = tot;
                                     listModel.get(0).tvDisc = disc;
+                                    listModel.get(0).DiscPer = disc;  //Added by Pavithra on 30-07-2020
+                                    listModel.get(0).DiscPerAmt = discperamount;  //Added by Pavithra on 30-07-2020
                                 }
                                 l2.setAdapter(adapter);
 
@@ -1265,6 +1575,7 @@ public class SalesActivity extends AppCompatActivity {
                             }
                         } else {
                             Toast.makeText(SalesActivity.this, "" + calcRowResponseObj.Message, Toast.LENGTH_SHORT).show();
+                            tsErrorMessage(calcRowResponseObj.Message); //Added by Pavithra on 29-07-2020
                         }
                     } catch (Exception e) {
                         Toast.makeText(SalesActivity.this, "" + e, Toast.LENGTH_SHORT).show();
@@ -1328,6 +1639,7 @@ public class SalesActivity extends AppCompatActivity {
 
                      } else {
                          Toast.makeText(SalesActivity.this, "" + nextBillNoResponsePLObj.Message, Toast.LENGTH_SHORT).show();
+                         tsErrorMessage(nextBillNoResponsePLObj.Message); //Added by Pavithra on 29-07-2020
                      }
                  } catch (Exception ex) {
                      Toast.makeText(SalesActivity.this, "" + ex, Toast.LENGTH_SHORT).show();
@@ -1384,101 +1696,111 @@ public class SalesActivity extends AppCompatActivity {
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
 
-        BillAmountResponse billAmountResponse;
-        gson1 = new Gson();
-        billAmountResponse = gson1.fromJson(strBillAmountResponse, BillAmountResponse.class);
+        if (strBillAmountResponse != null && !strBillAmountResponse.equals("")) {   //Added by Pavithra on 29-07-2020
 
-//        billno.setText(String.valueOf(billAmountResponse.SalesSummary.BillSeries + "" + billAmountResponse.SalesSummary.BillNo));
-        billno.setText(String.valueOf(bill_series + "" + bill_no));
-        num = l2.getAdapter().getCount();
-        numofitems.setText(String.valueOf(num));
-        itemtotal.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.TotalAmount)));
-        disctotal.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.DiscountAmt)));
-        taxtotal.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.TotalLinewiseTax)));
-        billdisc.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.TotalDiscount)));
-        billroundoff.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.RoundOff)));
-        billtotal.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.NetAmount)));
+            BillAmountResponse billAmountResponse;
+            gson1 = new Gson();
+            billAmountResponse = gson1.fromJson(strBillAmountResponse, BillAmountResponse.class);
 
-        //To pass to Payementactivity
-        SalessummaryDetail salessummaryDetailObj = new SalessummaryDetail();
-//        salessummaryDetailObj.BillSeries = billAmountResponse.SalesSummary.BillSeries;
-//        salessummaryDetailObj.BillNo = billAmountResponse.SalesSummary.BillNo;
+            if(billAmountResponse.ErrorStatus == 0) {    //Added by Pavithra on 29-07-2020
 
 
-        salessummaryDetailObj.BillSeries = bill_series;
-        salessummaryDetailObj.BillNo = bill_no;
+                billno.setText(String.valueOf(bill_series + "" + bill_no));
+                num = l2.getAdapter().getCount();
+                numofitems.setText(String.valueOf(num));
+                itemtotal.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.TotalAmount)));
+                disctotal.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.DiscountAmt)));
+                taxtotal.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.TotalLinewiseTax)));
+                tvtotalLinewiseDiscount.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.TotalLinewiseDisc))); //added by Pavithra on 30-07-2020
+                billdisc.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.TotalDiscount)));
+                billroundoff.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.RoundOff)));
+                billtotal.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.NetAmount)));
 
-//        salessummaryDetailObj.BillDate = billAmountResponse.SalesSummary.BillDate;  //Masked by APvithra on 13-07-2020
-        prefs = PreferenceManager.getDefaultSharedPreferences(SalesActivity.this);
-        salessummaryDetailObj.BillDate = prefs.getString("BillingDate", "");
-        ;
+                //To pass to Payementactivity
+                SalessummaryDetail salessummaryDetailObj = new SalessummaryDetail();
+                salessummaryDetailObj.BillSeries = bill_series;
+                salessummaryDetailObj.BillNo = bill_no;
+
+//              salessummaryDetailObj.BillDate = billAmountResponse.SalesSummary.BillDate;  //Masked by APvithra on 13-07-2020
+                prefs = PreferenceManager.getDefaultSharedPreferences(SalesActivity.this);
+                salessummaryDetailObj.BillDate = prefs.getString("BillingDate", "");
+
+                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+
+                Date date_temp = null;
+                try {
+                    date_temp = sdf.parse(salessummaryDetailObj.BillDate);
+                } catch (ParseException e) {
+                    e.printStackTrace();
+                }
+
+                Calendar cal = Calendar.getInstance();
+                cal.setTime(date_temp);
+                int month = cal.get(Calendar.MONTH);
+                int day = cal.get(Calendar.DAY_OF_MONTH);
+                int year = cal.get(Calendar.YEAR);
+
+                Log.d("SA From CalcBillAmt", "Month = " + month + " Day = " + day + "Year = " + year);
+
+                if (loyalty_code.equals("")) {
+                    salessummaryDetailObj.Customer = customerDetailObj.Customer;
+                    if (customerDetailObj.CustId != null) {
+                        salessummaryDetailObj.CustId = Integer.parseInt(customerDetailObj.CustId);
+                    }
+
+                    salessummaryDetailObj.LoyaltyId = "0";
+                    salessummaryDetailObj.LoyaltyCode = "";
+                } else {
 
 
-        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+                    //following commented by Pavithra on 04-08-2020
+                    salessummaryDetailObj.Customer = loyaltycustomerDetailsResponseObj.LoyaltyCustomerDetail.get(0).Customer;
+                    salessummaryDetailObj.LoyaltyId =  loyaltycustomerDetailsResponseObj.LoyaltyCustomerDetail.get(0).LoyaltyId;
+                    salessummaryDetailObj.LoyaltyCode =  loyaltycustomerDetailsResponseObj.LoyaltyCustomerDetail.get(0).LoyaltyNo;
+                    salessummaryDetailObj.LoyaltyCardType =  loyaltycustomerDetailsResponseObj.LoyaltyCustomerDetail.get(0).CardType;
 
-        Date date_temp = null;
-        try {
-            date_temp = sdf.parse(salessummaryDetailObj.BillDate);
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
+//                    salessummaryDetailObj.Customer = loyaltyCustomerObj.Name;
+//                    salessummaryDetailObj.LoyaltyId = loyaltyCustomerObj.LoyaltyId;
+////                    salessummaryDetailObj.LoyaltyCode = loyalty_code;                 //commented by Pavithra on 04-08-2020
+//                    salessummaryDetailObj.LoyaltyCode = loyaltyCustomerObj.LoyaltyNo;                //Edited by Pavithra on 04-08-2020
+//                    salessummaryDetailObj.LoyaltyCardType = loyaltyCustomerObj.Type;    //Added by Pavithra on 03-08-2020
+                }
+                salessummaryDetailObj.CustType = billAmountResponse.SalesSummary.CustType;
+//                salessummaryDetailObj.LoyaltyCardType = "";  //Commented by Pavithra on 03-08-2020
+                salessummaryDetailObj.StoreId = billAmountResponse.SalesSummary.StoreId;
+                salessummaryDetailObj.SubStore = "1";
 
-        Calendar cal = Calendar.getInstance();
-        cal.setTime(date_temp);
-        int month = cal.get(Calendar.MONTH);
-        int day = cal.get(Calendar.DAY_OF_MONTH);
-        int year = cal.get(Calendar.YEAR);
+//        salessummaryDetailObj.Counter = "1";  //C vommented by Pavithra 23-07-2020
+//        salessummaryDetailObj.Shift = "1";    //Commented by Pavithra 23-07-2020
+                salessummaryDetailObj.Counter = String.valueOf(prefs.getInt("CounterId", 1));
+                salessummaryDetailObj.Shift = String.valueOf(prefs.getInt("ShiftId", 1));
+                salessummaryDetailObj.B2BB2CType = "B2C";
+                salessummaryDetailObj.TotalAmount = billAmountResponse.SalesSummary.TotalAmount;
+                salessummaryDetailObj.TotalLinewiseTax = billAmountResponse.SalesSummary.TotalLinewiseTax;
+                salessummaryDetailObj.TaxAmount = billAmountResponse.SalesSummary.TotalLinewiseTax;//Edited by Pavithra on 22-07-2020
+                salessummaryDetailObj.DiscountPer = billAmountResponse.SalesSummary.DiscountPer; //Bill discount per
+                salessummaryDetailObj.DiscountAmt = billAmountResponse.SalesSummary.DiscountAmt; //Bill discount amt
+                salessummaryDetailObj.SchemeDiscount = billAmountResponse.SalesSummary.SchemeDiscount;
+                salessummaryDetailObj.CardDiscount = billAmountResponse.SalesSummary.CardDiscount;
+                salessummaryDetailObj.Addtions = billAmountResponse.SalesSummary.Addtions;
+                salessummaryDetailObj.RoundOff = billAmountResponse.SalesSummary.RoundOff;
+                salessummaryDetailObj.NetAmount = billAmountResponse.SalesSummary.NetAmount;
 
-        Log.d("SA From CalcBillAmt", "Month = " + month + " Day = " + day + "Year = " + year);
+                Gson gson = new Gson();
+                String salessummaryDetailObjStr = gson.toJson(salessummaryDetailObj);
 
-
-//        salessummaryDetailObj.Customer = "Test";
-//        salessummaryDetailObj.CustId = 0;
-
-        if (loyalty_code.equals("")) {
-            salessummaryDetailObj.Customer = customerDetailObj.Customer;
-            if (customerDetailObj.CustId != null) {
-                salessummaryDetailObj.CustId = Integer.parseInt(customerDetailObj.CustId);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString("SalessummaryDetailObjStr", salessummaryDetailObjStr);
+                editor.putString("NumberOfItems", String.valueOf(num));
+                editor.commit();
+            }else{
+                tsErrorMessage(billAmountResponse.Message);
             }
-
-            salessummaryDetailObj.LoyaltyId = "0";
-            salessummaryDetailObj.LoyaltyCode = "";
-        } else {
-            salessummaryDetailObj.Customer = loyaltyCustomerObj.Name;
-//            salessummaryDetailObj.CustId = Integer.parseInt(loyaltyCustomerObj.LoyaltyId);
-
-            salessummaryDetailObj.LoyaltyId = loyaltyCustomerObj.LoyaltyId;
-            salessummaryDetailObj.LoyaltyCode = loyaltyCustomerObj.EmpCode;
+        }else{
+            Toast.makeText(SalesActivity.this, "No result from web", Toast.LENGTH_SHORT).show();
         }
-//        salessummaryDetailObj.CustId = Integer.parseInt(billAmountResponse.SalesSummary.Customer.CustId);
-        salessummaryDetailObj.CustType = billAmountResponse.SalesSummary.CustType;
-//        salessummaryDetailObj.LoyaltyId = "0";
-//        salessummaryDetailObj.LoyaltyCode = "";
-        salessummaryDetailObj.LoyaltyCardType = "";
-        salessummaryDetailObj.StoreId = billAmountResponse.SalesSummary.StoreId;
-        salessummaryDetailObj.SubStore = "1";
-        salessummaryDetailObj.Counter = "1";
-        salessummaryDetailObj.Shift = "1";
-        salessummaryDetailObj.B2BB2CType = "B2C";
-        salessummaryDetailObj.TotalAmount = billAmountResponse.SalesSummary.TotalAmount;
-        salessummaryDetailObj.TotalLinewiseTax = billAmountResponse.SalesSummary.TotalLinewiseTax;
-        salessummaryDetailObj.TaxAmount = "0";
-        salessummaryDetailObj.DiscountPer = billAmountResponse.SalesSummary.DiscountPer;
-        salessummaryDetailObj.DiscountAmt = billAmountResponse.SalesSummary.DiscountAmt;
-        salessummaryDetailObj.SchemeDiscount = billAmountResponse.SalesSummary.SchemeDiscount;
-        salessummaryDetailObj.CardDiscount = billAmountResponse.SalesSummary.CardDiscount;
-        salessummaryDetailObj.Addtions = billAmountResponse.SalesSummary.Addtions;
-        salessummaryDetailObj.RoundOff = billAmountResponse.SalesSummary.RoundOff;
-        salessummaryDetailObj.NetAmount = billAmountResponse.SalesSummary.NetAmount;
-
-        Gson gson = new Gson();
-        String salessummaryDetailObjStr = gson.toJson(salessummaryDetailObj);
-
-        SharedPreferences.Editor editor = prefs.edit();
-        editor.putString("SalessummaryDetailObjStr", salessummaryDetailObjStr);
-        editor.putString("NumberOfItems", String.valueOf(num));
-        editor.commit();
     }
+
    }
     private void mobPosCalculateBillAmount() {
 
@@ -1510,52 +1832,53 @@ public class SalesActivity extends AppCompatActivity {
                 }
 
                 customerPL = new CustomerPL();
-//                customerPL.BillDate = "02-05-2015";
                 customerPL.BillDate = billing_date;
                 customerPL.CustId = customerDetailObj.CustId;
                 customerPL.CustName = customerDetailObj.Customer;
                 customerPL.CustType = "LOCAL"; //always local
 
-            }else{
+            }else {
 
-                String loyaltyCustJsonStr = prefs.getString("LoyaltyCustomerDetailJsonStr", "");
 
-                customerDetailObj = new CustomerDetail();;
-                if(!loyaltyCustJsonStr.equals("")) {
+                //Commented by Pavithra on 04-08-2020
+//                String loyaltyCustJsonStr = prefs.getString("LoyaltyCustomerDetailJsonStr", "");
+//
+//                customerDetailObj = new CustomerDetail();
+//                ;
+//                if (!loyaltyCustJsonStr.equals("")) {
+//                    Gson gson = new Gson();
+//                    loyaltyCustomerObj = new LoyaltyCustomer();
+//                    loyaltyCustomerObj = gson.fromJson(loyaltyCustJsonStr, LoyaltyCustomer.class);
+//                }
+
+//                Added by Pavithra on 04-08-2020
+                String loyaltyCustDetailRespnseJsonStr = prefs.getString("LoyaltyCustDetailsResponseJsnStr", "");
+
+                customerDetailObj = new CustomerDetail();
+                ;
+                if (!loyaltyCustDetailRespnseJsonStr.equals("")) {
                     Gson gson = new Gson();
-                    loyaltyCustomerObj = new LoyaltyCustomer();
-                    loyaltyCustomerObj = gson.fromJson(loyaltyCustJsonStr, LoyaltyCustomer.class);
+                    loyaltycustomerDetailsResponseObj = new LoyaltycustomerDetailsResponse();
+                    loyaltycustomerDetailsResponseObj = gson.fromJson(loyaltyCustDetailRespnseJsonStr, LoyaltycustomerDetailsResponse.class);
                 }
+
+
+//Commented by Pavithra on 04-08-2020
+//                customerPL = new CustomerPL();
+////                customerPL.BillDate = "02-05-2015"; //MAsked by Pavithra on 08-07-2020
+//                customerPL.BillDate = billing_date; //Added by Pavithra on 08-07-2020
+//                customerPL.CustId = loyaltyCustomerObj.LoyaltyId;
+//                customerPL.CustName = loyaltyCustomerObj.Name;
+//                customerPL.CustType = "LOCAL"; //always local
 
                 customerPL = new CustomerPL();
 //                customerPL.BillDate = "02-05-2015"; //MAsked by Pavithra on 08-07-2020
                 customerPL.BillDate = billing_date; //Added by Pavithra on 08-07-2020
-                customerPL.CustId = loyaltyCustomerObj.LoyaltyId;
-                customerPL.CustName = loyaltyCustomerObj.Name;
+                customerPL.CustId = loyaltycustomerDetailsResponseObj.LoyaltyCustomerDetail.get(0).LoyaltyId;
+                customerPL.CustName =  loyaltycustomerDetailsResponseObj.LoyaltyCustomerDetail.get(0).Customer;
                 customerPL.CustType = "LOCAL"; //always local
-
-
             }
-
-
-
-//            String customerDetailJsonStr = prefs.getString("CustomerDetailJsonStr", "");
-//
-//            customerDetailObj = new CustomerDetail();;
-//            if(!customerDetailJsonStr.equals("")) {
-//                Gson gson = new Gson();
-//                customerDetailObj = new CustomerDetail();
-//                customerDetailObj = gson.fromJson(customerDetailJsonStr, CustomerDetail.class);
-//            }
-//
-//            CustomerPL customerPL = new CustomerPL();
-//            customerPL.BillDate = "02-05-2015";
-//            customerPL.CustId = customerDetailObj.CustId;
-//            customerPL.CustName = customerDetailObj.Customer;
-//            customerPL.CustType = "LOCAL"; //always local
-
             //Check for LoyaltyCustomerDetailJsonStr too
-
 
 //            CustomerPL customerPL = new CustomerPL();
 //            customerPL.BillDate = "02-05-2015";
@@ -1569,10 +1892,11 @@ public class SalesActivity extends AppCompatActivity {
 //            salesbill.BillDate = "01-10-2015"; //Masked by APvithra on 08-07-2020
             salesbill.BillDate = billing_date;
             salesbill.CustType = "LOCAL";
-            salesbill.StoreId = "5";
+            salesbill.StoreId = "3";
             salesbill.TotalAmount = "0";
             salesbill.TotalLinewiseTax = "0";
             salesbill.DiscountPer = "0";
+//            salesbill.DiscountPer = "10";
             salesbill.DiscountAmt = "0";
             salesbill.SchemeDiscount = "0";
             salesbill.CardDiscount = "0";
@@ -1580,6 +1904,7 @@ public class SalesActivity extends AppCompatActivity {
             salesbill.Addtions = "0";
             salesbill.RoundOff = "0";
             salesbill.NetAmount = "0";
+
 
             salesbill.SalesDetail = salesdetailObjGlobal;
             salesbill.Customer = customerPL;
@@ -1687,6 +2012,7 @@ public class SalesActivity extends AppCompatActivity {
                         }
                     } else {
                         Toast.makeText(SalesActivity.this, "" + prResponse.Productlookup.Message, Toast.LENGTH_SHORT).show();
+                        tsErrorMessage(prResponse.Productlookup.Message); //Added by Pavithra on 29-07-2020
                     }
                 } catch (Exception e) {
                     e.printStackTrace();

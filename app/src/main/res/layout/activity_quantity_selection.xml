@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!-- Modified by Pavithra on 02-07-2020-->
+<!-- Modified by Pavithra on 30-07-2020-->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -166,6 +167,7 @@
         android:id="@+id/view" />
 
     <TextView
+        android:id="@+id/tvUnitQtyHeading"
         android:layout_width="180.1dp"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
@@ -190,7 +192,8 @@
         android:textCursorDrawable="@drawable/color_cursor"
         android:textSize="64dp"
         android:textStyle="bold"
-        android:enabled="true"/>
+        android:enabled="true"
+        android:inputType="numberDecimal"/>  <!--added by Pavithra on 30-07-2020 -->
     <View
         android:layout_width="118.79dp"
         android:layout_height="1dp"

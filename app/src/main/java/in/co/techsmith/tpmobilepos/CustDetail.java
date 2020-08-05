@@ -9,6 +9,5 @@ public class CustDetail {
         Customer = new ArrayList<>();
     }
     public List<Customer> Customer;
-//    public int ErrorStatus ;
-//    public String Message;
+
 }

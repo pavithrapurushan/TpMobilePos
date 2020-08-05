@@ -2,15 +2,9 @@ package in.co.techsmith.tpmobilepos;
 
 public class CalcBillAmount {
 
-    public CalcBillAmount()
-    {
-//        ErrorStatus = 0;
-//        Message = "";
+    public CalcBillAmount() {
     }
 
     public Salesbill SalesBill;
-
-//    public int ErrorStatus;
-//    public String Message;
 
 }

@@ -17,6 +17,7 @@ public class Salesbill {
     public String Addtions;
     public String RoundOff;
     public String NetAmount;
+
     public Salesdetail SalesDetail;
     public CustomerPL Customer;
 

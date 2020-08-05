@@ -24,6 +24,7 @@ import java.util.List;
 //Modified by Pavithra on 07-07-2020
 //Modified by Pavithra on 07-07-2020
 //Modified by Pavithra on 15-07-2020
+//Modified by Pavithra on 22-07-2020
 
 public class PaymentTenderListAdapter extends ArrayAdapter<String> {
 
@@ -73,10 +74,10 @@ public class PaymentTenderListAdapter extends ArrayAdapter<String> {
 
         /*******************************************************************************/
         //added by Pavithra on 15-07-2020
-        boolean IsSaveEnabled = prefs.getBoolean("SaveEnabled",false);
-        if(IsSaveEnabled) { //not Saved
+        boolean IsSaveEnabled = prefs.getBoolean("SaveEnabled", false);
+        if (IsSaveEnabled) { //not Saved
 
-        }else {
+        } else {
             imgBtnTenderDelete.setEnabled(false);
             imgBtnTenderDelete.setAlpha(0.4f);
 
@@ -98,7 +99,6 @@ public class PaymentTenderListAdapter extends ArrayAdapter<String> {
 //        tvSlNo.setText(String.valueOf(position + 1));
 
 
-
 //        if (paymentdetailObj.PayType.equals("0"))
 //            tvTenderType.setText("Cash");
 //        else if (paymentdetailObj.PayType.equals("1"))
@@ -106,24 +106,51 @@ public class PaymentTenderListAdapter extends ArrayAdapter<String> {
 //        else if (paymentdetailObj.PayType.equals("2"))
 //            tvTenderType.setText("Wallet");
 
+
+        /******************Commented by Pavithra on 23-07-2020********************************************************/
         //Added by Pavithra on 07-07-2020
 
-        if (paymentdetailObj.PayType.equals("0")) {
+//        if (paymentdetailObj.PayType.equals("1")) {  //edited by Pavithra on 22-07-2020
+//            tvTenderDetail.setText("Cash");
+//            imgBtnTenderType.setBackgroundResource(R.drawable.ic_dollar_icn);
+//        } else if (paymentdetailObj.PayType.equals("2")) {
+//            //Added by Pavithra on 22-07-2020
+//            String payment_type = prefs.getString("PaymentType", "");
+//            if (payment_type.equals("Card")) {
+//                tvTenderDetail.setText(paymentdetailObj.CardName);
+//                imgBtnTenderType.setBackgroundResource(R.drawable.card_small_icn);
+//            } else {
+//                tvTenderDetail.setText(paymentdetailObj.CardName);
+//                imgBtnTenderType.setBackgroundResource(R.drawable.wallet_small_icn);
+//            }
+//        }
+/*****************************************************************************************************/
+            //Commented by Pavithra on 22-07-2020
+//        else if (paymentdetailObj.PayType.equals("2")) {    //edited by Pavithra on 22-07-2020
+//            tvTenderDetail.setText(paymentdetailObj.CardName);
+//            imgBtnTenderType.setBackgroundResource(R.drawable.card_small_icn);
+//        } else if (paymentdetailObj.PayType.equals("2")) {
+//            tvTenderDetail.setText(paymentdetailObj.CardName);
+//            imgBtnTenderType.setBackgroundResource(R.drawable.wallet_small_icn);
+//        }
+
+
+//        tvTenderDetail.setText(paymentdetailObj.CardName); //Masked by Pavithra on 07-07-2020
+
+
+        if (paymentdetailObj.PayType.equals("1")) {  //edited by Pavithra on 22-07-2020
             tvTenderDetail.setText("Cash");
             imgBtnTenderType.setBackgroundResource(R.drawable.ic_dollar_icn);
-        }
-        else if (paymentdetailObj.PayType.equals("1")) {
-            tvTenderDetail.setText(paymentdetailObj.CardName);
-            imgBtnTenderType.setBackgroundResource(R.drawable.card_small_icn);
-        }
-        else if (paymentdetailObj.PayType.equals("2")) {
+//        } else if (paymentdetailObj.PayType.equals("2")) {
+        } else if (paymentdetailObj.TenderName.equals("Card")) {
+             tvTenderDetail.setText(paymentdetailObj.CardName);
+             imgBtnTenderType.setBackgroundResource(R.drawable.card_small_icn);
+        }else if(paymentdetailObj.TenderName.equals("Wallet")){
             tvTenderDetail.setText(paymentdetailObj.CardName);
             imgBtnTenderType.setBackgroundResource(R.drawable.wallet_small_icn);
         }
 
-//        tvTenderDetail.setText(paymentdetailObj.CardName); //Masked by Pavithra on 07-07-2020
-
-        tvTenderValue.setText(String.format("%.2f", Double.valueOf(paymentdetailObj.PaidAmount))); //Added by APvithra on 02-07-2020
+        tvTenderValue.setText(String.format("%.2f", Double.valueOf(paymentdetailObj.PaidAmount))); //Added by Pavithra on 02-07-2020
         return rowView;
     }
 
@@ -131,14 +158,16 @@ public class PaymentTenderListAdapter extends ArrayAdapter<String> {
     public int getCount() {
         return listPaymentDetail.size();
     }
-
     public void deleteItem(int position) {
 
         //Alert dialog Added by Pavithra on 07-07-2020
 
+        String tendername = listPaymentDetail.get(position).TenderName;
+        String tenderamount = listPaymentDetail.get(position).PaidAmount;
+
         final int pos = position;
         AlertDialog.Builder alertDialogBuilder = new AlertDialog.Builder(cntext);
-        alertDialogBuilder.setMessage("Are you sure to delete this tender?");
+        alertDialogBuilder.setMessage("Are you sure to delete this tender "+tendername+" "+tenderamount+"?");
         alertDialogBuilder.setPositiveButton("yes", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface arg0, int arg1) {

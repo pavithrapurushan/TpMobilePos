@@ -1,12 +1,15 @@
 package in.co.techsmith.tpmobilepos;
 
+//Modified by Pavithra on 04-08-2020
 class Loyaltycustomerdetail {
 
     public String Customer;
     public String LoyaltyId;
-    public String LoyaltyNo;
+    public String LoyaltyNo;  // LoyaltyNo = loyaltycode
     public String AlternateCard;
-    public String CardType;
+    //    public String CardType;  //commented by Pavithra on 04-08-2020
+    public String CardType;  //Added by Pavithra on 04-08-2020
+    public String CardTypeDesc;  //Added by Pavithra on 04-08-2020
     public String EmpCode;
     public String Phone1;
     public String Phone2;
@@ -17,3 +20,8 @@ class Loyaltycustomerdetail {
     public String EMail;
     public String ValidUpto;
 }
+
+
+
+
+

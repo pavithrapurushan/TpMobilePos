@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--Created by Pavithra on 06-07-2020-->
 
+<!--Modified by Pavithra on 23-07-2020-->
+
 <RelativeLayout android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"
@@ -24,16 +26,58 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentTop="true"
             android:background="@drawable/rectangletop"/>
-        <TextView
-            android:id="@+id/customer_in"
-            android:layout_width="385dp"
-            android:textSize="36sp"
-            android:layout_marginTop="10dp"
-            android:fontFamily="roboto"
-            android:layout_marginLeft="80dp"
-            android:textColor="#FFFFFF"
-            android:text="Payment Window"
-            android:layout_height="wrap_content"/>
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:id="@+id/payment_window"
+                android:layout_width="385dp"
+                android:textSize="36sp"
+                android:layout_marginTop="10dp"
+                android:fontFamily="roboto"
+                android:layout_marginLeft="80dp"
+                android:textColor="#FFFFFF"
+                android:text="Payment Window"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/tvStoreIdPayWindow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="StoreId : "
+                android:textColor="#FFFFFF"
+                android:textSize="30sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="200dp"/>
+
+            <TextView
+                android:id="@+id/tvShiftIdPayWindow"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="ShiftId : "
+                android:textColor="#FFFFFF"
+                android:textSize="30sp"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="100dp"/>
+
+
+
+        </LinearLayout>
+
+        <!--Masked by Pavithra on 29-07-2020-->
+        <!--<TextView-->
+            <!--android:id="@+id/customer_in"-->
+            <!--android:layout_width="385dp"-->
+            <!--android:textSize="36sp"-->
+            <!--android:layout_marginTop="10dp"-->
+            <!--android:fontFamily="roboto"-->
+            <!--android:layout_marginLeft="80dp"-->
+            <!--android:textColor="#FFFFFF"-->
+            <!--android:text="Payment Window"-->
+            <!--android:layout_height="wrap_content"/>-->
 
         <LinearLayout
             android:layout_width="110dp"
@@ -168,6 +212,20 @@
                 android:textSize="36sp"
                 android:textStyle="bold"
                 android:layout_alignBottom="@+id/tvCardAmt"/>
+
+            <!--added by  Pavithra on 23-07-2020-->
+
+
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imgbBtnAutofillPaymentCard"
+                android:src="@drawable/ic_autofill_payment_icon"
+                android:layout_alignBottom="@+id/cardamount"
+                android:layout_toRightOf="@+id/cardamount"
+                android:background="@null"
+                android:layout_marginLeft="5dp"/>
+
             <TextView
                 android:layout_width="170dp"
                 android:layout_height="56dp"
@@ -237,7 +295,8 @@
                 android:textColor="@color/white"
                 android:textSize="30sp"
                 android:textStyle="bold"
-                android:gravity="bottom"/>
+                android:gravity="bottom"
+                android:id="@+id/tvCashAmt"/>
 
             <EditText
                 android:id="@+id/cashamount"
@@ -250,7 +309,19 @@
                 android:text=""
                 android:textColor="#FFBB33"
                 android:textSize="36sp"
-                android:textStyle="bold" />  <!-- Modified by Pavithra on 02-07-2020-->
+                android:textStyle="bold"
+                android:layout_alignBottom="@+id/tvCashAmt"/>  <!-- Modified by Pavithra on 02-07-2020-->
+
+            <!--added by  Pavithra on 23-07-2020-->
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imgbBtnAutofillPayment"
+                android:src="@drawable/ic_autofill_payment_icon"
+                android:layout_alignBottom="@+id/cashamount"
+                android:layout_toRightOf="@+id/cashamount"
+                android:background="@null"
+                android:layout_marginLeft="5dp"/>
 
             <Button
                 android:id="@+id/cashsubmitbtn"
@@ -335,6 +406,18 @@
                 android:textStyle="bold"
                 android:layout_alignBottom="@+id/tvWalletAmt"/>   <!-- Modified by Pavithra on 02-07-2020-->
 
+ <!--added by  Pavithra on 23-07-2020-->
+            <ImageButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/imgbBtnAutofillPaymentWallet"
+                android:src="@drawable/ic_autofill_payment_icon"
+                android:layout_alignBottom="@+id/walletamount"
+                android:layout_toRightOf="@+id/walletamount"
+                android:background="@null"
+                android:layout_marginLeft="5dp"/>
+
+
             <TextView
                 android:layout_width="170dp"
                 android:layout_height="56dp"
@@ -348,7 +431,6 @@
                 android:gravity="bottom"
                 android:id="@+id/tvAUCodeWallet"
                 android:layout_below="@+id/walletamount"/>
-
 
             <EditText
                 android:id="@+id/etWalletAUCode"

@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
@@ -16,8 +17,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -29,10 +32,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Calendar;
 
-
 //Modified by Pavithra on 07-07-2020
 //Modified by Pavithra on 09-07-2020
-//Added by Pavithra on 15-07-2020
+//Modified by Pavithra on 15-07-2020
+//Modified by Pavithra on 22-07-2020
+//Modified by Pavithra on 23-07-2020
+//Modified by Pavithra on 29-07-2020
+//Modified by Pavithra on 31-07-2020
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -49,6 +55,13 @@ public class LoginActivity extends AppCompatActivity {
     SharedPreferences prefs;
 
     TextView tvValidateLoginMsg; //Added by Pavithra on 09-07-2020
+    TsCommonMethods tsCommonMethods;
+
+    String Device_id = "";
+
+    ImageButton imgBtnSettings;
+
+    TextView tvBiilingDate;  //Added by Pavithra on 05-08-2020
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -73,29 +86,35 @@ public class LoginActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_login);
 
-        etBillingDate = (EditText)findViewById(R.id.etBillingDate);
-        etUserName = (EditText)findViewById(R.id.etUsername);
-        etPassword = (EditText)findViewById(R.id.etPassword);
+//        String strUUID  = String.valueOf( UUID.randomUUID());
+//        strUUID = strUUID.replace("-", "");
+//        String DeviceUniqueId = strUUID.substring(0,15).toUpperCase();
+
+        tsCommonMethods = new TsCommonMethods(LoginActivity.this);
+        Device_id = tsCommonMethods.GetDeviceUniqueId();
+        Toast.makeText(this, "" + tsCommonMethods.GetDeviceUniqueId(), Toast.LENGTH_SHORT).show();
+        Log.d("LA", "DeviceId = " + tsCommonMethods.GetDeviceUniqueId());
+
+        etBillingDate = (EditText) findViewById(R.id.etBillingDate);
+        etUserName = (EditText) findViewById(R.id.etUsername);
+        etPassword = (EditText) findViewById(R.id.etPassword);
         tvValidateLoginMsg = (TextView) findViewById(R.id.tvValidateLoginMsg); //Added by Pavithra on 09-07-2020
+        imgBtnSettings = (ImageButton) findViewById(R.id.imgBtnSettings); //Added by Pavithra on 31-07-2020
 
-//        Snackbar.make(getWindow().getDecorView().getRootView(), "Click the pin for more options", Snackbar.LENGTH_LONG).show();
+        tvBiilingDate = (TextView)findViewById(R.id.tvBiilingDate); //Added by Pavithra on 05-08-2020
 
+        float textsize = tvBiilingDate.getTextSize();
+        Toast.makeText(this, ""+textsize, Toast.LENGTH_SHORT).show();
+        Log.d("LA",""+textsize);
 
-//        View parentLayout = findViewById(android.R.id.content);
-//        Snackbar.make(parentLayout, "This is main activity", Snackbar.LENGTH_LONG)
-//                .setAction("CLOSE", new View.OnClickListener() {
-//                    @Override
-//                    public void onClick(View view) {
-//
-//                    }
-//                })
-//                .setActionTextColor(getResources().getColor(android.R.color.holo_red_light ))
-//                .show();
-
-
-//        Intent loginintent=new Intent(LoginActivity.this,SalesActivity.class);
-//        Intent loginintent=new Intent(LoginActivity.this,SalesActivity.class);
-//        startActivity(loginintent);
+        //added by Pavithra on 31-07-2020
+        imgBtnSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intnt = new Intent(LoginActivity.this, SettingsActivity.class);
+                startActivity(intnt);
+            }
+        });
     }
 
     public void login(View view) {
@@ -104,22 +123,11 @@ public class LoginActivity extends AppCompatActivity {
         password = etPassword.getText().toString();
         bill_date = etBillingDate.getText().toString();
 
-        if(user_name.equals("")||password.equals("")||bill_date.equals("")){
+        if (user_name.equals("") || password.equals("") || bill_date.equals("")) {
             Toast.makeText(this, "Fields cannot be empty", Toast.LENGTH_SHORT).show();
-        }else{
-
-            //Commented by Pavithra on 10-07-2020
-//            prefs = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
-//            SharedPreferences.Editor editor = prefs.edit();
-//            editor.putString("BillingDate",bill_date);
-//            editor.commit();
+        } else {
             new MobPOSValidateUserAPITask().execute();
-
         }
-
-
-//        Intent loginintent = new Intent(LoginActivity.this,customtoolbar.class);
-//        startActivity(loginintent);
     }
 
     @Override
@@ -155,7 +163,7 @@ public class LoginActivity extends AppCompatActivity {
                 Toast.makeText(LoginActivity.this, "No result  from web", Toast.LENGTH_SHORT).show();
             } else {
                 Gson gson = new Gson();
-                ValidateUserr validateUserrObj = gson.fromJson(strFromValidateUser, ValidateUserr.class);
+                ValidateUserResponse validateUserrObj = gson.fromJson(strFromValidateUser, ValidateUserResponse.class);
                 if (validateUserrObj.ErrorStatus == 0) {
                     tvValidateLoginMsg.setText("");  //Added by Pavithra on 09-07-2020
                     SharedPreferences mPrefs = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this); //Added by Pavithra on 09-07-2020
@@ -164,11 +172,15 @@ public class LoginActivity extends AppCompatActivity {
                     editor.commit();   //Added by Pavithra on 09-07-2020
 
                     Toast.makeText(LoginActivity.this, "Successfully logged in", Toast.LENGTH_SHORT).show();
+
 /*************************************************************************************************************************************/
                     //Added by Pavithra on 10-07-2020
                     prefs = PreferenceManager.getDefaultSharedPreferences(LoginActivity.this);
                     editor = prefs.edit();
                     editor.putString("BillingDate",bill_date);
+                    editor.putString("DeviceId",Device_id);
+                    editor.putInt("CounterId",validateUserrObj.CounterId); //Added by Pavithra on 23-07-2020
+                    editor.putInt("ShiftId",validateUserrObj.ShiftId);     //Added by Pavithra on 23-07-2020
                     editor.commit();
 
 /*************************************************************************************************************************************/
@@ -178,8 +190,9 @@ public class LoginActivity extends AppCompatActivity {
                     finish();  //Added by Pavithra on 15-07-2020
 
                 } else {
-                    Toast.makeText(LoginActivity.this, "" + validateUserrObj.Message, Toast.LENGTH_SHORT).show();
-                    tvValidateLoginMsg.setText("Username or Password incorrect");  //Added by Pavithra on 09-07-2020
+//                    Toast.makeText(LoginActivity.this, "" + validateUserrObj.Message, Toast.LENGTH_SHORT).show();
+//                    tvValidateLoginMsg.setText("Username or Password incorrect");  //Added by Pavithra on 09-07-2020  //Commented by pavithra on 29-07-2020
+                    tsErrorMessage(validateUserrObj.Message);  //Added by Pavithra on 29-07-2020
                     String userName = validateUserrObj.UserName;
                     String userId = validateUserrObj.UserId;
                 }
@@ -190,17 +203,39 @@ public class LoginActivity extends AppCompatActivity {
     private void mobPOSValidateUser() {
 
         try {
+            //Added by Pavithra on 23-07-2020
+            User usrObj = new User();
+            usrObj.UserId = user_name;
+            usrObj.Password = password;
+            usrObj.BillDate = bill_date;
+//            usrObj.DeviceId = tsCommonMethods.GetDeviceUniqueId();
+            usrObj.DeviceId = Device_id;
+            UserPL userPLObj = new UserPL();
+            userPLObj.User = usrObj;
+
+            Gson gson = new Gson();
+            String userObjJsonstr = gson.toJson(userPLObj);
+
+
             URL url = new URL(AppConfig.app_url + "ValidateUser"); //give product id as filter
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
             connection.setReadTimeout(15000);
             connection.setConnectTimeout(30000);
-            // connection.setRequestProperty("device_id",deviceid);
             connection.setRequestProperty("Content-Type", "application/json");
             connection.setRequestProperty("auth_key", "BFD2E5AC-101F-47ED-AB49-C2D18EE5EA97");
             connection.setRequestProperty("user_key", "");
-            connection.setRequestProperty("user_name", user_name);
-            connection.setRequestProperty("pswd", password);
+
+            //Following 3 lines commented by Pavithra on 23-07-2020
+//            connection.setRequestProperty("user_name", user_name);
+//            connection.setRequestProperty("pswd", password);
+//            connection.setRequestProperty("bill_date", bill_date);//Added by Pavithra on 22-07-2020
+
+            //Added by Pavithra on 23-07-2020
+
+//            {"User":{"BillDate":"23/07/2020","DeviceId":"1EAF283696504E7","Password":"abcd","UserId":"Admin"}}
+            connection.setRequestProperty("xml_str", userObjJsonstr);
+
             connection.connect();
             try {
                 InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
@@ -216,7 +251,6 @@ public class LoginActivity extends AppCompatActivity {
                 String result = sb.toString();
                 strFromValidateUser = result;
 
-
 //                {"UserId":"Admin","UserName":"Admin","Id":1,"ErrorStatus":0,"Message":"Validation is Successfull"}
             } finally {
                 connection.disconnect();
@@ -225,6 +259,39 @@ public class LoginActivity extends AppCompatActivity {
             Log.e("ERROR", e.getMessage(), e);
         }
     }
+
+
+    //Added by Pavithra on 29-07-2020
+    public void tsErrorMessage(String error_massage){
+
+        final Dialog dialog = new Dialog(LoginActivity.this);
+        dialog.setContentView(R.layout.custom_save_popup);
+        final String title = "Message";
+
+        TextView dialogTitle = (TextView)dialog.findViewById(R.id.txvSaveTitleDialog);
+        dialogTitle.setText(title);
+        dialog.getWindow().setBackgroundDrawableResource(R.color.colorPrimary);
+        dialog. getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        int height_of_popup = 500;
+        int width_of_popup = 400;
+        dialog.getWindow().setLayout(width_of_popup, height_of_popup);
+        dialog.show();
+
+        final TextView tvSaveStatus = (TextView) dialog.findViewById(R.id.tvSaveStatus);
+//        tvSaveStatus.setText("Successfully saved \n Token No = "+tokenNo);
+        tvSaveStatus.setText(""+error_massage);
+
+        Button btnOkPopup = (Button)dialog.findViewById(R.id.btnOkPopUp);
+
+        btnOkPopup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+    }
+
 
 
     public void tsMessage(String msg) {

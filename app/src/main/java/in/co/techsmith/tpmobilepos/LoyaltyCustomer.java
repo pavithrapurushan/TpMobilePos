@@ -3,7 +3,7 @@ package in.co.techsmith.tpmobilepos;
 class LoyaltyCustomer {
 
     public String LoyaltyId;;
-    public String LoyaltyNo;
+    public String LoyaltyNo;  // LoyaltyNo = loyaltycode
     public String Name;
     public String AlternateCard;
     public String Type;

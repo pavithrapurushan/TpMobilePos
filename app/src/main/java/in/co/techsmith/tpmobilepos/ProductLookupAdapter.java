@@ -4,6 +4,7 @@ import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.preference.PreferenceManager;
@@ -17,6 +18,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -35,6 +37,7 @@ import java.util.List;
 
 
 //Modified by Pavithra on 30-05-2020
+//Modified by Pavithra on 30-07-2020
 
 public class ProductLookupAdapter extends ArrayAdapter<ProductModel> implements View.OnClickListener {
     ArrayList<ProductModel> listProductModel;
@@ -65,13 +68,13 @@ public class ProductLookupAdapter extends ArrayAdapter<ProductModel> implements 
 
     //Added by 1165 on 22-02-2020
     ListView l2;
-    TextView billno,numofitems,itemtotal,disctotal,taxtotal,billdisc,billroundoff,billtotal;
+    TextView billno,numofitems,itemtotal,disctotal,taxtotal,billdisc,billroundoff,billtotal,tvTotalLinewiseDisc;
 
     public static class ViewHolder {
         TextView slno, name, code, mnfr, mrp, soh, pmid;
     }
 
-    public ProductLookupAdapter(ArrayList<ProductModel> listdata, ArrayList<Model> list, ListView l2, TextView billno, TextView numofitems, TextView itemtotal, TextView disctotal, TextView taxtotal, TextView billdisc, TextView billroundoff, TextView billtotal, Context context, Dialog dialog) {
+    public ProductLookupAdapter(ArrayList<ProductModel> listdata, ArrayList<Model> list, ListView l2, TextView billno, TextView numofitems, TextView itemtotal, TextView disctotal, TextView taxtotal, TextView billdisc, TextView billroundoff, TextView billtotal, Context context, Dialog dialog,TextView tvTotalLineDisc) {
 
         /********** Take passed values **********/
         super(context, R.layout.product_list_row, listdata);
@@ -87,6 +90,7 @@ public class ProductLookupAdapter extends ArrayAdapter<ProductModel> implements 
         this.itemtotal = itemtotal;
         this.disctotal = disctotal;
         this.taxtotal = taxtotal;
+        this.tvTotalLinewiseDisc = tvTotalLineDisc;
         this.billdisc = billdisc;
         this.billroundoff = billroundoff;
         this.billtotal = billtotal;
@@ -151,7 +155,7 @@ public class ProductLookupAdapter extends ArrayAdapter<ProductModel> implements 
 
                     //Added by 1165 on 22-02-2020
                     batchlistview = (ListView) batchdialog.findViewById(R.id.batch_listview);
-                    batchLookupAdapter = new BatchLookupAdapter(listBatchModel,listModel,mContext,l2,billno,numofitems,itemtotal,disctotal,taxtotal,billdisc,billroundoff,billtotal,etproduct,batchdialog,dialog); //Added by Pavithra on 10-07-2020
+                    batchLookupAdapter = new BatchLookupAdapter(listBatchModel,listModel,mContext,l2,billno,numofitems,itemtotal,disctotal,taxtotal,billdisc,billroundoff,billtotal,etproduct,batchdialog,dialog,tvTotalLinewiseDisc); //Added by Pavithra on 10-07-2020
                     batchlistview.setAdapter(batchLookupAdapter);
 
                     WindowManager.LayoutParams lp = new WindowManager.LayoutParams();
@@ -279,7 +283,7 @@ public class ProductLookupAdapter extends ArrayAdapter<ProductModel> implements 
                             slno++; //Check this increment on slno
 
                             listBatchModel.add(new BatchModel("" + slno, "" + br.Code, "" + br.ExpDate, "" + br.MRP, "" + br.SOH, "" + br.BatchId));
-                            batchLookupAdapter = new BatchLookupAdapter(listBatchModel, listModel, mContext, l2, billno, numofitems, itemtotal, disctotal, taxtotal, billdisc, billroundoff, billtotal, etproduct, batchdialog, dialog); //Added by Pavithra on 10-07-2020
+                            batchLookupAdapter = new BatchLookupAdapter(listBatchModel, listModel, mContext, l2, billno, numofitems, itemtotal, disctotal, taxtotal, billdisc, billroundoff, billtotal, etproduct, batchdialog, dialog,tvTotalLinewiseDisc); //Added by Pavithra on 10-07-2020
 
                             batchlistview.setAdapter(batchLookupAdapter);
                             batchLookupAdapter.notifyDataSetChanged();
@@ -287,6 +291,7 @@ public class ProductLookupAdapter extends ArrayAdapter<ProductModel> implements 
 
                     } else {
                         Toast.makeText(mContext, "" + BResponse.Batchlookup.Message, Toast.LENGTH_SHORT).show();
+                        tsErrorMessage(BResponse.Batchlookup.Message);//Added by Pavithra on 30-07-2020
                     }
 
                 } catch (Exception e) {
@@ -377,6 +382,7 @@ public class ProductLookupAdapter extends ArrayAdapter<ProductModel> implements 
 
                     } else {
                         Toast.makeText(mContext, "" + Prdetail.Message, Toast.LENGTH_SHORT).show();
+                        tsErrorMessage(Prdetail.Message);//Added by Pavithra on 30-07-2020
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -389,5 +395,37 @@ public class ProductLookupAdapter extends ArrayAdapter<ProductModel> implements 
             super.onPreExecute();
 
         }
+    }
+
+
+    //Added by Pavithra on 30-07-2020
+    public void tsErrorMessage(String error_massage){
+
+        final Dialog dialog = new Dialog(mContext);
+        dialog.setContentView(R.layout.custom_save_popup);
+        final String title = "Message";
+
+        TextView dialogTitle = (TextView)dialog.findViewById(R.id.txvSaveTitleDialog);
+        dialogTitle.setText(title);
+        dialog.getWindow().setBackgroundDrawableResource(R.color.colorPrimary);
+        dialog. getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        int height_of_popup = 500;
+        int width_of_popup = 400;
+        dialog.getWindow().setLayout(width_of_popup, height_of_popup);
+        dialog.show();
+
+        final TextView tvSaveStatus = (TextView) dialog.findViewById(R.id.tvSaveStatus);
+//        tvSaveStatus.setText("Successfully saved \n Token No = "+tokenNo);
+        tvSaveStatus.setText(""+error_massage);
+
+        Button btnOkPopup = (Button)dialog.findViewById(R.id.btnOkPopUp);
+
+        btnOkPopup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
     }
 }

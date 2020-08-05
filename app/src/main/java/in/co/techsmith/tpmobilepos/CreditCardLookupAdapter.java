@@ -2,7 +2,9 @@ package in.co.techsmith.tpmobilepos;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -74,6 +76,11 @@ public class CreditCardLookupAdapter extends RecyclerView.Adapter<CreditCardLook
                     etCardAmount.setText("");
                     etCardAmount.requestFocus();
 
+                    SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putString("CardId",listdata.get(position).getCardid());
+                    editor.commit();
+
                     InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
                     imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
 
@@ -139,6 +146,7 @@ public class CreditCardLookupAdapter extends RecyclerView.Adapter<CreditCardLook
                 this.txtcardname = (TextView) itemView.findViewById(R.id.cardName);
                 this.txtcompany = (TextView) itemView.findViewById(R.id.company);
                 relativeLayout = (RelativeLayout) itemView.findViewById(R.id.cardlookuprow);
+
             }
         }
 }

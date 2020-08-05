@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--Modified by Pavithra on 09-07-2020-->
-
-
-<!--Added by PAvithra on 09-07-2020-->
+<!--Modified by Pavithra on 31-07-2020-->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -11,12 +9,16 @@
     android:background="#113a4e"
     android:layout_height="match_parent"
     tools:context=".LoginActivity"
-    android:gravity="center">
+    >
 
     <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:id="@+id/ll1"
+        android:gravity="center">
+
+
 
         <TextView
             android:layout_width="443dp"
@@ -31,14 +33,22 @@
             />
 
         <TextView
-            android:layout_width="443dp"
+            android:id="@+id/tvBiilingDate"
+            android:layout_width="375dp"
             android:layout_height="wrap_content"
-            android:text="BILLING DATE"
+            android:text="@string/my_screen_size"
             android:textStyle="bold"
             android:fontFamily="sans-serif"
             android:textColor="@color/white"
-            android:textSize="21sp"
+            android:textSize="@dimen/textView_font"
             android:layout_marginTop="25dp"/>
+
+        <!--android:text="BILLING DATE"-->
+
+
+        <!--android:textSize="21sp"-->
+        <!--Edited by Pavithra on 05-08-2020-->
+
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -48,7 +58,7 @@
 
             <EditText
                 android:id="@+id/etBillingDate"
-                android:layout_width="375dp"
+                android:layout_width="325dp"
                 android:layout_height="wrap_content"
                 android:hint="Add Billing Date"
                 android:textColor="#FFFFFF"
@@ -73,7 +83,7 @@
         </LinearLayout>
 
         <TextView
-            android:layout_width="443dp"
+            android:layout_width="375dp"
             android:layout_height="wrap_content"
             android:text="USER NAME"
             android:textStyle="bold"
@@ -99,7 +109,7 @@
             android:singleLine="true"/>
 
         <TextView
-            android:layout_width="443dp"
+            android:layout_width="375dp"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
             android:text="PASSWORD"
@@ -151,12 +161,26 @@
             android:padding="5dp"/>
 
 
-
-
-
+        <!--<TextView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:text="@string/my_screen_size"-->
+            <!--/>-->
 
 
     </LinearLayout>
+
+    <!--Added by Pavithra on 31-07-2020-->
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imgBtnSettings"
+        android:src="@drawable/ic_settings_24px"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentRight="true"
+        android:background="@null"
+        android:layout_marginTop="5dp"/>
 
 </RelativeLayout>
 

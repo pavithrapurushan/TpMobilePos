@@ -12,6 +12,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
+import android.text.Html;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
@@ -34,12 +35,18 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
+import java.net.SocketTimeoutException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
 //Modified by Pavithra on 03-07-2020
-//Added by Pavithra on 15-07-2020
+//Modified by Pavithra on 15-07-2020
+//Modified by Pavithra on 22-07-2020
+//Modified by Pavithra on 23-07-2020
+//Modified by Pavithra on 29-07-2020
+//Modified by Pavithra on 03-08-2020
+
 public class PaymentActivityNew extends AppCompatActivity {
 
     public static final String JSON_STRING="{\"CARD\":{\"CARDID\":\"9\",\"CARDNAME\":\"COD\",\"COMPANY\":\"\"}}";
@@ -109,6 +116,10 @@ public class PaymentActivityNew extends AppCompatActivity {
 
     ListView lvTenderList;
 
+    ImageButton imgBtnAutofillCashAmt;
+    ImageButton imgBtnAutofillCardAmt;
+    ImageButton imgBtnAutofillWalletAmt;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,17 +133,22 @@ public class PaymentActivityNew extends AppCompatActivity {
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         this.getWindow().getDecorView().setSystemUiVisibility(
-                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+
+//                View.SYSTEM_UI_FLAG_LAYOUT_STABLE                     Commented by Pavithra on 28-07-2020
+//                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+//                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+//                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+//                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+
+
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE                       //Edited by Pavithra on 28-07-2020
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
 
-//        setContentView(R.layout.activity_payment);  //Commented by Pavithra on 06-07-2020
+//        setContentView(R.layout.activity_payment);      //Commented by Pavithra on 06-07-2020
         setContentView(R.layout.activity_payment_new);    //Added by Pavithra on 06-07-2020
-
-//        Toast.makeText(this, "New PaymentActivity", Toast.LENGTH_SHORT).show();
 
         salessummaryDetail = new SalessummaryDetail();
         salesdetailPLObj = new Salesdetail();
@@ -186,6 +202,25 @@ public class PaymentActivityNew extends AppCompatActivity {
 //        btnPaymentTenderList = (Button) findViewById(R.id.btnPaymntTndrList);
         tvBadge_count_tenderlist = (TextView) findViewById(R.id.badge_count_tenderlist);
 
+        imgBtnAutofillCashAmt = (ImageButton) findViewById(R.id.imgbBtnAutofillPayment);
+        imgBtnAutofillCardAmt = (ImageButton) findViewById(R.id.imgbBtnAutofillPaymentCard);
+        imgBtnAutofillWalletAmt = (ImageButton) findViewById(R.id.imgbBtnAutofillPaymentWallet);
+
+
+/*******************************************Added by Pavithra on 29-07-2020 following ***********************************************/
+        TextView tvStoreId = (TextView) findViewById(R.id.tvStoreIdPayWindow);
+        TextView tvShiftId = (TextView) findViewById(R.id.tvShiftIdPayWindow);
+
+        int shiftId = prefs.getInt("ShiftId",0);
+        String store_id = "3";
+        String textStore = "<font color=#ffffff>StoreId : </font> <font color=#ffcc00>"+ store_id +"</font>";
+        String textShift = "<font color=#ffffff>ShiftId : </font> <font color=#ffcc00>"+ shiftId +"</font>";
+        tvStoreId.setText(Html.fromHtml(textStore));
+        tvShiftId.setText(Html.fromHtml(textShift));
+/****************************************************************************************************************************/
+
+
+
         cashLayout.setVisibility(View.VISIBLE);
         cardLayout.setVisibility(View.GONE);
         walletLayout.setVisibility(View.GONE);
@@ -198,14 +233,6 @@ public class PaymentActivityNew extends AppCompatActivity {
 
         paymentdetailsList = new ArrayList<>(); //Added by 1165 on 08-02-2020
         paymentdetailsListForAPISave = new ArrayList<>(); //Added by 1165 on 08-02-2020
-
-
-        //Masked by Pavithra on 07-07-2020
-//        try {
-//            tvBadge_count_tenderlist.setText(""+paymentdetailsList.size());  //Added by Pavithra on 06-07-2020
-//        }catch (Exception ex){
-//            Log.d("PA",""+ex);
-//        }
 
 
         IsSaveEnabled = prefs.getBoolean("SaveEnabled", false);
@@ -254,8 +281,6 @@ public class PaymentActivityNew extends AppCompatActivity {
 
                 }
 
-
-
             }
 
             @Override
@@ -295,11 +320,10 @@ public class PaymentActivityNew extends AppCompatActivity {
             @Override
             public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
 
-                if(!walletamount.getText().toString().equals("")) { //Added by Pavithra on  03-07-2020
+                if (!walletamount.getText().toString().equals("")) { //Added by Pavithra on  03-07-2020
                     walltsubmitbtn.setAlpha(1f);
                     walltsubmitbtn.setEnabled(true);
                 }
-
             }
 
             @Override
@@ -324,14 +348,22 @@ public class PaymentActivityNew extends AppCompatActivity {
 //                btnloyalty.setAlpha(0.30f);
                 final String shprfsBalance = prefs.getString(shrbalance, "");
 
+
+                //Added by Pavithra on 23-07-2020
+                imgBtnAutofillCashAmt.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String current_blnc = balance.getText().toString();
+                        cashamount.setText(current_blnc);
+
+                    }
+                });
+
                 cashsubmitbtn.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
 //                        cashsubmitbtn.setBackgroundColor(getResources().getColor(R.color.colorAccent));
 //                        cashsubmitbtn.setAlpha(4);
-
-
-
 //                        cashsubmitbtn.getBackground().setAlpha(51);
 
                         if (cashamount.getText().toString().equals("")) {
@@ -420,7 +452,7 @@ public class PaymentActivityNew extends AppCompatActivity {
                                     boolean isCashAdded = false;
                                     if (paymentdetailsList.size() != 0) {
                                         for (int i = 0; i < paymentdetailsList.size(); i++) {
-                                            if (paymentdetailsList.get(i).PayType.equals("0")) {
+                                            if (paymentdetailsList.get(i).PayType.equals("1")) {
 
                                                 isCashAdded = true;
                                                 String CashAmt = paymentdetailsList.get(i).PaidAmount;
@@ -439,7 +471,8 @@ public class PaymentActivityNew extends AppCompatActivity {
                                             paymentdetailObj.CurrencyDenom = "";
                                             paymentdetailObj.CurrencyType = "0";
                                             paymentdetailObj.CreditType = "0";
-                                            paymentdetailObj.PayType = "0";
+//                                            paymentdetailObj.PayType = "0";  //Commented by Pavithra on 21-07-2020
+                                            paymentdetailObj.PayType = "1";  //Added by Pavithra on 21-07-2020
                                             paymentdetailObj.ExchangeRate = "";
                                             paymentdetailObj.ChequeNo = "";
                                             paymentdetailObj.ChequeDate = "";
@@ -459,6 +492,8 @@ public class PaymentActivityNew extends AppCompatActivity {
                                             paymentdetailObj.Tender = tempTender;
                                             paymentdetailObj.PlutusId = "0";
                                             paymentdetailObj.WalletId = "0";
+
+                                            paymentdetailObj.TenderName = "Cash";
                                             paymentdetailsList.add(paymentdetailObj);
                                         }
                                     } else {
@@ -467,7 +502,8 @@ public class PaymentActivityNew extends AppCompatActivity {
                                         paymentdetailObj.CurrencyDenom = "";
                                         paymentdetailObj.CurrencyType = "0";
                                         paymentdetailObj.CreditType = "0";
-                                        paymentdetailObj.PayType = "0";
+                                        // paymentdetailObj.PayType = "0";  //Commented by Pavithra on 21-07-2020
+                                        paymentdetailObj.PayType = "1";  //Added by Pavithra on 21-07-2020
                                         paymentdetailObj.ExchangeRate = "";
                                         paymentdetailObj.ChequeNo = "";
                                         paymentdetailObj.ChequeDate = "";
@@ -486,6 +522,9 @@ public class PaymentActivityNew extends AppCompatActivity {
                                         paymentdetailObj.Tender = tempTender;
                                         paymentdetailObj.PlutusId = "0";
                                         paymentdetailObj.WalletId = "0";
+
+                                        paymentdetailObj.TenderName = "Cash"; //Added by Pavithra on 23-07-2020
+
                                         paymentdetailsList.add(paymentdetailObj);
 
                                         Log.d("PA", "One payment added to paymenttenderlist");
@@ -544,6 +583,17 @@ public class PaymentActivityNew extends AppCompatActivity {
 //                btnloyalty.setAlpha(0.30f);
 
 //                cardsubmitbtn.getBackground().setAlpha(255);
+
+
+                //Added by Pavithra on 23-07-2020
+                imgBtnAutofillCardAmt.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String current_blnc = balance.getText().toString();
+                        cardamount.setText(current_blnc);
+
+                    }
+                });
 
 
                 cardsubmitbtn.setOnClickListener(new View.OnClickListener() {
@@ -637,19 +687,22 @@ public class PaymentActivityNew extends AppCompatActivity {
                                     paymentdetailObj.CurrencyNumber = "";
                                     paymentdetailObj.CurrencyDenom = "";
                                     paymentdetailObj.CurrencyType = "0";
-                                    paymentdetailObj.CreditType = "0";
-                                    paymentdetailObj.PayType = "1";
+                                    paymentdetailObj.CreditType = "2";
+//                                    paymentdetailObj.PayType = "1";  //Commented by Pavithra on 21-07-2020
+                                    paymentdetailObj.PayType = "2";  //Added  by Pavithra on 21-07-2020
                                     paymentdetailObj.ExchangeRate = "";
                                     paymentdetailObj.ChequeNo = "";
                                     paymentdetailObj.ChequeDate = "";
                                     paymentdetailObj.CQIssuedBank = "";
 
+                                    String card_id = prefs.getString("CardId","");
+
                                     paymentdetailObj.CardName = edtcardname.getText().toString();
-                                    paymentdetailObj.CardType = "";
+//                                    paymentdetailObj.CardType = "";
+                                    paymentdetailObj.CardType = card_id;
                                     paymentdetailObj.CardNo = "";
                                     paymentdetailObj.CardAuthorisationNo = etAUCode.getText().toString();
                                     paymentdetailObj.CardOwner = "";
-
 
                                     String tempTender = "";
                                     tempTender = cardamount.getText().toString();
@@ -659,6 +712,7 @@ public class PaymentActivityNew extends AppCompatActivity {
                                     paymentdetailObj.Tender = tempTender;
                                     paymentdetailObj.PlutusId = "0";
                                     paymentdetailObj.WalletId = "0";
+                                    paymentdetailObj.TenderName = "Card"; //Added by Pavithra on 23-07-2020
                                     paymentdetailsList.add(paymentdetailObj);
                                     Log.d("PA", "One payment added to paymenttenderlist");
 
@@ -672,6 +726,7 @@ public class PaymentActivityNew extends AppCompatActivity {
                                     /*************Added by Pavithra on 07-07-2020*******************/
                                     SharedPreferences.Editor editor = prefs.edit();
                                     editor.putBoolean("IsDeleted", false);
+                                    editor.putString("PaymentType","Card"); //Added by Pavithra on 22-07-2020
                                     editor.commit();
                                     if (paymentdetailsList.size() > 0) {
 
@@ -713,6 +768,17 @@ public class PaymentActivityNew extends AppCompatActivity {
 //                btnloyalty.setAlpha(0.30f);
 
                 final String shprfsBalance = prefs.getString(shrbalance, "");
+
+                //Added by Pavithra on 23-07-2020
+                imgBtnAutofillWalletAmt.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        String current_blnc = balance.getText().toString();
+                        walletamount.setText(current_blnc);
+
+                    }
+                });
+
 
                 walltsubmitbtn.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -801,18 +867,23 @@ public class PaymentActivityNew extends AppCompatActivity {
                                     paymentdetailObj.CurrencyNumber = "";
                                     paymentdetailObj.CurrencyDenom = "";
                                     paymentdetailObj.CurrencyType = "0";
-                                    paymentdetailObj.CreditType = "0";
+                                    paymentdetailObj.CreditType = "2";
                                     paymentdetailObj.PayType = "2";
                                     paymentdetailObj.ExchangeRate = "";
                                     paymentdetailObj.ChequeNo = "";
                                     paymentdetailObj.ChequeDate = "";
                                     paymentdetailObj.CQIssuedBank = "";
                                     paymentdetailObj.CardName = etWalletname.getText().toString();
-                                    paymentdetailObj.CardType = "";
+
+                                    //Added by Pavithra on 21-07-2020
+                                    String wallet_id = prefs.getString("WalletId","");
+
+//                                    paymentdetailObj.CardType = "";
+                                    paymentdetailObj.CardType = wallet_id;
+
                                     paymentdetailObj.CardNo = "";
                                     paymentdetailObj.CardAuthorisationNo = etAUCodeWallet.getText().toString();
                                     paymentdetailObj.CardOwner = "";
-
 
                                     String tempTender = "";
                                     tempTender = walletamount.getText().toString();
@@ -822,6 +893,8 @@ public class PaymentActivityNew extends AppCompatActivity {
                                     paymentdetailObj.Tender = tempTender;
                                     paymentdetailObj.PlutusId = "0";
                                     paymentdetailObj.WalletId = "0";
+                                    paymentdetailObj.TenderName = "Wallet"; //Added by Pavithra on 23-07-2020
+
                                     paymentdetailsList.add(paymentdetailObj);
                                     Log.d("PA", "One payment added to paymenttenderlist");
 
@@ -834,6 +907,7 @@ public class PaymentActivityNew extends AppCompatActivity {
                                     /*************Added by Pavithra on 07-07-2020*******************/
                                     SharedPreferences.Editor editor = prefs.edit();
                                     editor.putBoolean("IsDeleted", false);
+                                    editor.putString("PaymentType","Wallet"); //Added by Pavithra on 22-07-2020
                                     editor.commit();
                                     if (paymentdetailsList.size() > 0) {
 
@@ -905,6 +979,16 @@ public class PaymentActivityNew extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 new WalletSearchAsyncTask().execute();
+            }
+        });
+
+
+        //Added by Pavithra on 23-07-2020
+        imgBtnAutofillCashAmt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String current_blnc = balance.getText().toString();
+                cashamount.setText(current_blnc);
             }
         });
 
@@ -1005,7 +1089,7 @@ public class PaymentActivityNew extends AppCompatActivity {
                             boolean isCashAdded = false;
                             if (paymentdetailsList.size() != 0) {
                                 for (int i = 0; i < paymentdetailsList.size(); i++) {
-                                    if (paymentdetailsList.get(i).PayType.equals("0")) {
+                                    if (paymentdetailsList.get(i).PayType.equals("1")) {
                                         isCashAdded = true;
 
                                         String CashAmt = paymentdetailsList.get(i).PaidAmount;
@@ -1024,7 +1108,7 @@ public class PaymentActivityNew extends AppCompatActivity {
                                     paymentdetailObj.CurrencyDenom = "";
                                     paymentdetailObj.CurrencyType = "0";
                                     paymentdetailObj.CreditType = "0";
-                                    paymentdetailObj.PayType = "0";
+                                    paymentdetailObj.PayType = "1";
                                     paymentdetailObj.ExchangeRate = "";
                                     paymentdetailObj.ChequeNo = "";
                                     paymentdetailObj.ChequeDate = "";
@@ -1044,6 +1128,7 @@ public class PaymentActivityNew extends AppCompatActivity {
                                     paymentdetailObj.Tender = tempTender;
                                     paymentdetailObj.PlutusId = "0";
                                     paymentdetailObj.WalletId = "0";
+                                    paymentdetailObj.TenderName = "Cash"; //Added by Pavithra on 23-07-2020
                                     paymentdetailsList.add(paymentdetailObj);
 
                                 }
@@ -1054,7 +1139,7 @@ public class PaymentActivityNew extends AppCompatActivity {
                                 paymentdetailObj.CurrencyDenom = "";
                                 paymentdetailObj.CurrencyType = "0";
                                 paymentdetailObj.CreditType = "0";
-                                paymentdetailObj.PayType = "0";
+                                paymentdetailObj.PayType = "1";
                                 paymentdetailObj.ExchangeRate = "";
                                 paymentdetailObj.ChequeNo = "";
                                 paymentdetailObj.ChequeDate = "";
@@ -1068,13 +1153,13 @@ public class PaymentActivityNew extends AppCompatActivity {
                                 String tempTender = "";
                                 tempTender = cashamount.getText().toString();
 
-
                                 paymentdetailObj.PaidAmount = tempTender;
 
                                 paymentdetailObj.ForexType = "";
                                 paymentdetailObj.Tender = tempTender;
                                 paymentdetailObj.PlutusId = "0";
                                 paymentdetailObj.WalletId = "0";
+                                paymentdetailObj.TenderName = "Cash"; //Added by Pavithra on 23-07-2020
                                 paymentdetailsList.add(paymentdetailObj);
 
                                 Log.d("PA", "One payment added to paymenttenderlist");
@@ -1224,7 +1309,7 @@ public class PaymentActivityNew extends AppCompatActivity {
                     } else {
 
                         for (int i = 0; i < paymentdetailsListForAPISave.size(); i++) {
-                            if (paymentdetailsListForAPISave.get(i).PayType.equals("0")) {
+                            if (paymentdetailsListForAPISave.get(i).PayType.equals("1")) {
                                 //reduce blnce from cash
                                 //what to do if blnce is greater than cash..?
                                 //Check if two cash fields are added in same list..?how to subtract..?
@@ -1299,6 +1384,7 @@ public class PaymentActivityNew extends AppCompatActivity {
                         new MobPosSaveBillTask().execute();
 
                     } else {
+                        tsErrorMessage(nextBillNoResponsePLObj.Message);//Added by Pavithra on 29-07-2020
                         Toast.makeText(PaymentActivityNew.this, "" + nextBillNoResponsePLObj.Message, Toast.LENGTH_SHORT).show();
                     }
                 } catch (Exception ex) {
@@ -1492,7 +1578,7 @@ public class PaymentActivityNew extends AppCompatActivity {
 //            Type type = new TypeToken<List<Paymentdetail>>() {
 //            }.getType();
 //            paymentdetailsList = gson.fromJson("PaymentDetailListJsonStr",type);
-//
+
 
                 Double pay_total = 0d;
 
@@ -1524,6 +1610,38 @@ public class PaymentActivityNew extends AppCompatActivity {
         }catch (Exception ex){
             Log.d("PA",""+ex);
         }
+    }
+
+
+    //Added by Pavithra on 29-07-2020
+    public void tsErrorMessage(String error_massage){
+
+        final Dialog dialog = new Dialog(PaymentActivityNew.this);
+        dialog.setContentView(R.layout.custom_save_popup);
+        final String title = "Message";
+
+        TextView dialogTitle = (TextView)dialog.findViewById(R.id.txvSaveTitleDialog);
+        dialogTitle.setText(title);
+        dialog.getWindow().setBackgroundDrawableResource(R.color.colorPrimary);
+        dialog. getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        int height_of_popup = 500;
+        int width_of_popup = 400;
+        dialog.getWindow().setLayout(width_of_popup, height_of_popup);
+        dialog.show();
+
+        final TextView tvSaveStatus = (TextView) dialog.findViewById(R.id.tvSaveStatus);
+//        tvSaveStatus.setText("Successfully saved \n Token No = "+tokenNo);
+        tvSaveStatus.setText(""+error_massage);
+
+        Button btnOkPopup = (Button)dialog.findViewById(R.id.btnOkPopUp);
+
+        btnOkPopup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
     }
 
     private class MobPosSaveBillTask extends AsyncTask<String,String,String> {
@@ -1568,15 +1686,8 @@ public class PaymentActivityNew extends AppCompatActivity {
                         editor.putString("BillNo", bill_no);
                         editor.commit();
                         editor.putString(shrbalance, "");
-
-//                        editor.putString("SalesdetailPLObjStr", "");
-//                        editor.putString("SalessummaryDetailObjStr", "");
-//                        editor.putString("NumberOfItems", "");
-//                        editor.putString("PaymentTotal", "");
-//                        editor.putString("BillSeries", "");
-//                        editor.putString("BillNo", "");
-
                         editor.putBoolean("SaveEnabled", false);
+
                         btnSaveBill.setEnabled(false);
                         btnSaveBill.setAlpha(0.4f); //Added by Pavithra on 02-07-2020
                         cashsubmitbtn.setAlpha(0.4f); //Added by Pavithra on 02-07-2020
@@ -1596,12 +1707,13 @@ public class PaymentActivityNew extends AppCompatActivity {
                         walletsearchbtn.setEnabled(false); //Added by Pavithra on 16-07-2020
 
                         lvTenderList.setAdapter(paymentTenderListAdapter);//to make delete button disable  //Added by Pavithra on 15-07-2020
-
                         showPopUP(bill_series + bill_no);
 
                     } else {
                         Toast.makeText(PaymentActivityNew.this, "" + message, Toast.LENGTH_SHORT).show();
+                        tsErrorMessage(message);//Added by Pavithra on 29-07-2020
                     }
+
                 } catch (JSONException e) {
                     e.printStackTrace();
                 }
@@ -1691,11 +1803,12 @@ public class PaymentActivityNew extends AppCompatActivity {
     private void mobPosSaveBill() {
         try {
 //            URL url = new URL("http://tsmith.co.in/MobPOS/api/SaveBill");
-            URL url = new URL(AppConfig.app_url+"SaveBill"); //Modified by Pavithra on 30-05-2020
+            URL url = new URL(AppConfig.app_url + "SaveBill"); //Modified by Pavithra on 30-05-2020
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
             connection.setReadTimeout(15000);
-            connection.setConnectTimeout(30000);
+//            connection.setConnectTimeout(30000);//Commented by Pavithra on 24-07-2020
+            connection.setConnectTimeout(40000);//Added by Pavithra on 24-07-2020
 
             Paymentsummary paymentsummaryObj = new Paymentsummary();
             paymentsummaryObj.BillAmount = billtotal.getText().toString(); ///billTotal
@@ -1714,51 +1827,41 @@ public class PaymentActivityNew extends AppCompatActivity {
             customerPLObj.CustName = "";
             customerPLObj.BillDate = "";
 
-            /**********************************************************************************************/
-
-
-//            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-//
-//            Date date_temp = null;
-//            try {
-//                date_temp = sdf.parse(salessummaryDetail.BillDate);
-//            } catch (ParseException e) {
-//                e.printStackTrace();
-//            }
-//
-//            Calendar cal = Calendar.getInstance();
-//            cal.setTime(date_temp);
-//            int month =  cal.get(Calendar.MONTH);
-//            int day =  cal.get(Calendar.DAY_OF_MONTH);
-//            int year =  cal.get(Calendar.YEAR);
-//
-//            Log.d("PA From SaveBill","Month = "+month+" Day = "+day+"Year = "+year);
-            /**********************************************************************************************/
-
-//            salessummaryDetail.BillDate = String.valueOf(date_temp);
-
-
-
-
 /**************************Added by Pavithra on 14-07-2020*********************************************************************************/
 
             prefs = PreferenceManager.getDefaultSharedPreferences(this);
             prefs = PreferenceManager.getDefaultSharedPreferences(this);
             String customerDetailJsonStr = prefs.getString("CustomerDetailJsonStr", "");
+            String loyaltyCustomerDetailsResponseObjStr = prefs.getString("LoyaltyCustDetailsResponseJsnStr", ""); //Added by Pavithra on 03-08-2020
 
-            CustomerDetail  customerDetailObj = new CustomerDetail();
-            if(!customerDetailJsonStr.equals("")) {
+            SalesbillDetail salesbillDetailObj = new SalesbillDetail(); //Place edited by Pavithra on 03-08-2020
+
+            CustomerDetail customerDetailObj = new CustomerDetail();
+            if (!customerDetailJsonStr.equals("")) {
                 Gson gson = new Gson();
-
                 customerDetailObj = gson.fromJson(customerDetailJsonStr, CustomerDetail.class);
             }
-/*********************************************************************************************************************/
+/***************************************8**********************************************************************************************************/
 
-            SalesbillDetail salesbillDetailObj = new SalesbillDetail();
+            LoyaltycustomerDetailsResponse loyaltycustomerdetailRespnseObj = new LoyaltycustomerDetailsResponse();
+            if (!loyaltyCustomerDetailsResponseObjStr.equals("")) {
+                Gson gson = new Gson();
+                loyaltycustomerdetailRespnseObj = gson.fromJson(loyaltyCustomerDetailsResponseObjStr, LoyaltycustomerDetailsResponse.class);
+                salesbillDetailObj.Loyaltycustomerdetail = loyaltycustomerdetailRespnseObj.LoyaltyCustomerDetail.get(0); //Added by Pavithra on 01-08-2020
+
+            }
+
+
+//            Gson gson = new Gson();
+//            LoyaltycustomerDetailsResponse loyaltycustomerDetailsResponseObj = gson.fromJson(loyaltyCustDetailsResponseJsnStr, LoyaltycustomerDetailsResponse.class);
+
+
+//            SalesbillDetail salesbillDetailObj = new SalesbillDetail(); //CXommented vby vPavithra von v03-080-2020
             salessummaryDetail.BillSeries = nextBillNoResponsePLObj.NextBillNo.get(0).BillSeries;
             salessummaryDetail.BillNo = nextBillNoResponsePLObj.NextBillNo.get(0).BillNo;
 
             salesbillDetailObj.CustomerDetail = customerDetailObj; //Added by Pavithra on 14-07-2020
+//            salesbillDetailObj.Loyaltycustomerdetail = loyaltycustomerdetailRespnseObj.LoyaltyCustomerDetail.get(0) ; //Added by Pavithra on 01-08-2020
 
             salesbillDetailObj.SalesSummary = salessummaryDetail;  //got from salesactivity prefs
             salesbillDetailObj.SalesDetail = salesdetailPLObj;    //got from salesactivity prefs
@@ -1796,7 +1899,6 @@ public class PaymentActivityNew extends AppCompatActivity {
                 }
 
 
-
 //                {"BillSeries":null,"BillNo":0,"Billid":0,"ErrorStatus":1,"Message":"Cannot insert duplicate key row in object 'dbo.TaxBreakupDetails' with unique index 'IX_BILLTYPE_BILL_DETROW_TAXTYPE'. The duplicate key value is (0, 688, 1060, 1).:: Message from [PROC_MOBPOS_SaveBill]"}
 
 //                {"BillSeries":null,"BillNo":0,"Billid":0,"ErrorStatus":1,"Message":"Error converting data type nvarchar to float.:: Message from [PROC_MOBPOS_SaveBill]"}
@@ -1808,6 +1910,9 @@ public class PaymentActivityNew extends AppCompatActivity {
             } finally {
                 connection.disconnect();
             }
+        }catch (SocketTimeoutException e){   //This exception added by Pavithra on 05-08-2020
+            Log.e("ERROR", e.getMessage(), e);
+
         } catch (Exception e) {
             Log.e("ERROR", e.getMessage(), e);
         }
@@ -1886,6 +1991,7 @@ public class PaymentActivityNew extends AppCompatActivity {
                 // Toast.makeText(CustomerInformation.this, "helloo", Toast.LENGTH_SHORT).show();
                 if(creditcardlookup.ErrorStatus==1)
                 {
+                    tsErrorMessage(creditcardlookup.Message);//Added by Pavithra on 29-07-2020
                     //Toast.makeText(PaymentActivity.this, ""+CreditCardLookUpResponse.Message, Toast.LENGTH_SHORT).show();
                 }
                 //   name=LoyaltyCustomer.get(i).Name;
@@ -1988,6 +2094,8 @@ public class PaymentActivityNew extends AppCompatActivity {
                 // Toast.makeText(CustomerInformation.this, "helloo", Toast.LENGTH_SHORT).show();
                 if(walletlookup.ErrorStatus==1)
                 {
+
+                    tsErrorMessage(walletlookup.Message);//Added by Pavithra on 29-07-2020
                     //Toast.makeText(PaymentActivity.this, ""+CreditCardLookUpResponse.Message, Toast.LENGTH_SHORT).show();
                 }
                 //   name=LoyaltyCustomer.get(i).Name;
@@ -1997,7 +2105,7 @@ public class PaymentActivityNew extends AppCompatActivity {
                     dialog.setCanceledOnTouchOutside(false);
                     dialog.setTitle("Wallet Card Lookup");
                     final RecyclerView recyclerView  = (RecyclerView) dialog.findViewById(R.id.walletlist);
-                    final WalletLookupAdapter adapter = new WalletLookupAdapter(walletlookupitems,edtWallet,dialog,walletamount);
+                    final WalletLookupAdapter adapter = new WalletLookupAdapter(PaymentActivityNew.this,walletlookupitems,edtWallet,dialog,walletamount);
                     recyclerView.setAdapter(adapter);
                     for (int i = 0; i < Wallet.size(); i++) {
                         WALLET wallet = Wallet.get(i);

@@ -22,4 +22,6 @@ public class Paymentdetail {
     public String Tender ;
     public String PlutusId ;
     public String WalletId ;
+
+    public String TenderName; //Added by Pavithra on 23-07-2020 for local use int tenderlist
 }

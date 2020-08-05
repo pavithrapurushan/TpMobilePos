@@ -39,6 +39,10 @@ import static android.content.Context.MODE_PRIVATE;
 //Modified by Pavithra on 08-07-2020
 //Modified  by Pavithra on 15-07-2020
 //Modified  by Pavithra on 16-07-2020
+//Modified by Pavithra on 21-07-2020
+//Modified by Pavithra on 22-07-2020
+//Modified by Pavithra on 29-07-2020
+//Modified by Pavithra on 30-07-2020
 
 public class ProductListCustomAdapter extends ArrayAdapter<Model> implements View.OnClickListener {
     ArrayList<Model> list;
@@ -54,7 +58,7 @@ public class ProductListCustomAdapter extends ArrayAdapter<Model> implements Vie
     Model model;
     String tot, disc;
     Double total, disctot, taxtot;
-    TextView billno, numofitems, itemtotal, disctotal, taxtotal, billdisc, misccharges, billroundoff, billtotal;
+    TextView billno, numofitems, itemtotal, disctotal, taxtotal, billdisc, misccharges, billroundoff, billtotal,tvTotalLinewiseTax;
     ListView l2;
 
     //Below decalrations added by 1165 on 11-05-2020
@@ -94,7 +98,6 @@ public class ProductListCustomAdapter extends ArrayAdapter<Model> implements Vie
 
 
 
-
     //ViewHolder holder;
     public class ViewHolder {
         TextView tvItemName, tvRate, tvMRP, tvDisc, tvTotal;
@@ -104,7 +107,7 @@ public class ProductListCustomAdapter extends ArrayAdapter<Model> implements Vie
         LinearLayout saleslist;
     }
 
-    public ProductListCustomAdapter(ArrayList<Model> listdata, Context context, ListView l2, TextView billno, TextView numofitems, TextView itemtotal, TextView disc_total,TextView taxtotal, TextView bill_disc,TextView billtotal, TextView billroundoff,String uperpack) {
+    public ProductListCustomAdapter(ArrayList<Model> listdata, Context context, ListView l2, TextView billno, TextView numofitems, TextView itemtotal, TextView disc_total,TextView taxtotal, TextView bill_disc,TextView billtotal, TextView billroundoff,String uperpack,TextView totalLinewiseTax) {
 
         /********** Take passed values **********/
         super(context, R.layout.list_row, listdata);
@@ -115,6 +118,7 @@ public class ProductListCustomAdapter extends ArrayAdapter<Model> implements Vie
         this.numofitems = numofitems;
         this.itemtotal = itemtotal;
         this.taxtotal = taxtotal;
+        this.tvTotalLinewiseTax = totalLinewiseTax;  //Added  by Pavithra on 30-07-2020
         this.billtotal = billtotal;
         this.billroundoff = billroundoff;
         this.disctotal = disc_total;
@@ -142,7 +146,7 @@ public class ProductListCustomAdapter extends ArrayAdapter<Model> implements Vie
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    Toast.makeText(mContext, "Listview clicked from adapter", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(mContext, "Listview clicked from adapter", Toast.LENGTH_SHORT).show();
 //                    ShowEnquirePopup(model.tvItemName, model.MRP, String.valueOf(uper_pack), model.etQty); //Now uper pack take as 10  Pass proper uperpack
 //                    holder.etQty.setText("" + displayQtyNew);//Not working this, should delete
 
@@ -172,7 +176,6 @@ public class ProductListCustomAdapter extends ArrayAdapter<Model> implements Vie
                 holder.etQty.setEnabled(false);
 
             }
-   /*******************************************************************************************/
 
             holder.etQty.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -181,18 +184,17 @@ public class ProductListCustomAdapter extends ArrayAdapter<Model> implements Vie
 
                     try {
 
-                        Double tempQtyFromDisplay = Double.valueOf(holder.etQty.getText().toString());  //Added by Pavithra on 18-07-2020
+//                        Double tempQtyFromDisplay = Double.valueOf(holder.etQty.getText().toString());   //commentd by Pavithra von 21-07-2020      //Added by Pavithra on 18-07-2020
+                        String etQtyStr = holder.etQty.getText().toString();        //Added by Pavithra on 21-07-2020
+                        etQtyStr = etQtyStr.replace("-",".");      //Added by Pavithra on 21-07-2020
+                        Double tempQtyFromDisplay = Double.valueOf(etQtyStr);       //Added by Pavithra on 21-07-2020
                         Qty = (int) (tempQtyFromDisplay*Integer.valueOf(list.get(pos).tvUOM));                 //Added by Pavithra on 18-07-2020
-                        //Qty = Integer.parseInt(holder.etQty.getText().toString());  //Commented by Pavithra on 18-07-2020
                         Rate = Double.parseDouble(holder.tvRate.getText().toString());
                         list.get(pos).etQty = String.valueOf(Qty);
-//                            ShowEnquirePopup(model.tvItemName, model.MRP, String.valueOf(uper_pack), model.etQty);
                         ShowEnquirePopup(list.get(pos).tvItemName, list.get(pos).MRP, list.get(pos).tvUOM, list.get(pos).etQty );
 
                         InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
                         imm.hideSoftInputFromWindow(holder.saleslist.getWindowToken(), 0);
-//                            CalculateRow rowDetails = new CalculateRow();  //Commented by Pavithra on 18-07-2020
-//                            rowDetails.execute();
                         saveData();
                     } catch (NumberFormatException ex) { // handle your exception
                         Toast.makeText(mContext, "" + ex, Toast.LENGTH_SHORT).show();
@@ -202,36 +204,6 @@ public class ProductListCustomAdapter extends ArrayAdapter<Model> implements Vie
                     saveData();
                 }
             });
-
-//            holder.etQty.setOnKeyListener(new View.OnKeyListener() {  //May this function do not after adding enquiry popuop
-//                @Override
-//                public boolean onKey(View view, int i, KeyEvent keyEvent) {
-//                    pos = (Integer) view.getTag();
-////                    Toast.makeText(mContext, "Pos = "+pos, Toast.LENGTH_SHORT).show();
-//                    if ((keyEvent.getAction() == KeyEvent.ACTION_DOWN) && (i == KeyEvent.KEYCODE_ENTER)) {
-//                        try {
-//                            Qty = Integer.parseInt(holder.etQty.getText().toString());
-//                            Rate = Double.parseDouble(holder.tvRate.getText().toString());
-//                            list.get(pos).etQty = String.valueOf(Qty);
-////                            ShowEnquirePopup(model.tvItemName, model.MRP, String.valueOf(uper_pack), model.etQty);
-//                            ShowEnquirePopup(list.get(pos).tvItemName, list.get(pos).MRP, list.get(pos).tvUOM, list.get(pos).etQty );
-//
-//
-//                            InputMethodManager imm = (InputMethodManager) mContext.getSystemService(Context.INPUT_METHOD_SERVICE);
-//                            imm.hideSoftInputFromWindow(holder.saleslist.getWindowToken(), 0);
-////                            CalculateRow rowDetails = new CalculateRow();  //Commented by Pavithra on 18-07-2020
-////                            rowDetails.execute();
-//                            saveData();
-//                        } catch (NumberFormatException ex) { // handle your exception
-//                            Toast.makeText(mContext, "" + ex, Toast.LENGTH_SHORT).show();
-//                        }
-//
-//                        holder.tvTotal.setText(list.get(pos).getTvTotal());
-//                        saveData();
-//                    }
-//                    return false;
-//                }
-//            });
 
             convertView.setTag(holder);
 
@@ -247,20 +219,31 @@ public class ProductListCustomAdapter extends ArrayAdapter<Model> implements Vie
             holder = (ViewHolder) convertView.getTag();
         }
 
-        /**************************************************************************/
+        //Commented by APvithra on 24-07-2020 below 4 lines
+//        Double qtyToDisplay = Double.valueOf(model.etQty)/Double.valueOf(model.tvUOM);
+//        String qtyToDisplayStr = String.valueOf(qtyToDisplay);               //Added b y Pavithra on 21-07-2020
+//        qtyToDisplayStr= qtyToDisplayStr.replace(".","-");  //Added b y Pavithra on 21-07-2020
+//        holder.etQty.setText(qtyToDisplayStr);                               //Added b y Pavithra on 21-07-2020
 
-        /**************************************************************************/
 
 
         Double qtyToDisplay = Double.valueOf(model.etQty)/Double.valueOf(model.tvUOM);
-        holder.etQty.setText(String.valueOf(qtyToDisplay));
+        if(model.tvUOM.equals("1")){
+            holder.etQty.setText(model.etQty);
+        }else {
+            String qtyToDisplayStr = String.valueOf(qtyToDisplay);               //Added b y Pavithra on 21-07-2020
+            qtyToDisplayStr = qtyToDisplayStr.replace(".", "-");  //Added b y Pavithra on 21-07-2020
+            holder.etQty.setText(qtyToDisplayStr);
+        }
 
-//        holder.etQty.setText(model.etQty);
+
+        //Qty shoud show like if uperpack = 1, packqty is qty then no seperator(-) else show with sepeartor for the time being commented
+
+
         holder.tvItemName.setText(model.tvItemName);
         holder.tvRate.setText(model.tvRate);
         holder.tvMRP.setText(model.MRP);
 //        holder.tvTotal.setText(model.getTvTotal());
-
 
         //below two added by 1165 on 27-05-2020
 
@@ -609,8 +592,8 @@ public class ProductListCustomAdapter extends ArrayAdapter<Model> implements Vie
                     Toast.makeText(mContext, "Qty can not be zero or empty", Toast.LENGTH_SHORT).show();
                 }else {
 
-                    if(uper_pack > 1){
-                        if(itemQty >= uper_pack){
+                    if(uper_pack > 1) {
+                        if (itemQty >= uper_pack) {
                             Toast.makeText(mContext, "Cannot save, item qty is greater than uperpack", Toast.LENGTH_SHORT).show();
                             return;
                         }
@@ -622,8 +605,7 @@ public class ProductListCustomAdapter extends ArrayAdapter<Model> implements Vie
 
                     CalculateRow rowDetails = new CalculateRow();
                     rowDetails.execute();
-
-                    Toast.makeText(mContext, "QtyInPacks = "+qtyInPacksNew+ "Qty in units="+qtyInUnitsNew+"DispalyQty = "+displayQtyNew ,Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(mContext, "QtyInPacks = "+qtyInPacksNew+ "Qty in units="+qtyInUnitsNew+"DispalyQty = "+displayQtyNew ,Toast.LENGTH_SHORT).show();
                     dialog.dismiss();
 
                 }
@@ -808,10 +790,16 @@ public class ProductListCustomAdapter extends ArrayAdapter<Model> implements Vie
                 billdetail.BatchId = list.get(pos).BatchId;
                 billdetail.BatchCode = list.get(pos).BatchCode;
                 billdetail.TaxId = list.get(pos).TaxId;
-//                billdetail.QtyInPacks = list.get(pos).etQty;  //Commented by Pavithra on 18-07-2020
-//                billdetail.QtyInUnits = "0";                  //Commented by Pavithra on 18-07-2020
-                billdetail.QtyInPacks = String.valueOf(qtyInPacksNew);  //Added by Pavithra on 18-07-2020
-                billdetail.QtyInUnits = String.valueOf(qtyInUnitsNew);  //Added by Pavithra on 18-07-2020
+
+//                billdetail.QtyInPacks = String.valueOf(qtyInPacksNew);  //Added by Pavithra on 18-07-2020
+//                billdetail.QtyInUnits = String.valueOf(qtyInUnitsNew);  //Added by Pavithra on 18-07-2020
+
+                //pass qtyInUnits only convert packqty too qtyInUnits
+                //Added by Pavithra on 21-07-2020
+                Double qtyInUnits = qtyInPacksNew* Double.valueOf(list.get(pos).tvUOM)+qtyInUnitsNew;
+                billdetail.QtyInPacks = "0";
+                billdetail.QtyInUnits = String.valueOf(qtyInUnits);
+
 
                 billdetail.UPerPack = list.get(pos).tvUOM;
                 billdetail.Mrp = list.get(pos).MRP;
@@ -820,7 +808,8 @@ public class ProductListCustomAdapter extends ArrayAdapter<Model> implements Vie
                 billdetail.FreeFlag = "0";
                 billdetail.CustType = "LOCAL";
                 billdetail.Amount = "0";
-                billdetail.DiscPer = "0";
+//                billdetail.DiscPer = "0";   //Commented by Pavithra on 30-07-2020
+                billdetail.DiscPer = list.get(pos).DiscPer;   //Added by Pavithra on 30-07-2020
                 billdetail.DiscPerAmt = "0";
                 billdetail.TaxableAmt = "0";
                 billdetail.TaxPer = list.get(pos).TaxRate;
@@ -838,7 +827,7 @@ public class ProductListCustomAdapter extends ArrayAdapter<Model> implements Vie
                 customer.CustName = prefs.getString("CustomerName", "");
                 customer.BillDate = billing_date; //Added by Pavithra on 08-07-2020
                 customer.CustType = "LOCAL";//For the time being need further interface
-                customer.StoreId = "5"; //alomost constant
+                customer.StoreId = "3"; //alomost constant
                 List<Customer> listCustomer = new ArrayList<>();
                 listCustomer.add(customer);
 
@@ -963,6 +952,7 @@ public class ProductListCustomAdapter extends ArrayAdapter<Model> implements Vie
                             }
                         } else {
                             Toast.makeText(mContext, "" + calcRowResponseObj.Message, Toast.LENGTH_SHORT).show();
+                            tsErrorMessage(calcRowResponseObj.Message); //Added by Pavithra on 29-07-2020
                         }
                     } catch (Exception e) {
                         Toast.makeText(mContext, "" + e, Toast.LENGTH_SHORT).show();
@@ -994,23 +984,25 @@ public class ProductListCustomAdapter extends ArrayAdapter<Model> implements Vie
                 Gson gson1 = new Gson();
                 billAmountResponse = gson1.fromJson(strBillAmountResponse, BillAmountResponse.class);
 
-                prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+                if (billAmountResponse.ErrorStatus == 0) {
 
-                bill_series = prefs.getString("BillSeries", "");
-                bill_no = prefs.getString("BillNo", "");
+                    prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+
+                    bill_series = prefs.getString("BillSeries", "");
+                    bill_no = prefs.getString("BillNo", "");
 
 //                billno.setText(String.valueOf(billAmountResponse.SalesSummary.BillSeries + "" + billAmountResponse.SalesSummary.BillNo));
-                billno.setText(String.valueOf(bill_series + "" +bill_no));
-                num = list.size();
-                numofitems.setText(String.valueOf(num));
+                    billno.setText(String.valueOf(bill_series + "" + bill_no));
+                    num = list.size();
+                    numofitems.setText(String.valueOf(num));
 
-                itemtotal.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.TotalAmount)));
-                disctotal.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.DiscountAmt)));//Added by Pavithra on 27-06-2020
-                taxtotal.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.TotalLinewiseTax)));
-                billdisc.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.TotalDiscount)));
-                billroundoff.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.RoundOff)));
-                billtotal.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.NetAmount)));
-
+                    itemtotal.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.TotalAmount)));
+                    disctotal.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.DiscountAmt)));//Added by Pavithra on 27-06-2020
+                    taxtotal.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.TotalLinewiseTax)));
+                    tvTotalLinewiseTax.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.TotalLinewiseDisc)));//Added by Pavithra on 30-07-2020
+                    billdisc.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.TotalDiscount)));
+                    billroundoff.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.RoundOff)));
+                    billtotal.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.NetAmount)));
 
 
 //                itemtotal.setText(String.valueOf(billAmountResponse.SalesSummary.TotalAmount));
@@ -1020,65 +1012,70 @@ public class ProductListCustomAdapter extends ArrayAdapter<Model> implements Vie
 //                billroundoff.setText(String.valueOf(billAmountResponse.SalesSummary.RoundOff));
 //                billtotal.setText(String.valueOf(billAmountResponse.SalesSummary.NetAmount));
 
-                //To pass to Payementactivity
+                    //To pass to Payementactivity
 
-                SalessummaryDetail salessummaryDetailObj = new SalessummaryDetail();
-                salessummaryDetailObj.BillSeries = bill_series;
-                salessummaryDetailObj.BillNo = bill_no;//Or
+                    SalessummaryDetail salessummaryDetailObj = new SalessummaryDetail();
+                    salessummaryDetailObj.BillSeries = bill_series;
+                    salessummaryDetailObj.BillNo = bill_no;//Or
 //                salessummaryDetailObj.BillSeries = billAmountResponse.SalesSummary.BillSeries;
 //                salessummaryDetailObj.BillNo = billAmountResponse.SalesSummary.BillNo;//Original  cant us  since same bill number coming
-                salessummaryDetailObj.BillDate = billAmountResponse.SalesSummary.BillDate;
+                    salessummaryDetailObj.BillDate = billAmountResponse.SalesSummary.BillDate;
 
 
-                if(loyalty_code.equals("")) {
-                    salessummaryDetailObj.Customer = customerDetailObj.Customer;
-                    if (customerDetailObj.CustId != null) {
-                        salessummaryDetailObj.CustId = Integer.parseInt(customerDetailObj.CustId);
-                    }
+                    if (loyalty_code.equals("")) {
+                        salessummaryDetailObj.Customer = customerDetailObj.Customer;
+                        if (customerDetailObj.CustId != null) {
+                            salessummaryDetailObj.CustId = Integer.parseInt(customerDetailObj.CustId);
+                        }
 
-                    salessummaryDetailObj.LoyaltyId = "0";
-                    salessummaryDetailObj.LoyaltyCode = "";
-                }else{
-                    salessummaryDetailObj.Customer = loyaltyCustomerObj.Name;
+                        salessummaryDetailObj.LoyaltyId = "0";
+                        salessummaryDetailObj.LoyaltyCode = "";
+                    } else {
+                        salessummaryDetailObj.Customer = loyaltyCustomerObj.Name;
 //                    salessummaryDetailObj.CustId = Integer.parseInt(loyaltyCustomerObj.LoyaltyId);
 
-                    salessummaryDetailObj.LoyaltyId =loyaltyCustomerObj.LoyaltyId;
-                    salessummaryDetailObj.LoyaltyCode = loyaltyCustomerObj.EmpCode;
+                        salessummaryDetailObj.LoyaltyId = loyaltyCustomerObj.LoyaltyId;
+                        salessummaryDetailObj.LoyaltyCode = loyaltyCustomerObj.EmpCode;
 
-                }
+                    }
 //                salessummaryDetailObj.CustId = 0;
 
 //                salessummaryDetailObj.Customer = "Test";
 //                salessummaryDetailObj.CustId = 0;
-                salessummaryDetailObj.CustType = billAmountResponse.SalesSummary.CustType;
+                    salessummaryDetailObj.CustType = billAmountResponse.SalesSummary.CustType;
 //                salessummaryDetailObj.LoyaltyId = "0";
 //                salessummaryDetailObj.LoyaltyCode = "";
-                salessummaryDetailObj.LoyaltyCardType = "";
-                salessummaryDetailObj.StoreId = billAmountResponse.SalesSummary.StoreId;
-                salessummaryDetailObj.SubStore = "1";
-                salessummaryDetailObj.Counter = "1";
-                salessummaryDetailObj.Shift = "1";
-                salessummaryDetailObj.B2BB2CType = "B2C";
-                salessummaryDetailObj.TotalAmount = billAmountResponse.SalesSummary.TotalAmount;
-                salessummaryDetailObj.TotalLinewiseTax = billAmountResponse.SalesSummary.TotalLinewiseTax;
-                salessummaryDetailObj.TaxAmount = "0";
-                salessummaryDetailObj.DiscountPer = billAmountResponse.SalesSummary.DiscountPer;
-                salessummaryDetailObj.DiscountAmt = billAmountResponse.SalesSummary.DiscountAmt;
-                salessummaryDetailObj.SchemeDiscount = billAmountResponse.SalesSummary.SchemeDiscount;
-                salessummaryDetailObj.CardDiscount = billAmountResponse.SalesSummary.CardDiscount;
-                salessummaryDetailObj.Addtions = billAmountResponse.SalesSummary.Addtions;
-                salessummaryDetailObj.RoundOff = billAmountResponse.SalesSummary.RoundOff;
-                salessummaryDetailObj.NetAmount = billAmountResponse.SalesSummary.NetAmount;
+                    salessummaryDetailObj.LoyaltyCardType = "";
+                    salessummaryDetailObj.StoreId = billAmountResponse.SalesSummary.StoreId;
+                    salessummaryDetailObj.SubStore = "1";
+//                salessummaryDetailObj.Counter = "1";
+//                salessummaryDetailObj.Shift = "1";
+                    salessummaryDetailObj.Counter = String.valueOf(prefs.getInt("CounterId", 1)); //Added by PAvithra on 23-07-2020
+                    salessummaryDetailObj.Shift = String.valueOf(prefs.getInt("ShiftId", 1));    //Added by Pavithra on 23-07-2020
+                    salessummaryDetailObj.B2BB2CType = "B2C";
+                    salessummaryDetailObj.TotalAmount = billAmountResponse.SalesSummary.TotalAmount;
+                    salessummaryDetailObj.TotalLinewiseTax = billAmountResponse.SalesSummary.TotalLinewiseTax;
+                    salessummaryDetailObj.TaxAmount = billAmountResponse.SalesSummary.TotalLinewiseTax; //Edited by Pavithra on 22-07-2020
+                    salessummaryDetailObj.DiscountPer = billAmountResponse.SalesSummary.DiscountPer;
+                    salessummaryDetailObj.DiscountAmt = billAmountResponse.SalesSummary.DiscountAmt;
+                    salessummaryDetailObj.SchemeDiscount = billAmountResponse.SalesSummary.SchemeDiscount;
+                    salessummaryDetailObj.CardDiscount = billAmountResponse.SalesSummary.CardDiscount;
+                    salessummaryDetailObj.Addtions = billAmountResponse.SalesSummary.Addtions;
+                    salessummaryDetailObj.RoundOff = billAmountResponse.SalesSummary.RoundOff;
+                    salessummaryDetailObj.NetAmount = billAmountResponse.SalesSummary.NetAmount;
 
-                Gson gson = new Gson();
-                String salessummaryDetailObjStr = gson.toJson(salessummaryDetailObj);
+                    Gson gson = new Gson();
+                    String salessummaryDetailObjStr = gson.toJson(salessummaryDetailObj);
 
-                SharedPreferences.Editor editor = prefs.edit();
-                editor.putString("SalessummaryDetailObjStr", salessummaryDetailObjStr);
-                editor.putString("NumberOfItems", String.valueOf(num));
-                editor.commit();
+                    SharedPreferences.Editor editor = prefs.edit();
+                    editor.putString("SalessummaryDetailObjStr", salessummaryDetailObjStr);
+                    editor.putString("NumberOfItems", String.valueOf(num));
+                    editor.commit();
+                } else {
+                    tsErrorMessage(billAmountResponse.Message); //added by Pavithra on 29-07-2020
+                }
+
             }
-
         }
 
     }
@@ -1103,11 +1100,10 @@ public class ProductListCustomAdapter extends ArrayAdapter<Model> implements Vie
             loyalty_code = prefs.getString("LoyaltyCode", "");
             billing_date = prefs.getString("BillingDate", "");
 
-
             if(loyalty_code.equals("") || loyalty_code == null){
                 String customerDetailJsonStr = prefs.getString("CustomerDetailJsonStr", "");
 
-                customerDetailObj = new CustomerDetail();;
+                customerDetailObj = new CustomerDetail();
                 if(!customerDetailJsonStr.equals("")) {
                     Gson gson = new Gson();
                     customerDetailObj = new CustomerDetail();
@@ -1121,11 +1117,10 @@ public class ProductListCustomAdapter extends ArrayAdapter<Model> implements Vie
                 customerPL.CustName = customerDetailObj.Customer;
                 customerPL.CustType = "LOCAL"; //always local
 
-            }else{
-
+            }else {
                 String loyaltyCustJsonStr = prefs.getString("LoyaltyCustomerDetailJsonStr", "");
 
-                customerDetailObj = new CustomerDetail();;
+                customerDetailObj = new CustomerDetail();
                 if(!loyaltyCustJsonStr.equals("")) {
                     Gson gson = new Gson();
                     loyaltyCustomerObj = new LoyaltyCustomer();
@@ -1159,7 +1154,7 @@ public class ProductListCustomAdapter extends ArrayAdapter<Model> implements Vie
 //            salesbill.BillDate = "01-10-2015";  //Masked by Pavithra on 08-07-2020
             salesbill.BillDate = billing_date;
             salesbill.CustType = "LOCAL";
-            salesbill.StoreId = "5";
+            salesbill.StoreId = "3";
             salesbill.TotalAmount = "0";
             salesbill.TotalLinewiseTax = "0";
             salesbill.DiscountPer = "0";
@@ -1207,5 +1202,37 @@ public class ProductListCustomAdapter extends ArrayAdapter<Model> implements Vie
         }
     }
 
+
+
+    //Added by Pavithra on 29-07-2020
+    public void tsErrorMessage(String error_massage){
+
+        final Dialog dialog = new Dialog(mContext);
+        dialog.setContentView(R.layout.custom_save_popup);
+        final String title = "Message";
+
+        TextView dialogTitle = (TextView)dialog.findViewById(R.id.txvSaveTitleDialog);
+        dialogTitle.setText(title);
+        dialog.getWindow().setBackgroundDrawableResource(R.color.colorPrimary);
+        dialog. getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        int height_of_popup = 500;
+        int width_of_popup = 400;
+        dialog.getWindow().setLayout(width_of_popup, height_of_popup);
+        dialog.show();
+
+        final TextView tvSaveStatus = (TextView) dialog.findViewById(R.id.tvSaveStatus);
+//        tvSaveStatus.setText("Successfully saved \n Token No = "+tokenNo);
+        tvSaveStatus.setText(""+error_massage);
+
+        Button btnOkPopup = (Button)dialog.findViewById(R.id.btnOkPopUp);
+
+        btnOkPopup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
+    }
 
 }

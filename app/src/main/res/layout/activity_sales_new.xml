@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!--Created by Pavithra on 29-07-2020-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -100,7 +102,7 @@
             android:layout_width="56dp"
             android:layout_height="56dp"
             />
-       <EditText
+        <EditText
             android:layout_width="219dp"
             android:layout_height="56dp"
             android:background="#B7DAE6"
@@ -110,15 +112,15 @@
             android:singleLine="true"
             android:inputType="numberDecimal"/>
 
-       <ImageButton
+        <ImageButton
             android:background="@drawable/selection"
             android:layout_marginTop="8dp"
             android:layout_marginLeft="10dp"
             android:layout_width="56dp"
             android:layout_height="56dp" />
 
-       <ImageButton
-           android:id="@+id/imgBtnSearchProductFromLookup"
+        <ImageButton
+            android:id="@+id/imgBtnSearchProductFromLookup"
             android:background="@drawable/searchicon"
             android:layout_marginTop="8dp"
             android:layout_marginLeft="10dp"
@@ -174,139 +176,89 @@
                 android:layout_marginTop="50dp"
                 />
         </RelativeLayout>
-        
-        <!--<Button-->
-            <!--android:layout_width="418dp"-->
-            <!--android:layout_height="66dp"-->
-            <!--android:id="@+id/btnSaveBill"-->
-            <!--android:background="@drawable/edtbtn"-->
-            <!--android:layout_below="@+id/rlsuggestions"-->
-            <!--android:layout_marginLeft="21dp"-->
-            <!--android:layout_marginTop="26dp"-->
-            <!--android:text="SAVE"-->
-            <!--android:textSize="28sp"-->
-            <!--android:textStyle="bold|italic"/>-->
-        <RelativeLayout
+
+        <LinearLayout
+            android:layout_width="430dp"
+            android:layout_height="470dp"
+            android:orientation="vertical"
             android:layout_marginTop="18dp"
             android:layout_marginLeft="10dp"
-            android:layout_width="430dp"
-            android:layout_height="425dp"
             android:background="#005068"
             android:id="@+id/rlTotalBillamount">
+            <!--android:layout_height="425dp"  previos-->
 
             <LinearLayout
-                android:layout_width="423dp"
-                android:background="#005068"
-                android:layout_marginTop="1dp"
-                android:layout_marginLeft="5dp"
-                android:orientation="vertical"
-                android:layout_height="420dp">
+                android:layout_width="430dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="13dp"
+                android:layout_marginTop="14dp">
 
                 <TextView
                     android:layout_width="197dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="13dp"
-                    android:layout_marginTop="14dp"
+                    android:gravity="right|center_vertical"
+                    android:text="Store Id:"
+                    android:fontFamily="sans-serif"
+                    android:textColor="@color/white"
+                    android:textSize="24sp" />
+                <TextView
+                    android:layout_width="200dp"
+                    android:textColor="#FFBB33"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif"
+                    android:gravity="right|center_vertical"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/storeid"
+                    android:text=""/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="430dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="13dp"
+                android:layout_marginTop="14dp">
+
+                <TextView
+                    android:layout_width="197dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="right|center_vertical"
+                    android:text="Shift Id:"
+                    android:fontFamily="sans-serif"
+                    android:textColor="@color/white"
+                    android:textSize="24sp" />
+                <TextView
+                    android:layout_width="200dp"
+                    android:textColor="#FFBB33"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:fontFamily="sans-serif"
+                    android:gravity="right|center_vertical"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/shiftid"
+                    android:text=""/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="430dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="13dp"
+                android:layout_marginTop="14dp">
+
+                <TextView
+                    android:layout_width="197dp"
+                    android:layout_height="wrap_content"
                     android:gravity="right|center_vertical"
                     android:text="Bill No:"
                     android:fontFamily="sans-serif"
                     android:textColor="@color/white"
                     android:textSize="24sp" />
                 <TextView
-                    android:layout_width="197dp"
-                    android:layout_height="wrap_content"
-                    android:textSize="24sp"
-                    android:fontFamily="sans-serif"
-                    android:textColor="@color/white"
-                    android:text="Number Of Items:"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginTop="14dp"
-                    android:gravity="right|center_vertical"
-                    />
-                <TextView
-                    android:layout_width="174dp"
-                    android:layout_height="wrap_content"
-                    android:textSize="24sp"
-                    android:textColor="@color/white"
-                    android:text="Total Amount:"
-                    android:fontFamily="sans-serif"
-                    android:layout_marginLeft="35dp"
-                    android:layout_marginTop="14dp"
-                    android:gravity="right|center_vertical"/>
-                <TextView
-                    android:layout_width="195dp"
-                    android:layout_height="wrap_content"
-                    android:textSize="24sp"
-                    android:fontFamily="sans-serif"
-                    android:textColor="@color/white"
-                    android:text="Discount Amount:"
-                    android:layout_marginLeft="36dp"
-                    android:layout_marginTop="14dp"
-                    android:gravity="right|center_vertical"
-                    android:visibility="gone"/>
-
-                <TextView
-                    android:layout_width="200dp"
-                    android:layout_height="63dp"
-                    android:layout_marginLeft="12dp"
-                    android:layout_marginTop="14dp"
-                    android:fontFamily="sans-serif"
-                    android:gravity="right|center_vertical"
-                    android:text="Total Linewise Discount:"
-                    android:textColor="@color/white"
-                    android:textSize="24sp" />
-                <TextView
-                    android:layout_width="174dp"
-                    android:layout_height="wrap_content"
-                    android:textSize="24sp"
-                    android:textColor="@color/white"
-                    android:text="Tax Total:"
-                    android:fontFamily="sans-serif"
-                    android:layout_marginLeft="35dp"
-                    android:layout_marginTop="14dp"
-                    android:gravity="right|center_vertical"/>
-                <TextView
-                    android:layout_width="174dp"
-                    android:layout_height="wrap_content"
-                    android:textSize="24sp"
-                    android:fontFamily="sans-serif"
-                    android:textColor="@color/white"
-                    android:text="Total Discount:"
-                    android:layout_marginLeft="35dp"
-                    android:layout_marginTop="14dp"
-                    android:gravity="right|center_vertical"/>
-
-                <TextView
-                    android:layout_width="174dp"
-                    android:layout_height="wrap_content"
-                    android:textSize="24sp"
-                    android:fontFamily="sans-serif"
-                    android:textColor="@color/white"
-                    android:text="Bill R.Off:"
-                    android:layout_marginLeft="35dp"
-                    android:layout_marginTop="14dp"
-                    android:gravity="right|center_vertical"/>
-                <TextView
-                    android:layout_width="174dp"
-                    android:layout_height="wrap_content"
-                    android:textSize="24sp"
-                    android:fontFamily="sans-serif"
-                    android:textColor="@color/white"
-                    android:text="Net Amount:"
-                    android:layout_marginLeft="35dp"
-                    android:layout_marginTop="13dp"
-                    android:gravity="right|bottom"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="423dp"
-                android:layout_marginTop="1dp"
-                android:layout_marginLeft="220dp"
-                android:orientation="vertical"
-                android:layout_height="420dp">
-                <TextView
-                    android:layout_marginTop="15dp"
                     android:layout_width="200dp"
                     android:textColor="#FFBB33"
                     android:textSize="24sp"
@@ -316,9 +268,26 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/billno"
                     android:text=""/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="430dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="13dp"
+                android:layout_marginTop="10dp">
+
                 <TextView
-                    android:layout_marginTop="14dp"
-                    android:layout_width="181dp"
+                    android:layout_width="197dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    android:fontFamily="sans-serif"
+                    android:textColor="@color/white"
+                    android:text="Number Of Items:"
+                    android:gravity="right|center_vertical" />
+                <TextView
+                    android:layout_width="200dp"
                     android:textColor="#000000"
                     android:textSize="24sp"
                     android:textStyle="bold"
@@ -327,9 +296,25 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/numofitems"
                     android:text="0"/>
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="430dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="13dp"
+                android:layout_marginTop="10dp">
+
                 <TextView
-                    android:layout_marginTop="14dp"
-                    android:layout_width="181dp"
+                    android:layout_width="197dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    android:textColor="@color/white"
+                    android:text="Total Amount:"
+                    android:fontFamily="sans-serif"
+                    android:gravity="right|center_vertical"/>
+                <TextView
+                    android:layout_width="200dp"
                     android:textColor="#000000"
                     android:textSize="24sp"
                     android:textStyle="bold"
@@ -338,6 +323,191 @@
                     android:layout_height="wrap_content"
                     android:id="@+id/itemtotal"
                     android:text="0" />
+
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="430dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="13dp"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:layout_width="197dp"
+                    android:layout_height="63dp"
+                    android:fontFamily="sans-serif"
+                    android:gravity="right|center_vertical"
+                    android:text="Total Linewise Discount:"
+                    android:textColor="@color/white"
+                    android:textSize="24sp" />
+                <TextView
+                    android:layout_width="200dp"
+                    android:textColor="#000000"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:gravity="right|center_vertical"
+                    android:fontFamily="sans-serif"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/tvtotalLinewiseDiscount"
+                    android:text="0"
+                    android:layout_gravity="center_vertical"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="430dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="13dp"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:layout_width="197dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    android:textColor="@color/white"
+                    android:text="Tax Total:"
+                    android:fontFamily="sans-serif"
+                    android:gravity="right|center_vertical"/>
+                <TextView
+                    android:layout_width="200dp"
+                    android:textColor="#000000"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:gravity="right|center_vertical"
+                    android:fontFamily="sans-serif"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/taxtotal"
+                    android:text="0"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="430dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="13dp"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:layout_width="197dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    android:fontFamily="sans-serif"
+                    android:textColor="@color/white"
+                    android:text="Total Discount:"
+                    android:gravity="right|center_vertical"/>
+                <TextView
+                    android:layout_width="200dp"
+                    android:textColor="#000000"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:gravity="right|center_vertical"
+                    android:fontFamily="sans-serif"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/billdisc"
+                    android:text="0" />
+            </LinearLayout>
+            <LinearLayout
+                android:layout_width="430dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="13dp"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:layout_width="197dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    android:fontFamily="sans-serif"
+                    android:textColor="@color/white"
+                    android:text="Bill R.Off:"
+                    android:gravity="right|center_vertical"/>
+                <TextView
+                    android:layout_width="200dp"
+                    android:textColor="#000000"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:gravity="right|center_vertical"
+                    android:fontFamily="sans-serif"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/billroundoff"
+                    android:text="0"/>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="430dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginLeft="13dp"
+                android:layout_marginTop="10dp">
+
+                <TextView
+                    android:layout_width="197dp"
+                    android:layout_height="wrap_content"
+                    android:textSize="24sp"
+                    android:fontFamily="sans-serif"
+                    android:textColor="@color/white"
+                    android:text="Net Amount:"
+                    android:gravity="right|bottom"/>
+
+                <TextView
+                    android:layout_width="200dp"
+                    android:textColor="#000000"
+                    android:textSize="24sp"
+                    android:textStyle="bold"
+                    android:gravity="right|center_vertical"
+                    android:fontFamily="sans-serif"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/billtotal"
+                    android:text="0" />
+            </LinearLayout>
+
+
+
+
+        </LinearLayout>
+
+
+
+
+
+
+
+
+
+                <!--<TextView-->
+                    <!--android:layout_width="195dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:textSize="24sp"-->
+                    <!--android:fontFamily="sans-serif"-->
+                    <!--android:textColor="@color/white"-->
+                    <!--android:text="Discount Amount:"-->
+                    <!--android:layout_marginLeft="36dp"-->
+                    <!--android:layout_marginTop="14dp"-->
+                    <!--android:gravity="right|center_vertical"-->
+                    <!--android:visibility="gone"/>-->
+
+
+
+
+
+                <!--<TextView-->
+                    <!--android:layout_width="174dp"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:textSize="24sp"-->
+                    <!--android:fontFamily="sans-serif"-->
+                    <!--android:textColor="@color/white"-->
+                    <!--android:text="Net Amount:"-->
+                    <!--android:layout_marginLeft="35dp"-->
+                    <!--android:layout_marginTop="13dp"-->
+                    <!--android:gravity="right|bottom"/>-->
+
+            <!--</LinearLayout>-->
+
+
+
+
                 <TextView
                     android:layout_marginTop="13dp"
                     android:layout_width="181dp"
@@ -350,65 +520,31 @@
                     android:id="@+id/disctotal"
                     android:text="0"
                     android:visibility="gone"/>
-                <TextView
-                    android:layout_marginTop="26dp"
-                    android:layout_width="181dp"
-                    android:textColor="#000000"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    android:gravity="right|center_vertical"
-                    android:fontFamily="sans-serif"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/tvtotalLinewiseDiscount"
-                    android:text="0" />
-                <TextView
-                    android:layout_marginTop="26dp"
-                    android:layout_width="181dp"
-                    android:textColor="#000000"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    android:gravity="right|center_vertical"
-                    android:fontFamily="sans-serif"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/taxtotal"
-                    android:text="0"
-                    />
-                <TextView
-                    android:layout_marginTop="26dp"
-                    android:layout_width="181dp"
-                    android:textColor="#000000"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    android:gravity="right|center_vertical"
-                    android:fontFamily="sans-serif"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/billdisc"
-                    android:text="0" />
-                <TextView
-                    android:layout_marginTop="28dp"
-                    android:layout_width="181dp"
-                    android:textColor="#000000"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    android:gravity="right|center_vertical"
-                    android:fontFamily="sans-serif"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/billroundoff"
-                    android:text="0"/>
-                <TextView
-                    android:layout_marginTop="24dp"
-                    android:layout_width="181dp"
-                    android:textColor="#000000"
-                    android:textSize="24sp"
-                    android:textStyle="bold"
-                    android:gravity="right|center_vertical"
-                    android:fontFamily="sans-serif"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/billtotal"
-                    android:text="0" />
 
-            </LinearLayout>
 
-        </RelativeLayout>
+
+
+
+                <!--<TextView-->
+                    <!--android:layout_marginTop="28dp"-->
+                    <!--android:layout_width="181dp"-->
+                    <!--android:textColor="#000000"-->
+                    <!--android:textSize="24sp"-->
+                    <!--android:textStyle="bold"-->
+                    <!--android:gravity="right|center_vertical"-->
+                    <!--android:fontFamily="sans-serif"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:id="@+id/billroundoff"-->
+                    <!--android:text="0"/>-->
+
+
+            <!--</LinearLayout>-->
+
+        <!--</RelativeLayout>-->
+
+
+
+
+
     </RelativeLayout>
 </RelativeLayout>

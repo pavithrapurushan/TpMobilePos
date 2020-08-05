@@ -1,10 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--Modified by Pavithra on 28-07-2020-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:id="@+id/saleslist"
     android:layout_height="wrap_content"
-    android:gravity="center_vertical">
-    <!--Earlier above linearlayout height was matchparent..to delete btn properly it cheanged to wrap content-->
+    android:gravity="center_vertical"
+    android:longClickable="true">    <!--this property added by Pavithra on 28-07-2020 -->
+    <!--Earlier above linearlayout height was matchparent..to delete btn properly it changed to wrap content-->
 
     <ImageButton
         android:layout_width="wrap_content"

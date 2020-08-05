@@ -12,6 +12,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
@@ -34,9 +36,13 @@ import java.net.ProtocolException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
 
 //Modified by Pavithra on 30-05-2020
 //Modified by Pavithra on 15-07-2020
+//Modified by Pavithra on 29-07-2020
+//Modified by Pavithra on 03-08-2020
+
 
 public class CustomerInformation extends AppCompatActivity {
     String Url = "";
@@ -74,20 +80,39 @@ public class CustomerInformation extends AppCompatActivity {
             this.getSupportActionBar().hide();
         } catch (NullPointerException e) {
         }
+
+
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
         this.getWindow().getDecorView().setSystemUiVisibility(
 
+//                View.SYSTEM_UI_FLAG_LAYOUT_STABLE                      Commented by Pavithra on 28-07-2020
+//                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+//                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+//                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+//                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+//                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+
                 View.SYSTEM_UI_FLAG_LAYOUT_STABLE
-                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
-                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                         | View.SYSTEM_UI_FLAG_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
 
-        setContentView(R.layout.activity_customer_information);
+        setContentView(R.layout.activity_customer_information);          //Masked by Pavithra on 28-07-2020
+//        setContentView(R.layout.activity_customer_information_new);   // Added by Pavithra on 28-07-2020
+
+//        TextView tvCustInfo = (TextView) findViewById(R.id.customer_in);
+////        String text = "<font color=#cc0029>Customer</font> <font color=#ffcc00>Information</font>";
+//        String temp = "5";
+//        String text = "<font color=#cc0029>StoreId : </font> <font color=#ffcc00> Information"+ temp +"</font>";
+//        tvCustInfo.setText(Html.fromHtml(text));
+
+
+        TextView tvStoreId = (TextView) findViewById(R.id.tvStoreIdCustInfo);
+        TextView tvShiftId = (TextView) findViewById(R.id.tvShiftIdCustInfo);
+
         edtmob = (EditText) findViewById(R.id.mobile_numb);
         edtname = (EditText) findViewById(R.id.Customername);
         edtmail = (EditText) findViewById(R.id.Customermail);
@@ -110,6 +135,16 @@ public class CustomerInformation extends AppCompatActivity {
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         customerDetailJsonStr = prefs.getString("CustomerDetailJsonStr", "");
+
+/****************************************Added by Pavithra on 29-07-2020 following ***********************************************/
+        int shiftId = prefs.getInt("ShiftId",0);
+        String store_id = "3";
+        String textStore = "<font color=#ffffff>StoreId : </font> <font color=#ffcc00>"+ store_id +"</font>";
+        String textShift = "<font color=#ffffff>ShiftId : </font> <font color=#ffcc00>"+ shiftId +"</font>";
+        tvStoreId.setText(Html.fromHtml(textStore));
+        tvShiftId.setText(Html.fromHtml(textShift));
+/****************************************************************************************************************************/
+
 
         if(!customerDetailJsonStr.equals("")) {
             Gson gson = new Gson();
@@ -213,6 +248,24 @@ public class CustomerInformation extends AppCompatActivity {
 
 
 
+    //This function added by Pavithra on 28-07-2020
+    private boolean isValidMobile(String phone) {
+        if(!Pattern.matches("[a-zA-Z]+", phone)) {
+            return phone.length() > 6 && phone.length() <= 13;
+        }
+        return false;
+    }
+
+    //Added by Pavithra on 28-07-2020
+    private boolean isValidMail(String email) {
+
+        String EMAIL_STRING = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@"
+                + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$";
+
+        return Pattern.compile(EMAIL_STRING).matcher(email).matches();
+
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
@@ -280,8 +333,6 @@ public class CustomerInformation extends AppCompatActivity {
             edtPrescribingDoctor.setEnabled(true);
             tvSubmit.setEnabled(true);
             tvSubmit.setAlpha(1f);
-
-
 
         } else {
             edtmob.setEnabled(false);
@@ -373,6 +424,22 @@ public class CustomerInformation extends AppCompatActivity {
 
         if(!edtname.getText().toString().equals("")&&!edtmob.getText().toString().equals("")) {
 
+
+//            if(isValidMobile(edtmob.getText().toString())){
+//                Toast.makeText(this, "Phone number valid", Toast.LENGTH_SHORT).show();
+//
+//            }else{
+//                Toast.makeText(this, "Invalid phone number", Toast.LENGTH_SHORT).show();
+//            }
+
+
+//            if(isValidMail(edtmail.getText().toString())){
+//                Toast.makeText(this, "Email valid", Toast.LENGTH_SHORT).show();
+//
+//            }else{
+//                Toast.makeText(this, "Invalid Email", Toast.LENGTH_SHORT).show();
+//            }
+
             //Added by 1165 on 12-02-2020
             loyaltycode = edtloyaltycode.getText().toString();
             if (loyaltycode.equals("")) {
@@ -382,16 +449,13 @@ public class CustomerInformation extends AppCompatActivity {
                 prefs = PreferenceManager.getDefaultSharedPreferences(CustomerInformation.this);
 //                editor.putString("CustomerId",customerDetails.get(i).CustId);
                 String cust_id = prefs.getString("CustomerId","");
+                String from_where =   prefs.getString("FromWhere","");   //Added by Pavithra on 31-07-2020
                 String mobileNumberLoaded = prefs.getString("MobileNumber","");
-                if(cust_id.equals("")){
+                if(cust_id.equals("")) {
                     cust_id = "0";
                 }
 
-
-
-
                 //Added by 1165 on 27-01-2020
-
                 CustomerDetail customerDetail = new CustomerDetail();
 //                customerDetail.CustId = cust_id;  //Commented by Pavithra on 16-07-2020
                 customerDetail.Customer = edtname.getText().toString();
@@ -404,11 +468,12 @@ public class CustomerInformation extends AppCompatActivity {
                 customerDetail.Address2 = edtaddress2.getText().toString();
                 customerDetail.Address3 = edtaddress3.getText().toString();
                 customerDetail.PrescribingDoctor = edtPrescribingDoctor.getText().toString();  //Added by PAvithra on 14-07-2020
+                customerDetail.FromWhere = from_where;  //Added by Pavithra on 31-07-2020
 
                 if(mobileNumberLoaded.equals(edtmob.getText().toString())){
                     customerDetail.CustId = cust_id;
 
-                }else{
+                }else {
                     customerDetail.CustId = "0";
                 }
 
@@ -416,7 +481,6 @@ public class CustomerInformation extends AppCompatActivity {
                 String customerDetailJsonStr = gson.toJson(customerDetail);
 
                 //Before adding check with prev mobile number from custdetails and current edittext number and additot the field
-
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putString("CustomerDetailJsonStr", customerDetailJsonStr);
                 editor.putString("LoyaltyCode", "");
@@ -432,6 +496,35 @@ public class CustomerInformation extends AppCompatActivity {
                 loyaltyCustomer.Address2 = edtaddress2.getText().toString();
                 loyaltyCustomer.Address3 = edtaddress3.getText().toString();
 
+
+
+/*******************Added vby Paithra on  03-080-2020****************************************************************************************8*/
+
+                try {
+                    String loyaltyCustDetailsResponseJsnStr = prefs.getString("LoyaltyCustDetailsResponseJsnStr","");
+
+                    Gson gson = new Gson();
+                    LoyaltycustomerDetailsResponse loyaltycustomerDetailsResponseObj = gson.fromJson(loyaltyCustDetailsResponseJsnStr, LoyaltycustomerDetailsResponse.class);
+
+                    loyaltycustomerDetailsResponseObj.LoyaltyCustomerDetail.get(0).Customer = edtname.getText().toString();
+                    loyaltycustomerDetailsResponseObj.LoyaltyCustomerDetail.get(0).Phone1 = edtmob.getText().toString();
+                    loyaltycustomerDetailsResponseObj.LoyaltyCustomerDetail.get(0).Phone2 = edtmob2.getText().toString();
+                    loyaltycustomerDetailsResponseObj.LoyaltyCustomerDetail.get(0).EMail = edtmail.getText().toString();
+                    loyaltycustomerDetailsResponseObj.LoyaltyCustomerDetail.get(0).Address1 = address1.getText().toString();
+                    loyaltycustomerDetailsResponseObj.LoyaltyCustomerDetail.get(0).Address2 = edtaddress2.getText().toString();
+                    loyaltycustomerDetailsResponseObj.LoyaltyCustomerDetail.get(0).Address3 = edtaddress3.getText().toString();
+
+                    gson = new Gson();
+                    String loyaltycustomerDetailsResponseObjStr = gson.toJson(loyaltycustomerDetailsResponseObj);
+
+
+
+
+/********************************************************************************************************************************************************/
+
+
+
+
                 String loyalty_id = prefs.getString("LoyaltyId", "");
                 loyaltyCustomer.LoyaltyId = loyalty_id; //LoyaltyId should pass here
 
@@ -441,9 +534,13 @@ public class CustomerInformation extends AppCompatActivity {
                 SharedPreferences.Editor editor = prefs.edit();
                 editor.putString("LoyaltyCustomerDetailJsonStr", lcustomerDetailJsonStr);
                 editor.putString("LoyaltyCode", loyaltycode);
+                editor.putString("LoyaltyCustDetailsResponseJsnStr", loyaltycustomerDetailsResponseObjStr);//Added by Pavithra on 03-080-2020
                 editor.commit();
-            }
+                }catch (Exception ex){
+                    Log.d("CI",""+ex);
+                }
 
+            }
 
             prefs = PreferenceManager.getDefaultSharedPreferences(CustomerInformation.this);
             SharedPreferences.Editor editor = prefs.edit();
@@ -453,8 +550,6 @@ public class CustomerInformation extends AppCompatActivity {
             editor.putString("ListModelJsonStr", "");  //Added by 1165 on 30-04-2020 ;task renamed to ListModelJsonStr
             editor.putBoolean("SaveEnabled", true);
 
-
-
 //newly added from PaymenetaCtivity after saving
             editor.putString("SalesdetailPLObjStr", "");
             editor.putString("SalessummaryDetailObjStr", "");
@@ -462,7 +557,6 @@ public class CustomerInformation extends AppCompatActivity {
             editor.putString("PaymentTotal", "");
             editor.putString("BillSeries", "");
             editor.putString("BillNo", "");
-
             editor.commit();
 
             Intent submitintent = new Intent(CustomerInformation.this, customtoolbar.class);

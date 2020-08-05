@@ -26,6 +26,8 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
+
+//Modified by Pavithra on 04-08-2020
 public class LoyaltyCustomerLookupAdapter extends RecyclerView.Adapter<LoyaltyCustomerLookupAdapter.ViewHolder> {
     private ArrayList<LoyaltyCustomerList> listdata;
     EditText name,number,mail,loyaltycode;
@@ -211,20 +213,23 @@ public class LoyaltyCustomerLookupAdapter extends RecyclerView.Adapter<LoyaltyCu
                      address1=LoyaltyCustomerDetail.get(i).Address1;
                      address2=LoyaltyCustomerDetail.get(i).Address2;
                      address3=LoyaltyCustomerDetail.get(i).Address3;
-                    strloyaltycode=LoyaltyCustomerDetail.get(i).LoyaltyNo;
+                     strloyaltycode=LoyaltyCustomerDetail.get(i).LoyaltyNo;
+
+                     Gson gson = new Gson();
+                     String loyaltycustomerDetailsResponseJsnStr = gson.toJson(loyaltycustomerDetailsResponse);  //Added by Pavithra on 31-07-2020
 
                     SharedPreferences.Editor editor = prefs.edit();
                     editor.putString("LoyaltyId",LoyaltyCustomerDetail.get(i).LoyaltyId);
+                    editor.putString("LoyaltyCustDetailsResponseJsnStr",loyaltycustomerDetailsResponseJsnStr);  //Added by Pavithra on 31-07-2020
                     editor.commit();
-
 
                  }
                 name.setText(""+customername);
-
                 name.setTextColor(Color.YELLOW);
                 name.setTypeface(Typeface.create("sans-serif", Typeface.BOLD));
 
-                number.setText(""+mob1);
+///                number.setText(""+mob1); //commented by Pavithra on 04-08-2020
+                number.setText(""+mob2); //Added by Pavithra on 04-08-2020+
                 number.setTextColor(Color.YELLOW);
                 number.setTypeface(Typeface.create("sans-serif", Typeface.BOLD));
 

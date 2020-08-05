@@ -27,8 +27,10 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-public class
-CustomerLookupAdapter extends RecyclerView.Adapter<CustomerLookupAdapter.ViewHolder> {
+
+//Modified by Pavithra on 22-07-2020
+//Modified by Pavithra on 31-07-2020
+public class CustomerLookupAdapter extends RecyclerView.Adapter<CustomerLookupAdapter.ViewHolder> {
     @NonNull
     String Url;
     Gson gson;
@@ -95,8 +97,8 @@ CustomerLookupAdapter extends RecyclerView.Adapter<CustomerLookupAdapter.ViewHol
             @Override
             public void onClick(View view) {
                 index = i;
-                fromwhere=listdata.get(i).getFromwhere();
-                customerid=listdata.get(i).getCustomerid();
+                fromwhere= listdata.get(i).getFromwhere();
+                customerid= listdata.get(i).getCustomerid();
                 new CustomerDetailAsyncTask().execute();
 
 
@@ -164,6 +166,7 @@ CustomerLookupAdapter extends RecyclerView.Adapter<CustomerLookupAdapter.ViewHol
     }
 
     private class CustomerDetailAsyncTask extends AsyncTask<String, String, String> {
+
     /*    ProgressDialog progressDialog = new ProgressDialog(context);
         @Override
         protected void onPreExecute() {
@@ -230,16 +233,14 @@ CustomerLookupAdapter extends RecyclerView.Adapter<CustomerLookupAdapter.ViewHol
                     address3=customerDetails.get(i).Address3;
                     prescribing_doctor=customerDetails.get(i).PrescribingDoctor;
 
-
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putString("CustomerId",customerDetails.get(i).CustId);
+                    editor.putString("FromWhere",fromwhere);//Added by Pavithra on 31-07-2020 --fromwhere not getting any value in CustomerDetail so value taken from customerlookup itself
                     editor.putString("CustomerName",customername);
-                    editor.putString("MobileNumber",customerDetails.get(i).Phone1);//Added by Pavithra on 16-07-2020 ..Mobile number loaded.
+//                    editor.putString("MobileNumber",customerDetails.get(i). Phone1);//Added by Pavithra on 16-07-2020 ..Mobile number loaded. commented on 22-07-2020
+                    editor.putString("MobileNumber",mob2);//Added by Pavithra on 22-07-2020
                     editor.commit();
-
-
-                    //  strloyaltycode=LoyaltyCustomerDetail.get(i).LoyaltyNo;
-
+                    // strloyaltycode=LoyaltyCustomerDetail.get(i).LoyaltyNo;
                 }
                 edtname.setText(""+customername);
                 edtname.setTextColor(Color.YELLOW);

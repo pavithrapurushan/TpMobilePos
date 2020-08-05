@@ -10,7 +10,6 @@ public class BatchModel {
         this.mrp = mrp;
         this.batchid = batchid;
         this.soh = soh;
-//        this.reserved=reserved;
     }
 
     public String getSlno(){
@@ -32,7 +31,4 @@ public class BatchModel {
         return batchid;
     }
 
-//    public String getReserved(){
-//        return reserved;
-//    }
 }

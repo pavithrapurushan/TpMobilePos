@@ -3,7 +3,8 @@ package in.co.techsmith.tpmobilepos;
 public class Model  {
     String tvItemName,tvRate,tvUOM,tvDisc,tvTotal,etQty,ItemId,ItemCode,MRP,PackName,UnitName,Company,TaxRate,TaxId,BatchCode,BatchId
             ,BatchExpiry,PackRate,BatchMRP,SOHInUnits,SOHInPacks,QtyInPacks,QtyInUnits,BillingRate,FreeFlag,CustType,Amount,DiscPer,
-            DiscAmt,TaxableAmt,TaxPer,TaxType,TaxAmt,RowTotal,UperPack;
+            DiscPerAmt,TaxableAmt,TaxPer,TaxType,TaxAmt,RowTotal,UperPack;  //Edited by Pavithra on 30-07-2020
+//    DiscAmt
 
     public Model(String ItemId ,String ItemCode,String MRP,String PackName,
                  String UnitName,String Company,String TaxRate,String TaxId, String BatchCode,

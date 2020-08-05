@@ -2,4 +2,5 @@
     <!--<string name="app_name">MyMobPosApplication</string>-->
     <string name="app_name">TpMobPos</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="my_screen_size">default</string>
 </resources>

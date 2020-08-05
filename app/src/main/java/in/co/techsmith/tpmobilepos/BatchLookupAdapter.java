@@ -8,6 +8,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.preference.PreferenceManager;
+import android.service.autofill.TextValueSanitizer;
 import android.support.annotation.RequiresApi;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -54,6 +55,10 @@ import java.util.List;
 //Modified by Pavithra on 09-07-2020
 //Modified by Pavithra on 11-07-2020
 //Modified by Pavithra on 17-07-2020
+//Modified by Pavithra on 22-07-2020
+//Modified by Pavithra on 23-07-2020
+//Modified by Pavithra on 28-07-2020
+//Modified by Pavithra on 30-07-2020
 
 public class BatchLookupAdapter extends ArrayAdapter<BatchModel> implements View.OnClickListener {
 
@@ -73,6 +78,7 @@ public class BatchLookupAdapter extends ArrayAdapter<BatchModel> implements View
 
     String batchname,tot,disc;
     EditText prname,etqtyselection,packqty,unitqty,productname,etbatch;
+    TextView tvUnitQtyHeading; //Added by Pavithra on 30-07-2020
     ImageButton qtyminus,qtyadd,unitadd,unitminus;
     Button submit;
     String listModelJsonStr;
@@ -91,7 +97,7 @@ public class BatchLookupAdapter extends ArrayAdapter<BatchModel> implements View
     JSONArray batchArr;
     int packquantity,unitquantity,y,num;
     String batchId,BatchCode,ExpiryDate,MRP,PackRate,UnitRate,SOHInUnits,SOHInPacks;
-    TextView billno,numofitems,itemtotal,disctotal,taxtotal,billdisc,billroundoff,billtotal,total;
+    TextView billno,numofitems,itemtotal,disctotal,taxtotal,billdisc,billroundoff,billtotal,total,totallLinewiseDisc;
     ListView l2;
     Dialog batchdialog,dialog,qtydialog;
     SharedPreferences prefs;
@@ -119,14 +125,15 @@ public class BatchLookupAdapter extends ArrayAdapter<BatchModel> implements View
     String bill_series = "";
     String bill_no = "";
 
-    String uperPack = "0";//Added by PAvithra on 17-07-2020
+    String uperPack = "0";//Added by Pavithra on 17-07-2020
 
+    View viewUnitQty;  //Added by Pavithra on 28-07-2020
 
     public static class ViewHolder {
         TextView slno, batchcode, expiry, mrp, soh, batchid;
     }
 
-    public BatchLookupAdapter(ArrayList<BatchModel> listdata, ArrayList<Model> list, Context context, ListView l2, TextView billno, TextView numofitems, TextView itemtotal, TextView disctotal, TextView taxtotal, TextView billdisc, TextView billroundoff, TextView billtotal, EditText prname, Dialog batchdialog, Dialog dialog) {
+    public BatchLookupAdapter(ArrayList<BatchModel> listdata, ArrayList<Model> list, Context context, ListView l2, TextView billno, TextView numofitems, TextView itemtotal, TextView disctotal, TextView taxtotal, TextView billdisc, TextView billroundoff, TextView billtotal, EditText prname, Dialog batchdialog, Dialog dialog,TextView tvTotalLinewiseDisc) {
 
         /********** Take passed values **********/
         super(context, R.layout.batch_lookup_row, listdata);
@@ -143,6 +150,7 @@ public class BatchLookupAdapter extends ArrayAdapter<BatchModel> implements View
         this.itemtotal = itemtotal;
         this.disctotal = disctotal;
         this.taxtotal = taxtotal;
+        this.totallLinewiseDisc = tvTotalLinewiseDisc; //Added by Pavithra on 30-07-2020
         this.billdisc = billdisc;
         this.billroundoff = billroundoff;
         this.billtotal = billtotal;
@@ -152,7 +160,7 @@ public class BatchLookupAdapter extends ArrayAdapter<BatchModel> implements View
         bill_no = prefs.getString("BillNo", "");
         billing_date = prefs.getString("BillingDate", "");
 
-        productListCustomAdapterObj = new ProductListCustomAdapter(listModel, context, l2, billno, numofitems, itemtotal, disctotal, taxtotal, billdisc, billtotal, billroundoff,uperPack); //edited by Pavithra on 18-07-2020
+        productListCustomAdapterObj = new ProductListCustomAdapter(listModel, context, l2, billno, numofitems, itemtotal, disctotal, taxtotal, billdisc, billtotal, billroundoff,uperPack,totallLinewiseDisc); //edited by Pavithra on 18-07-2020
         //l2 is the productlist listview to finally show in salesactivity
     }
 
@@ -162,7 +170,7 @@ public class BatchLookupAdapter extends ArrayAdapter<BatchModel> implements View
         Log.d("BLA","Pos = "+position);
         batchmodel = listBatchModel.get(position);
         final ViewHolder holder;
-        productLookupAdapter = new ProductLookupAdapter(listProductModel, listModel, l2, billno, numofitems, itemtotal, disctotal, taxtotal, billdisc, billroundoff, billtotal, mContext, dialog);
+        productLookupAdapter = new ProductLookupAdapter(listProductModel, listModel, l2, billno, numofitems, itemtotal, disctotal, taxtotal, billdisc, billroundoff, billtotal, mContext, dialog,totallLinewiseDisc); //Edited by Pavithra on 30-07-2020
         if (convertView == null) {
             holder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
@@ -179,9 +187,11 @@ public class BatchLookupAdapter extends ArrayAdapter<BatchModel> implements View
                     qtydialog.setTitle("Quantity Selection");
                     qtydialog.getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
 
+                    viewUnitQty = (View)qtydialog.findViewById(R.id.view);
                     etqtyselection = (EditText) qtydialog.findViewById(R.id.etqtyselection); //setting product name
                     qtyadd = (ImageButton) qtydialog.findViewById(R.id.qtyadd);
                     qtyminus = (ImageButton) qtydialog.findViewById(R.id.qtyminus);
+                    tvUnitQtyHeading = (TextView) qtydialog.findViewById(R.id.tvUnitQtyHeading);
                     unitadd = (ImageButton) qtydialog.findViewById(R.id.unitqtyadd);
                     unitminus = (ImageButton) qtydialog.findViewById(R.id.unitqtyminus);
                     packqty = (EditText) qtydialog.findViewById(R.id.packqty);
@@ -246,6 +256,27 @@ public class BatchLookupAdapter extends ArrayAdapter<BatchModel> implements View
                     String qtyUnit = unitqty.getText().toString();
                     int tot_qty = Integer.parseInt(qtyPack)*Integer.parseInt(uperPack)+Integer.parseInt(qtyUnit);
                     total.setText(String.valueOf(tot_qty));
+
+                    //This condition added by Pavithra on 24-07-2020
+                    if(uperPack.equals("1")){
+                        unitqty.setEnabled(false);
+                        tvUnitQtyHeading.setAlpha(0.4f); //Added by Pavithra on 30-07-2020
+                        unitqty.setAlpha(0.4f);      //Added by Pavithra on 30-07-2020
+                        unitadd.setAlpha(0.4f);      //Added by Pavithra on 30-07-2020
+                        unitminus.setAlpha(0.4f);    //Added by Pavithra on 30-07-2020
+                        viewUnitQty.setAlpha(0.4f);  //added by Pavithra on 28-07-2020
+                        packqty.setText("1");        //added by Pavithra on 28-07-2020
+                    }else{
+                        unitqty.setEnabled(true);
+                        viewUnitQty.setAlpha(1f);  //added by Pavithra on 28-07-2020
+                        packqty.setText("0");      //added by Pavithra on 28-07-2020
+
+                        tvUnitQtyHeading.setAlpha(1f); //Added by Pavithra on 30-07-2020
+                        unitqty.setAlpha(1f);      //Added by Pavithra on 30-07-2020
+                        unitadd.setAlpha(1f);      //Added by Pavithra on 30-07-2020
+                        unitminus.setAlpha(1f);    //Added by Pavithra on 30-07-2020
+
+                    }
 
                 /****************************************************************************************************************/
 
@@ -582,6 +613,7 @@ public class BatchLookupAdapter extends ArrayAdapter<BatchModel> implements View
                         }
                     } else {
                         Toast.makeText(mContext, "" + Bdetail.Message, Toast.LENGTH_SHORT).show();
+                        tsErrorMessage(Bdetail.Message); //Added by Pavithra on 30-07-2020
                     }
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -651,15 +683,37 @@ public class BatchLookupAdapter extends ArrayAdapter<BatchModel> implements View
                 billdetail.ExpiryDate = batchDetailsObj.ExpiryDate;
 
                 if(isRepeatItem){
-//                    billdetail.QtyInPacks = String.valueOf(new_qty); //Commented by Pavithra on 17-07-2020
-                    billdetail.QtyInPacks = String.valueOf(new_pack_qty); //Added by Pavithra on 17-07-2020
-                    billdetail.QtyInUnits = String.valueOf(new_unit_qty); //Added by Pavithra on 17-07-2020
+
+                    //Added by Pavithra on 21-07-2020
+                    Double qtyInUnits = new_pack_qty* Double.valueOf(listProducts.get(0).UPERPACK)+new_unit_qty;
+                    billdetail.QtyInPacks = "0";
+                    billdetail.QtyInUnits = String.valueOf(qtyInUnits);
+
+
+                    //Commented by Pavithra on 21-07-2020
+//                    billdetail.QtyInPacks = String.valueOf(new_pack_qty); //Added by Pavithra on 17-07-2020
+//                    billdetail.QtyInUnits = String.valueOf(new_unit_qty); //Added by Pavithra on 17-07-2020
                     billdetail.SlNo = String.valueOf(listModel.size()- p);
 
+                    prefs = PreferenceManager.getDefaultSharedPreferences(mContext); //Added by Pavithra on 05-08-2020
+                    String disc_per = prefs.getString("DiscPer","0"); //Added by Pavithra on 05-08-2020
+                    billdetail.DiscPer = disc_per;  //Added by Pavithra on 05-08-2020
+
+
                 }else {
-                    billdetail.QtyInPacks = String.valueOf(packquantity);
-                    billdetail.SlNo = String.valueOf(listModel.size()+1);
-                    billdetail.QtyInUnits = String.valueOf(unitquantity);   //Added by Pavithra on 17-07-2020
+
+                    //Added by Pavithra on 21-07-2020
+//                    Double qtyInUnits = Double.valueOf(packquantity) * Double.valueOf(listProducts.get(0).UPERPACK) + Double.valueOf(new_unit_qty);//Commented by Pavithra on 24-07-2020
+                    Double qtyInUnits = Double.valueOf(packquantity) * Double.valueOf(listProducts.get(0).UPERPACK) + Double.valueOf(unitquantity); //Added by Pavithra on 24-07-2020
+                    billdetail.QtyInPacks = "0";
+                    billdetail.QtyInUnits = String.valueOf(qtyInUnits);
+
+//                    billdetail.QtyInPacks = String.valueOf(packquantity);
+//                    billdetail.QtyInUnits = String.valueOf(unitquantity);   //Added by Pavithra on 17-07-2020
+
+                    billdetail.SlNo = String.valueOf(listModel.size() + 1);
+                    billdetail.DiscPer = "0";  //Added by Pavithra on 05-08-2020
+
                 }
 
 
@@ -674,7 +728,7 @@ public class BatchLookupAdapter extends ArrayAdapter<BatchModel> implements View
                 billdetail.FreeFlag = "0";
                 billdetail.CustType = "LOCAL";
                 billdetail.Amount = "0";
-                billdetail.DiscPer = "0";
+//                billdetail.DiscPer = "0"; //Commented by Pavithra on 05-08-2020
                 billdetail.DiscPerAmt = "0";
                 billdetail.TaxableAmt = "0";
                 billdetail.TaxPer = listProducts.get(0).TAXRATE;
@@ -693,7 +747,7 @@ public class BatchLookupAdapter extends ArrayAdapter<BatchModel> implements View
                 customer.CustName = prefs.getString("CustomerName", "");
                 customer.BillDate = billing_date; //Added by Pavithra on 08-07-2020
                 customer.CustType = "LOCAL";//For the time being need further interface
-                customer.StoreId = "5"; //alomost constant
+                customer.StoreId = "3"; //alomost constant
                 List<Customer> listCustomer = new ArrayList<>();
                 listCustomer.add(customer);
 
@@ -757,23 +811,28 @@ public class BatchLookupAdapter extends ArrayAdapter<BatchModel> implements View
                                 if (BillRow.get(0).ItemCode.equals(billrowList.get(i).ItemCode)) { //Checking for same item in the old list
                                     if (BillRow.get(0).BatchCode.equals(billrowList.get(i).BatchCode)) {
 
+
+           /************************No need to caluclte qty new updated qty is coming from result****************************Commented by Pavithra on 21-07-2020*********************************************/
 //                                        int new_qty = Integer.valueOf( BillRow.get(0).QtyInPacks )+1; //Commented on 25-06-2020 by Pavithra
-                                        int new_qty = Integer.valueOf(BillRow.get(0).QtyInPacks); //Added by Pavithra on 25-06-2020
+//                                        int new_qty = Integer.valueOf(BillRow.get(0).QtyInPacks); //Added by Pavithra on 25-06-2020
 
 
                                         //Modification by Pavithra on 17-07-2020
                                         ///Now here calculting total qty from aold packqty and unit qty adding with new and save it  list itself
                                         //Billrow new with o one item ,billrowlist contains previous items
-                                        int temp_pack_qty_old = Integer.parseInt(billrowList.get(i).QtyInPacks);
-                                        int temp_unit_qty_old = Integer.parseInt(billrowList.get(i).QtyInUnits);
-                                        int temp_pack_qty_new = Integer.parseInt(BillRow.get(0).QtyInPacks);
-                                        int temp_unit_qty_new = Integer.parseInt(BillRow.get(0).QtyInUnits);
+//                                        int temp_pack_qty_old = Integer.parseInt(billrowList.get(i).QtyInPacks);
+//                                        int temp_unit_qty_old = Integer.parseInt(billrowList.get(i).QtyInUnits);
+//                                        int temp_pack_qty_new = Integer.parseInt(BillRow.get(0).QtyInPacks);
+//                                        int temp_unit_qty_new = Integer.parseInt(BillRow.get(0).QtyInUnits);
+//
+//                                        int new_pack_qty = temp_pack_qty_old+temp_pack_qty_new;
+//                                        int new_unit_qty = temp_unit_qty_old+temp_unit_qty_new;
+//
+//                                        BillRow.get(0).QtyInPacks = String.valueOf(new_pack_qty);
+//                                        BillRow.get(0).QtyInUnits = String.valueOf(new_unit_qty);
 
-                                        int new_pack_qty = temp_pack_qty_old+temp_pack_qty_new;
-                                        int new_unit_qty = temp_unit_qty_old+temp_unit_qty_new;
+      /*****************************************************************************************************************************/
 
-                                        BillRow.get(0).QtyInPacks = String.valueOf(new_pack_qty);
-                                        BillRow.get(0).QtyInUnits = String.valueOf(new_unit_qty);
 
 
 
@@ -863,7 +922,7 @@ public class BatchLookupAdapter extends ArrayAdapter<BatchModel> implements View
                             }
 
 //                            productListCustomAdapterObj = new ProductListCustomAdapter(listModel, mContext, l2, billno, numofitems, itemtotal taxtotal, billtotal, billroundoff);
-                            productListCustomAdapterObj = new ProductListCustomAdapter(listModel, mContext, l2, billno,numofitems, itemtotal,disctotal, taxtotal,billdisc, billtotal, billroundoff, uperPack);//adde uperpack parameter by APvithra on 18-07-2020
+                            productListCustomAdapterObj = new ProductListCustomAdapter(listModel, mContext, l2, billno,numofitems, itemtotal,disctotal, taxtotal,billdisc, billtotal, billroundoff, uperPack,totallLinewiseDisc);//adde uperpack parameter by APvithra on 18-07-2020
                             l2.setAdapter(productListCustomAdapterObj);
 
 //                            l2.setAdapter(productListCustomAdapterObj);
@@ -1025,6 +1084,7 @@ public class BatchLookupAdapter extends ArrayAdapter<BatchModel> implements View
 
                     } else {
                         Toast.makeText(mContext, "" + cr.Message, Toast.LENGTH_SHORT).show();
+                        tsErrorMessage(cr.Message); //Added by Pavithra on 30-07-2020
                     }
                 } catch (Exception e) {
                     Log.e("ERROR", e.getMessage(), e);
@@ -1063,9 +1123,7 @@ public class BatchLookupAdapter extends ArrayAdapter<BatchModel> implements View
                             p = j;
                             return true;
                         }
-
                     }
-
                 }
             }
 
@@ -1145,7 +1203,7 @@ public class BatchLookupAdapter extends ArrayAdapter<BatchModel> implements View
 //                    salesbill.BillDate = "01-10-2015";  //Masked by Pavithra on 08-07-2020
                     salesbill.BillDate = billing_date;    //Added by PAvithra on 08-07-2020
                     salesbill.CustType = "LOCAL";
-                    salesbill.StoreId = "5";
+                    salesbill.StoreId = "3";
                     salesbill.TotalAmount = "0";
                     salesbill.TotalLinewiseTax = "0";
                     salesbill.DiscountPer = "0";
@@ -1208,76 +1266,81 @@ public class BatchLookupAdapter extends ArrayAdapter<BatchModel> implements View
 
 //                    billno.setText(String.valueOf(billAmountResponse.SalesSummary.BillSeries + "" + billAmountResponse.SalesSummary.BillNo));
 
-                    billno.setText(String.valueOf(bill_series + "" + bill_no));
-                    num = l2.getAdapter().getCount();
-                    numofitems.setText(String.valueOf(num));
+                    if(billAmountResponse.ErrorStatus == 0) { //Condition added by Pavithra on 30-07-2020
+                        billno.setText(String.valueOf(bill_series + "" + bill_no));
+                        num = l2.getAdapter().getCount();
+                        numofitems.setText(String.valueOf(num));
 
 
-                    itemtotal.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.TotalAmount)));
-                    disctotal.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.DiscountAmt)));
-                    taxtotal.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.TotalLinewiseTax)));
-                    billdisc.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.TotalDiscount)));
-                    billroundoff.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.RoundOff)));
-                    billtotal.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.NetAmount)));
+                        itemtotal.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.TotalAmount)));
+                        disctotal.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.DiscountAmt)));
+                        taxtotal.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.TotalLinewiseTax)));
+                        billdisc.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.TotalDiscount)));
+                        billroundoff.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.RoundOff)));
+                        billtotal.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.NetAmount)));
 
-                    //To pass to Paymentactivity
+                        //To pass to Paymentactivity
 
-                    SalessummaryDetail salessummaryDetailObj = new SalessummaryDetail();
+                        SalessummaryDetail salessummaryDetailObj = new SalessummaryDetail();
 
-                    salessummaryDetailObj.BillSeries = bill_series;
-                    salessummaryDetailObj.BillNo = bill_no; //Original  cant us  since same bill number coming
+                        salessummaryDetailObj.BillSeries = bill_series;
+                        salessummaryDetailObj.BillNo = bill_no; //Original  cant us  since same bill number coming
 
 //                    salessummaryDetailObj.BillSeries = billAmountResponse.SalesSummary.BillSeries;
 //                    salessummaryDetailObj.BillNo = billAmountResponse.SalesSummary.BillNo;//Original  cant us  since same bill number coming
 
-                    salessummaryDetailObj.BillDate = billAmountResponse.SalesSummary.BillDate;
+                        salessummaryDetailObj.BillDate = billAmountResponse.SalesSummary.BillDate;
 
-                    if(loyalty_code.equals("")) {
-                        salessummaryDetailObj.Customer = customerDetailObj.Customer;
-                        if (customerDetailObj.CustId != null) {
-                            salessummaryDetailObj.CustId = Integer.parseInt(customerDetailObj.CustId);
-                        }
-                        salessummaryDetailObj.LoyaltyId = "0";
-                        salessummaryDetailObj.LoyaltyCode = "";
-                    }else{
-                        salessummaryDetailObj.Customer = loyaltyCustomerObj.Name;
+                        if (loyalty_code.equals("")) {
+                            salessummaryDetailObj.Customer = customerDetailObj.Customer;
+                            if (customerDetailObj.CustId != null) {
+                                salessummaryDetailObj.CustId = Integer.parseInt(customerDetailObj.CustId);
+                            }
+                            salessummaryDetailObj.LoyaltyId = "0";
+                            salessummaryDetailObj.LoyaltyCode = "";
+                        } else {
+                            salessummaryDetailObj.Customer = loyaltyCustomerObj.Name;
 //                        salessummaryDetailObj.CustId = Integer.parseInt(loyaltyCustomerObj.LoyaltyId);
 
-                        salessummaryDetailObj.LoyaltyId =loyaltyCustomerObj.LoyaltyId;
-                        salessummaryDetailObj.LoyaltyCode = loyaltyCustomerObj.EmpCode;
+                            salessummaryDetailObj.LoyaltyId = loyaltyCustomerObj.LoyaltyId;
+                            salessummaryDetailObj.LoyaltyCode = loyaltyCustomerObj.EmpCode;
 
-                    }
+                        }
 //                    salessummaryDetailObj.Customer = "Test";
 //                    salessummaryDetailObj.CustId = 0;
-                    salessummaryDetailObj.CustType = billAmountResponse.SalesSummary.CustType;
+                        salessummaryDetailObj.CustType = billAmountResponse.SalesSummary.CustType;
 //                    salessummaryDetailObj.LoyaltyId = "0";
 //                    salessummaryDetailObj.LoyaltyCode = "";
-                    salessummaryDetailObj.LoyaltyCardType = "";
-                    salessummaryDetailObj.StoreId = billAmountResponse.SalesSummary.StoreId;
-                    salessummaryDetailObj.SubStore = "1";
-                    salessummaryDetailObj.Counter = "1";
-                    salessummaryDetailObj.Shift = "1";
-                    salessummaryDetailObj.B2BB2CType = "B2C";
-                    salessummaryDetailObj.TotalAmount = billAmountResponse.SalesSummary.TotalAmount;
-                    salessummaryDetailObj.TotalLinewiseTax = billAmountResponse.SalesSummary.TotalLinewiseTax;
-                    salessummaryDetailObj.TaxAmount = "0";
-                    salessummaryDetailObj.DiscountPer = billAmountResponse.SalesSummary.DiscountPer;
-                    salessummaryDetailObj.DiscountAmt = billAmountResponse.SalesSummary.DiscountAmt;
-                    salessummaryDetailObj.SchemeDiscount = billAmountResponse.SalesSummary.SchemeDiscount;
-                    salessummaryDetailObj.CardDiscount = billAmountResponse.SalesSummary.CardDiscount;
-                    salessummaryDetailObj.Addtions = billAmountResponse.SalesSummary.Addtions;
-                    salessummaryDetailObj.RoundOff = billAmountResponse.SalesSummary.RoundOff;
-                    salessummaryDetailObj.NetAmount = billAmountResponse.SalesSummary.NetAmount;
+                        salessummaryDetailObj.LoyaltyCardType = "";
+                        salessummaryDetailObj.StoreId = billAmountResponse.SalesSummary.StoreId;
+                        salessummaryDetailObj.SubStore = "1";
+//                    salessummaryDetailObj.Counter = "1";
+//                    salessummaryDetailObj.Shift = "1";
+                        salessummaryDetailObj.Counter = String.valueOf(prefs.getInt("CounterId", 1)); //added by Pavithra on 23-07-2020
+                        salessummaryDetailObj.Shift = String.valueOf(prefs.getInt("ShiftId", 1));     //Added by Pavithra on 23-07-2020
+                        salessummaryDetailObj.B2BB2CType = "B2C";
+                        salessummaryDetailObj.TotalAmount = billAmountResponse.SalesSummary.TotalAmount;
+                        salessummaryDetailObj.TotalLinewiseTax = billAmountResponse.SalesSummary.TotalLinewiseTax;
+                        salessummaryDetailObj.TaxAmount = billAmountResponse.SalesSummary.TotalLinewiseTax; //Edited by Pavithra on 22-07-2020
+                        salessummaryDetailObj.DiscountPer = billAmountResponse.SalesSummary.DiscountPer;
+                        salessummaryDetailObj.DiscountAmt = billAmountResponse.SalesSummary.DiscountAmt;
+                        salessummaryDetailObj.SchemeDiscount = billAmountResponse.SalesSummary.SchemeDiscount;
+                        salessummaryDetailObj.CardDiscount = billAmountResponse.SalesSummary.CardDiscount;
+                        salessummaryDetailObj.Addtions = billAmountResponse.SalesSummary.Addtions;
+                        salessummaryDetailObj.RoundOff = billAmountResponse.SalesSummary.RoundOff;
+                        salessummaryDetailObj.NetAmount = billAmountResponse.SalesSummary.NetAmount;
 
-                    Gson gson = new Gson();
-                    String salessummaryDetailObjStr = gson.toJson(salessummaryDetailObj);
+                        Gson gson = new Gson();
+                        String salessummaryDetailObjStr = gson.toJson(salessummaryDetailObj);
 
-                    SharedPreferences.Editor editor = prefs.edit();
-                    editor.putString("SalessummaryDetailObjStr", salessummaryDetailObjStr);
-                    editor.putString("NumberOfItems", String.valueOf(num));
-                    editor.commit();
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putString("SalessummaryDetailObjStr", salessummaryDetailObjStr);
+                        editor.putString("NumberOfItems", String.valueOf(num));
+                        editor.commit();
+                    }else{
+                        tsErrorMessage(billAmountResponse.Message); //Added by Pavithra on 30-07-2020
+                    }
                 }
-
             }
     }
 
@@ -1329,5 +1392,37 @@ public class BatchLookupAdapter extends ArrayAdapter<BatchModel> implements View
             taxtotal = taxtotal + Double.parseDouble(items.get(i).TaxRate);
         }
         return taxtotal;
+    }
+
+
+    //Added by Pavithra on 30-07-2020
+    public void tsErrorMessage(String error_massage){
+
+        final Dialog dialog = new Dialog(mContext);
+        dialog.setContentView(R.layout.custom_save_popup);
+        final String title = "Message";
+
+        TextView dialogTitle = (TextView)dialog.findViewById(R.id.txvSaveTitleDialog);
+        dialogTitle.setText(title);
+        dialog.getWindow().setBackgroundDrawableResource(R.color.colorPrimary);
+        dialog. getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+
+        int height_of_popup = 500;
+        int width_of_popup = 400;
+        dialog.getWindow().setLayout(width_of_popup, height_of_popup);
+        dialog.show();
+
+        final TextView tvSaveStatus = (TextView) dialog.findViewById(R.id.tvSaveStatus);
+//        tvSaveStatus.setText("Successfully saved \n Token No = "+tokenNo);
+        tvSaveStatus.setText(""+error_massage);
+
+        Button btnOkPopup = (Button)dialog.findViewById(R.id.btnOkPopUp);
+
+        btnOkPopup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
     }
 }

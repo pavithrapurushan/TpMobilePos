@@ -1,9 +1,6 @@
 package in.co.techsmith.tpmobilepos;
 
-public class Billrow
-{
-
-
+public class Billrow {
     public String SlNo;
     public String ItemId;
     public String ItemCode;
@@ -26,6 +23,7 @@ public class Billrow
     public String Amount;
     public String DiscPer;
     public String DiscPerAmt;
+//    public String DiscAmt;  //Added by Pavithra on 29-07-2020
     public String TaxableAmt;
     public String TaxPer;
     public String TaxType;

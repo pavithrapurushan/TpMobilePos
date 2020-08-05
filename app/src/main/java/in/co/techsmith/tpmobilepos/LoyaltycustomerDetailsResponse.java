@@ -8,7 +8,7 @@ public class LoyaltycustomerDetailsResponse {
     {
         LoyaltyCustomerDetail = new ArrayList<Loyaltycustomerdetail>();
     }
-    public List<Loyaltycustomerdetail> LoyaltyCustomerDetail;
+    public List<Loyaltycustomerdetail> LoyaltyCustomerDetail; //Actually no need to declare this as list
     public int ErrorStatus;
     public String Message;
 }

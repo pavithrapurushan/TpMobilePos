@@ -4,10 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SalesdetailPL {
-    public SalesdetailPL()
-    {
+    public SalesdetailPL() {
         BillRow = new ArrayList<>();
     }
-    public List<Billrow> BillRow;
 
+    public List<Billrow> BillRow;
 }

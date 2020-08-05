@@ -15,11 +15,12 @@
         <activity android:name="in.co.techsmith.tpmobilepos.customtoolbar"/>
         <activity android:name="in.co.techsmith.tpmobilepos.SalesActivity" />
         <activity android:name="in.co.techsmith.tpmobilepos.RetrieveActivity" />
-        <activity android:name=".PaymentActivity" />
         <activity android:name="in.co.techsmith.tpmobilepos.CustomerInformation" />
         <activity android:name="in.co.techsmith.tpmobilepos.SalesReturnActivity" />
+        <activity android:name="in.co.techsmith.tpmobilepos.SettingsActivity" />
         <activity android:name="in.co.techsmith.tpmobilepos.PaymentActivityNew"
             android:windowSoftInputMode="stateAlwaysVisible"/>
+
         <activity
             android:name="in.co.techsmith.tpmobilepos.LoginActivity"
             android:configChanges="screenLayout|orientation|screenSize"

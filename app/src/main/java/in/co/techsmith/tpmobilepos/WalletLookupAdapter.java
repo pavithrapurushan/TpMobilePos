@@ -1,7 +1,10 @@
 package in.co.techsmith.tpmobilepos;
 
 import android.app.Dialog;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -22,12 +25,14 @@ class WalletLookupAdapter extends RecyclerView.Adapter<WalletLookupAdapter.ViewH
     private Walletlist[] listdata;
     EditText edtwallet;
     EditText edtwalletAmount;
+    Context mContxt;
 
-    public WalletLookupAdapter(ArrayList<Walletlist> walletlookupitems, EditText edtWallet, Dialog dialog, EditText edtwalletamount) {
+    public WalletLookupAdapter(Context cntxt,ArrayList<Walletlist> walletlookupitems, EditText edtWallet, Dialog dialog, EditText edtwalletamount) {
         this.walletlistdata=walletlookupitems;
         this.dialog=dialog;
         this.edtwallet=edtWallet;
         this.edtwalletAmount = edtwalletamount;
+        this.mContxt = cntxt;
     }
 
     @Override
@@ -56,6 +61,11 @@ class WalletLookupAdapter extends RecyclerView.Adapter<WalletLookupAdapter.ViewH
                 //Added by Pavithra on 02-07-2020
                 edtwalletAmount.setText("");
                 edtwalletAmount.requestFocus();
+
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContxt);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString("WalletId",walletlistdata.get(position).getWalletdid());
+                editor.commit();
 
 
 

@@ -9,8 +9,6 @@ public class BatchDetails {
     public String UnitRate;
     public String SOHInUnits;
     public String SOHInPacks;
-
-//    public String Batchid; //Added by 1165 on 08-02-2020
     public String BatchId;   //Added by 1165 on 08-02-2020
 
 }
