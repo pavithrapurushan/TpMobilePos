@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!--Modified by Pavithra on 02-07-2020-->
+<!--Modified by Pavithra on 18-08-2020-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -12,32 +13,25 @@
     android:layout_height="match_parent"
     tools:context=".SalesActivity"
     android:id="@+id/batchsearch">
-    <!--<TextView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="Batch Lookup"-->
-        <!--android:textSize="50dp"-->
-        <!--android:gravity="center"-->
-        <!--android:textColor="@color/white"-->
-        <!--android:textStyle="bold"/>-->
+
     <ImageButton
-        android:layout_width="37.33dp"
-        android:layout_height="37.33dp"
-        android:layout_marginLeft="31.33dp"
-        android:layout_marginTop="39.33dp"
+        android:layout_width="37.33px"
+        android:layout_height="37.33px"
+        android:layout_marginLeft="31.33px"
+        android:layout_marginTop="39.33px"
         android:background="@drawable/batchdelete"
-        android:id="@+id/cancel"
-        />
+        android:id="@+id/cancel" />
     <EditText
-        android:layout_width="1109dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@android:color/transparent"
         android:fontFamily="sans-serif"
         android:textColor="#FFBB33"
-        android:layout_marginLeft="128dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginLeft="128px"
+        android:layout_marginTop="40px"
+        android:layout_marginRight="128px"
         android:textCursorDrawable="@drawable/color_cursor"
-        android:textSize="50sp"
+        android:textSize="50px"
         android:ems="5"
         android:id="@+id/etproduct"
         android:drawableRight="@drawable/search"
@@ -46,19 +40,20 @@
         android:enabled="false"
         />
     <TextView
-        android:layout_width="958dp"
-        android:textSize="64sp"
+        android:layout_width="958px"
+        android:textSize="64px"
         android:textColor="#FFBB33"
-        android:layout_height="57dp"
+        android:layout_height="57px"
         android:background="@android:color/transparent"
         android:textCursorDrawable="@drawable/color_cursor"
-        android:layout_marginTop="40dp"
-        android:layout_marginLeft="128dp"/>
+        android:layout_marginTop="40px"
+        android:layout_marginLeft="128px"/>
     <View
-        android:layout_width="1109dp"
-        android:layout_height="5dp"
-        android:layout_marginTop="111dp"
-        android:layout_marginLeft="128dp"
+        android:layout_width="match_parent"
+        android:layout_height="5px"
+        android:layout_marginTop="111px"
+        android:layout_marginLeft="128px"
+        android:layout_marginRight="128px"
         android:background="@drawable/batchline"/>
     <LinearLayout
         android:layout_width="wrap_content"
@@ -66,82 +61,226 @@
         android:orientation="vertical">
         <LinearLayout
             android:id="@+id/rectangletop"
-            android:layout_width="1109dp"
-            android:layout_height="56dp"
+            android:layout_width="match_parent"
+            android:layout_height="66px"
             android:orientation="horizontal"
-            android:layout_marginLeft="128dp"
-            android:layout_marginTop="135dp"
+            android:layout_marginLeft="128px"
+            android:layout_marginTop="135px"
+            android:layout_marginRight="128px"
+            android:gravity="center_vertical"
             android:background="@drawable/batchlist">
             <TextView
-                android:layout_marginLeft="30.32dp"
-                android:layout_width="29.24dp"
+                android:layout_width="0dp"
+                android:layout_weight="0.1"
                 android:text="#"
                 android:textStyle="bold"
+                android:textSize="@dimen/productandbatch_lvheader_text_size"
                 android:textColor="@color/white"
-                android:layout_marginTop="16dp"
-                android:layout_height="23dp"/>
+                android:layout_height="wrap_content"/>
             <TextView
-                android:layout_marginLeft="30.32dp"
-                android:layout_width="175.45dp"
+                android:layout_width="0dp"
+                android:layout_weight="0.3"
                 android:text="Batch Code"
                 android:textStyle="bold"
+                android:textSize="@dimen/productandbatch_lvheader_text_size"
                 android:textColor="@color/white"
-                android:layout_marginTop="16dp"
-                android:layout_height="23dp"/>
-            <!--<TextView-->
-                <!--android:layout_marginLeft="85.32dp"-->
-                <!--android:layout_width="145.12dp"-->
-                <!--android:text="barcode"-->
-                <!--android:textStyle="bold"-->
-                <!--android:textColor="@color/white"-->
-                <!--android:layout_marginTop="16dp"-->
-                <!--android:layout_height="23dp"/>-->
+                android:layout_height="wrap_content"/>
             <TextView
-                android:layout_marginLeft="35.38dp"
-                android:layout_width="200dp"
+                android:layout_width="0dp"
+                android:layout_weight="0.2"
                 android:text="Expiry-Date"
                 android:textStyle="bold"
+                android:textSize="@dimen/productandbatch_lvheader_text_size"
                 android:textColor="@color/white"
-                android:layout_marginTop="16dp"
-                android:layout_height="24dp"/>
+                android:layout_height="wrap_content"/>
             <TextView
-                android:layout_marginLeft="82.12dp"
-                android:layout_width="150dp"
+                android:layout_width="0dp"
+                android:layout_weight="0.2"
                 android:text="MRP"
+                android:textSize="@dimen/productandbatch_lvheader_text_size"
                 android:textStyle="bold"
                 android:textColor="@color/white"
-                android:layout_marginTop="16dp"
-                android:layout_height="23dp"/>
+                android:layout_height="wrap_content"/>
             <TextView
-                android:layout_marginLeft="10.24dp"
-                android:layout_width="150dp"
+                android:layout_width="0dp"
+                android:layout_weight="0.2"
                 android:text="SOH"
                 android:textStyle="bold"
+                android:textSize="@dimen/productandbatch_lvheader_text_size"
                 android:textColor="@color/white"
-                android:layout_marginTop="16dp"
-                android:layout_height="23dp"/>
+                android:layout_height="wrap_content"/>
             <TextView
-                android:layout_marginLeft="44.95dp"
-                android:layout_width="82dp"
+                android:layout_width="0dp"
+                android:layout_weight="0.0"
                 android:text="BatchId"
                 android:textStyle="bold"
+                android:textSize="@dimen/productandbatch_lvheader_text_size"
                 android:textColor="@color/white"
-                android:layout_marginTop="16dp"
                 android:layout_height="23dp"
                 android:visibility="gone"/> <!--Added by Pavithra on 02-07-2020-->
+        </LinearLayout>
+
+        <!--edited by Pavithra on 20-08-2020-->
+        <ListView
+            android:layout_width="wrap_content"
+            android:layout_height="450px"
+            android:id="@+id/batch_listview"
+            android:layout_marginLeft="128px"
+            android:layout_marginRight="128px"></ListView>
+    </LinearLayout>
+</RelativeLayout>
+
+
+
+
+
+
+
+<!--Following commented by Pavithra on 18-08-2020-->
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+
+<!--&lt;!&ndash;Modified by Pavithra on 02-07-2020&ndash;&gt;-->
+<!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--xmlns:tools="http://schemas.android.com/tools"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:orientation="horizontal"-->
+    <!--android:layout_alignParentLeft="true"-->
+    <!--android:layout_gravity="center"-->
+    <!--android:background="#237C96"-->
+    <!--android:layout_height="match_parent"-->
+    <!--tools:context=".SalesActivity"-->
+    <!--android:id="@+id/batchsearch">-->
+    <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:text="Batch Lookup"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:textSize="50dp"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:gravity="center"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:textColor="@color/white"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:textStyle="bold"/>&ndash;&gt;-->
+    <!--<ImageButton-->
+        <!--android:layout_width="37.33dp"-->
+        <!--android:layout_height="37.33dp"-->
+        <!--android:layout_marginLeft="31.33dp"-->
+        <!--android:layout_marginTop="39.33dp"-->
+        <!--android:background="@drawable/batchdelete"-->
+        <!--android:id="@+id/cancel"-->
+        <!--/>-->
+    <!--<EditText-->
+        <!--android:layout_width="1109dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="@android:color/transparent"-->
+        <!--android:fontFamily="sans-serif"-->
+        <!--android:textColor="#FFBB33"-->
+        <!--android:layout_marginLeft="128dp"-->
+        <!--android:layout_marginTop="40dp"-->
+        <!--android:textCursorDrawable="@drawable/color_cursor"-->
+        <!--android:textSize="50sp"-->
+        <!--android:ems="5"-->
+        <!--android:id="@+id/etproduct"-->
+        <!--android:drawableRight="@drawable/search"-->
+        <!--android:textStyle="bold"-->
+        <!--android:singleLine="true"-->
+        <!--android:enabled="false"-->
+        <!--/>-->
+    <!--<TextView-->
+        <!--android:layout_width="958dp"-->
+        <!--android:textSize="64sp"-->
+        <!--android:textColor="#FFBB33"-->
+        <!--android:layout_height="57dp"-->
+        <!--android:background="@android:color/transparent"-->
+        <!--android:textCursorDrawable="@drawable/color_cursor"-->
+        <!--android:layout_marginTop="40dp"-->
+        <!--android:layout_marginLeft="128dp"/>-->
+    <!--<View-->
+        <!--android:layout_width="1109dp"-->
+        <!--android:layout_height="5dp"-->
+        <!--android:layout_marginTop="111dp"-->
+        <!--android:layout_marginLeft="128dp"-->
+        <!--android:background="@drawable/batchline"/>-->
+    <!--<LinearLayout-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:orientation="vertical">-->
+        <!--<LinearLayout-->
+            <!--android:id="@+id/rectangletop"-->
+            <!--android:layout_width="1109dp"-->
+            <!--android:layout_height="56dp"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:layout_marginLeft="128dp"-->
+            <!--android:layout_marginTop="135dp"-->
+            <!--android:background="@drawable/batchlist">-->
             <!--<TextView-->
-                <!--android:layout_marginLeft="31dp"-->
-                <!--android:layout_width="82dp"-->
-                <!--android:text="Reserved"-->
+                <!--android:layout_marginLeft="30.32dp"-->
+                <!--android:layout_width="29.24dp"-->
+                <!--android:text="#"-->
                 <!--android:textStyle="bold"-->
                 <!--android:textColor="@color/white"-->
                 <!--android:layout_marginTop="16dp"-->
                 <!--android:layout_height="23dp"/>-->
-        </LinearLayout>
-        <ListView
-            android:layout_width="wrap_content"
-            android:layout_height="450dp"
-            android:id="@+id/batch_listview"
-            android:layout_marginLeft="128dp"></ListView>
-    </LinearLayout>
-</RelativeLayout>
+            <!--<TextView-->
+                <!--android:layout_marginLeft="30.32dp"-->
+                <!--android:layout_width="175.45dp"-->
+                <!--android:text="Batch Code"-->
+                <!--android:textStyle="bold"-->
+                <!--android:textColor="@color/white"-->
+                <!--android:layout_marginTop="16dp"-->
+                <!--android:layout_height="23dp"/>-->
+            <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_marginLeft="85.32dp"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_width="145.12dp"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:text="barcode"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:textStyle="bold"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:textColor="@color/white"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_marginTop="16dp"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_height="23dp"/>&ndash;&gt;-->
+            <!--<TextView-->
+                <!--android:layout_marginLeft="35.38dp"-->
+                <!--android:layout_width="200dp"-->
+                <!--android:text="Expiry-Date"-->
+                <!--android:textStyle="bold"-->
+                <!--android:textColor="@color/white"-->
+                <!--android:layout_marginTop="16dp"-->
+                <!--android:layout_height="24dp"/>-->
+            <!--<TextView-->
+                <!--android:layout_marginLeft="82.12dp"-->
+                <!--android:layout_width="150dp"-->
+                <!--android:text="MRP"-->
+                <!--android:textStyle="bold"-->
+                <!--android:textColor="@color/white"-->
+                <!--android:layout_marginTop="16dp"-->
+                <!--android:layout_height="23dp"/>-->
+            <!--<TextView-->
+                <!--android:layout_marginLeft="10.24dp"-->
+                <!--android:layout_width="150dp"-->
+                <!--android:text="SOH"-->
+                <!--android:textStyle="bold"-->
+                <!--android:textColor="@color/white"-->
+                <!--android:layout_marginTop="16dp"-->
+                <!--android:layout_height="23dp"/>-->
+            <!--<TextView-->
+                <!--android:layout_marginLeft="44.95dp"-->
+                <!--android:layout_width="82dp"-->
+                <!--android:text="BatchId"-->
+                <!--android:textStyle="bold"-->
+                <!--android:textColor="@color/white"-->
+                <!--android:layout_marginTop="16dp"-->
+                <!--android:layout_height="23dp"-->
+                <!--android:visibility="gone"/> &lt;!&ndash;Added by Pavithra on 02-07-2020&ndash;&gt;-->
+            <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_marginLeft="31dp"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_width="82dp"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:text="Reserved"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:textStyle="bold"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:textColor="@color/white"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_marginTop="16dp"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_height="23dp"/>&ndash;&gt;-->
+        <!--</LinearLayout>-->
+        <!--<ListView-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="450dp"-->
+            <!--android:id="@+id/batch_listview"-->
+            <!--android:layout_marginLeft="128dp"></ListView>-->
+    <!--</LinearLayout>-->
+<!--</RelativeLayout>-->

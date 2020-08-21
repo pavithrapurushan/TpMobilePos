@@ -19,6 +19,7 @@ import java.util.ArrayList;
 
 
 //Modified by Pavithra on 02-07-2020
+//Modified by Pavithra on 14-08-2020
 
 public class CreditCardLookupAdapter extends RecyclerView.Adapter<CreditCardLookupAdapter.ViewHolder> {
     int index =-1;
@@ -51,7 +52,7 @@ public class CreditCardLookupAdapter extends RecyclerView.Adapter<CreditCardLook
            // final CreditCardList myListData = listdata[position];
             holder.txtcardid.setText(listdata.get(position).getCardid());
             holder.txtcardname.setText(listdata.get(position).getCardname());
-            holder.txtcompany.setText(listdata.get(position).getCompany());
+//            holder.txtcompany.setText(listdata.get(position).getCompany());
             if(index==position){
 
 
@@ -144,7 +145,7 @@ public class CreditCardLookupAdapter extends RecyclerView.Adapter<CreditCardLook
                 super(itemView);
                 this.txtcardid = (TextView) itemView.findViewById(R.id.cardId);
                 this.txtcardname = (TextView) itemView.findViewById(R.id.cardName);
-                this.txtcompany = (TextView) itemView.findViewById(R.id.company);
+//                this.txtcompany = (TextView) itemView.findViewById(R.id.company);   //Commenetd by Pavithra on 14-08-2020
                 relativeLayout = (RelativeLayout) itemView.findViewById(R.id.cardlookuprow);
 
             }

@@ -1,50 +1,57 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
+    android:layout_width="@dimen/payment_cardlookup_layout_width"
     android:orientation="horizontal"
     android:layout_marginBottom="3dp"
     android:background="@drawable/borderlookuprow"
     android:id="@+id/walletlookuprow"
-    android:layout_height="50dp">
+    android:layout_height="50px">
     <LinearLayout
-        android:layout_width="1070dp"
+        android:layout_width="match_parent"
         android:orientation="horizontal"
         android:layout_height="wrap_content">
         <TextView
             android:id="@+id/walletId"
-            android:gravity="right"
-            android:layout_width="120dp"
-            android:layout_marginTop="16dp"
-            android:textSize="28sp"
-            android:layout_marginLeft="50dp"
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:textSize="28px"
             android:textStyle="bold"
             android:textColor="#000000"
-            android:layout_height="50dp"
-            />
+            android:layout_height="50px"
+            android:layout_weight="0.4"/>
+
+        <!--<TextView-->
+            <!--android:id="@+id/cardId"-->
+            <!--android:gravity="center"-->
+            <!--android:layout_width="0dp"-->
+            <!--android:textSize="24px"-->
+            <!--android:textStyle="bold"-->
+            <!--android:textColor="#000000"-->
+            <!--android:layout_weight="0.4"-->
+            <!--android:layout_height="50px"/>-->
 
         <TextView
             android:id="@+id/walletName"
             android:gravity="left"
-            android:layout_marginTop="16dp"
-            android:layout_width="800dp"
-            android:textSize="28sp"
-            android:layout_marginLeft="200dp"
+            android:layout_width="0dp"
+            android:layout_weight="0.6"
+            android:textSize="24px"
             android:textStyle="bold"
             android:textColor="#000000"
-            android:layout_height="50dp"
+            android:layout_height="50px"
             />
-        <TextView
-            android:id="@+id/company"
-            android:gravity="right"
-            android:layout_marginRight="50dp"
-            android:layout_width="150dp"
-            android:layout_marginTop="28dp"
-            android:layout_marginLeft="350dp"
-            android:textSize="28sp"
-            android:textStyle="bold"
-            android:textColor="#000000"
-            android:layout_height="50dp"
-            />
+        <!--<TextView-->
+            <!--android:id="@+id/company"-->
+            <!--android:gravity="right"-->
+            <!--android:layout_marginRight="50dp"-->
+            <!--android:layout_width="150dp"-->
+            <!--android:layout_marginTop="28dp"-->
+            <!--android:layout_marginLeft="350dp"-->
+            <!--android:textSize="28sp"-->
+            <!--android:textStyle="bold"-->
+            <!--android:textColor="#000000"-->
+            <!--android:layout_height="50dp"-->
+            <!--/>-->
 
     </LinearLayout>
 </RelativeLayout>

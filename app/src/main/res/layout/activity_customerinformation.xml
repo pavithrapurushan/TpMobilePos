@@ -1,0 +1,349 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<!--Created by Pavithra on 12-08-2020-->
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+
+        <LinearLayout
+            android:id="@+id/ll1_header_custinfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#113A4E"
+            android:orientation="horizontal"
+            android:gravity="center_vertical">
+
+            <TextView
+                android:id="@+id/customer_in"
+                android:layout_width="wrap_content"
+                android:textSize="36px"
+                android:fontFamily="roboto"
+                android:textColor="#FFFFFF"
+                android:text="Customer Information"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10px"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="#237C96"
+            android:orientation="horizontal"
+            android:paddingTop="10px"
+            android:paddingLeft="10px">
+
+            <LinearLayout
+                android:id="@+id/llCustInfoLeftSide"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingRight="30px">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="MOBILE NUMBER"
+                    android:textStyle="bold"
+                    android:textSize="@dimen/cust_info_tv_textsize"
+                    android:textColor="#FFFFFF"
+                    android:gravity="top"/>
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    >
+                    <EditText
+                        android:id="@+id/mobile_numb"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textSize="@dimen/cust_info_edittext_textsize"
+                        android:textColorHint="#FFFFFF"
+                        android:textColor="#FFFFFF"
+                        android:alpha="0.64"
+                        android:fontFamily="sans-serif-thin"
+                        android:background="@drawable/custinfo_edittext_bg"
+                        android:layout_alignParentTop="true"
+                        android:textCursorDrawable="@drawable/color_cursor"
+                        android:hint="Mobile Number"
+                        android:layout_marginTop="10px"
+                        android:inputType="numberDecimal" />
+
+
+                    <ImageButton
+                        android:id="@+id/searchbtn"
+                        android:background="@drawable/search"
+                        android:layout_width="@dimen/searchbtn_width_and_height"
+                        android:layout_height="@dimen/searchbtn_width_and_height"
+                        android:layout_alignRight="@+id/mobile_numb"/>
+
+
+                </RelativeLayout>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/cust_info_tv_textsize"
+                    android:gravity="top"
+                    android:textStyle="bold"
+                    android:layout_marginTop="20px"
+                    android:textColor="#FFFFFF"
+                    android:text="FULL NAME"/>
+                <EditText
+                    android:id="@+id/Customername"
+                    android:layout_marginTop="10px"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="bottom"
+                    android:fontFamily="sans-serif-thin"
+                    android:textColorHint="#ffffff"
+                    android:hint="Customer Name"
+                    android:textCursorDrawable="@drawable/color_cursor"
+                    android:background="@drawable/custinfo_edittext_bg"
+                    android:textColor="#FFFFFF"
+                    android:alpha="0.64"
+                    android:textSize="@dimen/cust_info_edittext_textsize"
+                    android:singleLine="true"
+                    android:inputType="textFilter|textNoSuggestions"/>
+                <TextView
+                    android:id="@+id/email"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="EMAIL"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginTop="20px"
+                    android:textSize="@dimen/cust_info_tv_textsize"
+                    android:gravity="top"
+                    />
+
+                <EditText
+                    android:id="@+id/Customermail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:alpha="0.64"
+                    android:textSize="@dimen/cust_info_edittext_textsize"
+                    android:fontFamily="sans-serif-thin"
+                    android:textCursorDrawable="@drawable/color_cursor"
+                    android:hint="Prepare INBOX for amazing offers!!!"
+                    android:layout_marginTop="10px"
+                    android:textColorHint="#ffffff"
+                    android:textColor="#FFFFFF"
+                    android:background="@drawable/custinfo_edittext_bg"
+                    android:gravity="bottom"
+                    android:singleLine="true"
+                    android:inputType="textFilter|textNoSuggestions"
+                    />
+
+                <TextView
+                    android:id="@+id/doctor"
+                    android:layout_width="197.23dp"
+                    android:layout_height="wrap_content"
+                    android:text="DOCTOR"
+                    android:textSize="@dimen/cust_info_tv_textsize"
+                    android:textStyle="bold"
+                    android:textColor="#FFFFFF"
+                    android:layout_marginTop="242dp"
+                    android:gravity="top"
+                    android:visibility="gone"/>
+                <EditText
+                    android:id="@+id/prescribingDoctor"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/cust_info_edittext_textsize"
+                    android:alpha="0.64"
+                    android:fontFamily="sans-serif-thin"
+                    android:hint="Prescribing Doctor"
+                    android:background="@drawable/custinfo_edittext_bg"
+                    android:textColor="#FFFFFF"
+                    android:textColorHint="#ffffff"
+                    android:textCursorDrawable="@drawable/color_cursor"
+                    android:layout_marginTop="10dp"
+                    android:gravity="bottom"
+                    android:singleLine="true"
+                    android:inputType="textFilter|textNoSuggestions"
+                    android:visibility="gone"/>
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/llCustInfoRightSide"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingRight="30px">
+
+                <TextView
+                    android:id="@+id/address_lin1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#FFFFFF"
+                    android:textSize="@dimen/cust_info_tv_textsize"
+                    android:textStyle="bold"
+                    android:text="ADDRESS 1"
+                    android:gravity="top"/>
+                <EditText
+                    android:id="@+id/address1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#FFFFFF"
+                    android:textSize="@dimen/cust_info_edittext_textsize"
+                    android:alpha="0.64"
+                    android:fontFamily="sans-serif-thin"
+                    android:textColorHint="#ffffff"
+                    android:textCursorDrawable="@drawable/color_cursor"
+                    android:background="@drawable/custinfo_edittext_bg"
+                    android:layout_marginTop="10px"
+                    android:hint="Address 1"
+                    android:gravity="bottom"
+                    android:singleLine="true"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20px"
+                    android:textColor="#FFFFFF"
+                    android:textSize="@dimen/cust_info_tv_textsize"
+                    android:textStyle="bold"
+                    android:text="ADDRESS 2"
+                    android:gravity="top" />
+                <EditText
+                    android:id="@+id/address2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#FFFFFF"
+                    android:textSize="@dimen/cust_info_edittext_textsize"
+                    android:alpha="0.64"
+                    android:fontFamily="sans-serif-thin"
+                    android:textColorHint="#ffffff"
+                    android:textCursorDrawable="@drawable/color_cursor"
+                    android:background="@drawable/custinfo_edittext_bg"
+                    android:layout_marginTop="10px"
+                    android:hint="Address 2"
+                    android:gravity="bottom"
+                    android:singleLine="true"
+                    android:inputType="textFilter|textNoSuggestions"/>
+
+                <TextView
+                    android:id="@+id/address_lin3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20px"
+                    android:textColor="#FFFFFF"
+                    android:textSize="@dimen/cust_info_tv_textsize"
+                    android:textStyle="bold"
+                    android:text="ADDRESS 3"
+                    android:gravity="top"
+                    />
+                <EditText
+                    android:id="@+id/address3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#FFFFFF"
+                    android:textSize="@dimen/cust_info_edittext_textsize"
+                    android:alpha="0.64"
+                    android:fontFamily="sans-serif-thin"
+                    android:textColorHint="#ffffff"
+                    android:textCursorDrawable="@drawable/color_cursor"
+                    android:background="@drawable/custinfo_edittext_bg"
+                    android:layout_marginTop="10px"
+                    android:hint="Address 3"
+                    android:gravity="bottom"
+                    android:singleLine="true"
+                    android:inputType="textFilter|textNoSuggestions"/>
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20px"
+                    android:textColor="#FFFFFF"
+                    android:textSize="@dimen/cust_info_tv_textsize"
+                    android:text="PHONE NUMBER 2"
+                    android:textStyle="bold"
+                    android:gravity="top"
+                    />
+                <EditText
+                    android:id="@+id/edtmobnumber2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:textColor="#FFFFFF"
+                    android:textSize="@dimen/cust_info_edittext_textsize"
+                    android:alpha="0.64"
+                    android:fontFamily="sans-serif-thin"
+                    android:textCursorDrawable="@drawable/color_cursor"
+                    android:background="@drawable/custinfo_edittext_bg"
+                    android:layout_marginTop="10px"
+                    android:hint="Phone Number 2"
+                    android:textColorHint="#ffffff"
+                    android:gravity="bottom"
+                    android:singleLine="true"
+                    android:inputType="textFilter|textNoSuggestions"/>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="20px"
+                    android:textColor="#FFFFFF"
+                    android:textSize="@dimen/cust_info_tv_textsize"
+                    android:textStyle="bold"
+                    android:text="LOYALTY CODE"
+                    android:gravity="top"
+                    />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+                    <EditText
+                        android:id="@+id/loyalty_code"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:textColor="#FFFFFF"
+                        android:textSize="@dimen/cust_info_edittext_textsize"
+                        android:alpha="0.64"
+                        android:fontFamily="sans-serif-thin"
+                        android:textColorHint="#ffffff"
+                        android:textCursorDrawable="@drawable/color_cursor"
+                        android:background="@drawable/custinfo_edittext_bg"
+                        android:layout_marginTop="10px"
+                        android:hint="Loyalty Code"
+                        android:gravity="bottom"
+                        android:singleLine="true" />
+
+                    <ImageButton
+                        android:id="@+id/loyaltysearch"
+                        android:background="@drawable/search"
+                        android:layout_width="@dimen/searchbtn_width_and_height"
+                        android:layout_height="@dimen/searchbtn_width_and_height"
+                        android:layout_alignRight="@+id/loyalty_code" />
+
+                </RelativeLayout>
+
+                <TextView
+                    android:onClick="submitDetails"
+                    android:id="@+id/submit2"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="40px"
+                    android:text="SUBMIT"
+                    android:textStyle="bold"
+                    android:gravity="center"
+                    android:textSize="36px"
+                    android:textColor="#FFFFFF"
+                    android:background="@drawable/corners_round_btn"
+                    android:layout_gravity="right"
+                    android:padding="2px"/>
+
+            </LinearLayout>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+
+</RelativeLayout>

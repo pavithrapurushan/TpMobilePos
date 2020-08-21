@@ -1,82 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--Modified by Pavithra on 20-08-2020-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="1230dp"
+    android:layout_width="@dimen/custinfo_mobnumber_lookup_width"
     android:background="#237C96"
-    android:id="@+id/customer_look"
+    android:id="@+id/rlMobNumLookup"
     android:layout_height="wrap_content">
-    <TextView
-        android:id="@+id/title"
-        android:gravity="center"
-        android:textSize="36sp"
-        android:background="#113A4E"
-        android:layout_marginTop="10dp"
-        android:textColor="@color/white"
-        android:text="Customer Lookup"
-        android:layout_width="1240dp"
-        android:layout_height="50dp" />
-    <Button
 
-        android:id="@+id/close_dialog"
-        android:layout_marginLeft="1190dp"
-        android:background="@drawable/closebtn"
-        android:layout_marginTop="20dp"
-        android:layout_width="30dp"
-        android:layout_height="30dp" />
+    <RelativeLayout
+        android:id="@+id/rlTitleCustomerLookup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/title"
+            android:gravity="center"
+            android:textSize="36px"
+            android:background="#113A4E"
+            android:textColor="@color/white"
+            android:text="Customer Lookup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"/>
+
+        <Button
+            android:id="@+id/close_dialog"
+            android:background="@drawable/closebtn"
+            android:layout_width="30px"
+            android:layout_height="30px"
+            android:layout_centerVertical="true"
+            android:layout_alignRight="@+id/title"/>
+
+    </RelativeLayout>
+
     <LinearLayout
         android:id="@+id/l1"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="20dp"
-        android:layout_below="@+id/title"
+        android:layout_marginLeft="10px"
+        android:layout_marginTop="20px"
+        android:layout_marginRight="10px"
+        android:layout_below="@+id/rlTitleCustomerLookup"
         android:background="#113A4E"
-        android:layout_width="1210dp"
+        android:layout_width="match_parent"
         android:orientation="horizontal"
-        android:layout_height="70dp">
+        android:gravity="center_vertical|center"
+        android:layout_height="76px">
         <TextView
             android:text="Customer Id"
             android:gravity="center"
-            android:layout_marginLeft="10dp"
-            android:layout_width="200dp"
-            android:layout_marginTop="16dp"
-            android:textSize="28sp"
+            android:layout_width="0dp"
+            android:textSize="24px"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
-            android:layout_height="30dp"
-            />
-
+            android:layout_height="30px"
+            android:layout_weight=".25" />
         <TextView
             android:text="Customer Name"
             android:gravity="center"
-            android:layout_width="250dp"
-            android:layout_marginTop="16dp"
-            android:textSize="28sp"
-            android:layout_marginLeft="50dp"
+            android:layout_width="0dp"
+            android:layout_weight=".25"
+            android:textSize="24px"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
-            android:layout_height="30dp"
-            />
+            android:layout_height="30px" />
         <TextView
             android:text="Address"
             android:gravity="center"
-            android:layout_marginTop="16dp"
-            android:layout_marginLeft="50dp"
-            android:layout_width="350dp"
-            android:textSize="28sp"
+            android:layout_width="0dp"
+            android:layout_weight=".25"
+            android:textSize="24px"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
-            android:layout_height="30dp"
-            />
+            android:layout_height="30px" />
         <TextView
             android:text="Mobile Number"
             android:gravity="center"
-            android:layout_width="200dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginTop="16dp"
-            android:textSize="28sp"
+            android:layout_width="200px"
+            android:layout_weight=".25"
+            android:textSize="24px"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
-            android:layout_height="30dp"
-            />
+            android:layout_height="30px" />
     </LinearLayout>
 
     <android.support.v7.widget.RecyclerView
@@ -84,10 +86,191 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/l1"
-        android:layout_marginLeft="10dp"
-        android:layout_marginBottom="30dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginLeft="10px"
+        android:layout_marginBottom="30px"
+        android:layout_marginTop="10px"
         android:scrollbars="vertical" />
 
+
+    <!--<TextView-->
+        <!--android:id="@+id/title"-->
+        <!--android:gravity="center"-->
+        <!--android:textSize="36px"-->
+        <!--android:background="#113A4E"-->
+        <!--android:textColor="@color/white"-->
+        <!--android:text="Customer Lookup"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content" />-->
+    <!--<Button-->
+        <!--android:id="@+id/close_dialog"-->
+        <!--android:layout_marginLeft="1190dp"-->
+        <!--android:background="@drawable/closebtn"-->
+        <!--android:layout_marginTop="20dp"-->
+        <!--android:layout_width="30dp"-->
+        <!--android:layout_height="30dp" />-->
+
+    <!--<LinearLayout-->
+        <!--android:id="@+id/l1"-->
+        <!--android:layout_marginLeft="10dp"-->
+        <!--android:layout_marginTop="20dp"-->
+        <!--android:layout_below="@+id/rlTitleCustomerLookup"-->
+        <!--android:background="#113A4E"-->
+        <!--android:layout_width="1210dp"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:layout_height="70dp">-->
+        <!--<TextView-->
+            <!--android:text="Customer Id"-->
+            <!--android:gravity="center"-->
+            <!--android:layout_marginLeft="10dp"-->
+            <!--android:layout_width="200dp"-->
+            <!--android:layout_marginTop="16dp"-->
+            <!--android:textSize="28sp"-->
+            <!--android:textStyle="bold"-->
+            <!--android:textColor="#FFFFFF"-->
+            <!--android:layout_height="30dp"-->
+            <!--/>-->
+
+        <!--<TextView-->
+            <!--android:text="Customer Name"-->
+            <!--android:gravity="center"-->
+            <!--android:layout_width="250dp"-->
+            <!--android:layout_marginTop="16dp"-->
+            <!--android:textSize="28sp"-->
+            <!--android:layout_marginLeft="50dp"-->
+            <!--android:textStyle="bold"-->
+            <!--android:textColor="#FFFFFF"-->
+            <!--android:layout_height="30dp"-->
+            <!--/>-->
+        <!--<TextView-->
+            <!--android:text="Address"-->
+            <!--android:gravity="center"-->
+            <!--android:layout_marginTop="16dp"-->
+            <!--android:layout_marginLeft="50dp"-->
+            <!--android:layout_width="350dp"-->
+            <!--android:textSize="28sp"-->
+            <!--android:textStyle="bold"-->
+            <!--android:textColor="#FFFFFF"-->
+            <!--android:layout_height="30dp"-->
+            <!--/>-->
+        <!--<TextView-->
+            <!--android:text="Mobile Number"-->
+            <!--android:gravity="center"-->
+            <!--android:layout_width="200dp"-->
+            <!--android:layout_marginLeft="50dp"-->
+            <!--android:layout_marginTop="16dp"-->
+            <!--android:textSize="28sp"-->
+            <!--android:textStyle="bold"-->
+            <!--android:textColor="#FFFFFF"-->
+            <!--android:layout_height="30dp"-->
+            <!--/>-->
+    <!--</LinearLayout>-->
+
+    <!--<android.support.v7.widget.RecyclerView-->
+        <!--android:id="@+id/mobilelist"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@id/l1"-->
+        <!--android:layout_marginLeft="10dp"-->
+        <!--android:layout_marginBottom="30dp"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--android:scrollbars="vertical" />-->
+
 </RelativeLayout>
+
+
+
+
+
+    <!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--xmlns:tools="http://schemas.android.com/tools"-->
+    <!--android:layout_width="1100px"-->
+    <!--android:background="#237C96"-->
+    <!--android:id="@+id/rlMobNumLookup"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:paddingTop="10px">-->
+    <!--<TextView-->
+        <!--android:id="@+id/title"-->
+        <!--android:gravity="center"-->
+        <!--android:textSize="36px"-->
+        <!--android:background="#113A4E"-->
+        <!--android:textColor="@color/white"-->
+        <!--android:text="Customer Lookup"-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="wrap_content" />-->
+    <!--<Button-->
+
+        <!--android:id="@+id/close_dialog"-->
+        <!--android:layout_marginLeft="1190dp"-->
+        <!--android:background="@drawable/closebtn"-->
+        <!--android:layout_marginTop="20dp"-->
+        <!--android:layout_width="30dp"-->
+        <!--android:layout_height="30dp" />-->
+    <!--<LinearLayout-->
+        <!--android:id="@+id/l1"-->
+        <!--android:layout_marginLeft="10dp"-->
+        <!--android:layout_marginTop="20dp"-->
+        <!--android:layout_below="@+id/title"-->
+        <!--android:background="#113A4E"-->
+        <!--android:layout_width="1210dp"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:layout_height="70dp">-->
+        <!--<TextView-->
+            <!--android:text="Customer Id"-->
+            <!--android:gravity="center"-->
+            <!--android:layout_marginLeft="10dp"-->
+            <!--android:layout_width="200dp"-->
+            <!--android:layout_marginTop="16dp"-->
+            <!--android:textSize="28sp"-->
+            <!--android:textStyle="bold"-->
+            <!--android:textColor="#FFFFFF"-->
+            <!--android:layout_height="30dp"-->
+            <!--/>-->
+
+        <!--<TextView-->
+            <!--android:text="Customer Name"-->
+            <!--android:gravity="center"-->
+            <!--android:layout_width="250dp"-->
+            <!--android:layout_marginTop="16dp"-->
+            <!--android:textSize="28sp"-->
+            <!--android:layout_marginLeft="50dp"-->
+            <!--android:textStyle="bold"-->
+            <!--android:textColor="#FFFFFF"-->
+            <!--android:layout_height="30dp"-->
+            <!--/>-->
+        <!--<TextView-->
+            <!--android:text="Address"-->
+            <!--android:gravity="center"-->
+            <!--android:layout_marginTop="16dp"-->
+            <!--android:layout_marginLeft="50dp"-->
+            <!--android:layout_width="350dp"-->
+            <!--android:textSize="28sp"-->
+            <!--android:textStyle="bold"-->
+            <!--android:textColor="#FFFFFF"-->
+            <!--android:layout_height="30dp"-->
+            <!--/>-->
+        <!--<TextView-->
+            <!--android:text="Mobile Number"-->
+            <!--android:gravity="center"-->
+            <!--android:layout_width="200dp"-->
+            <!--android:layout_marginLeft="50dp"-->
+            <!--android:layout_marginTop="16dp"-->
+            <!--android:textSize="28sp"-->
+            <!--android:textStyle="bold"-->
+            <!--android:textColor="#FFFFFF"-->
+            <!--android:layout_height="30dp"-->
+            <!--/>-->
+    <!--</LinearLayout>-->
+
+    <!--<android.support.v7.widget.RecyclerView-->
+        <!--android:id="@+id/mobilelist"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@id/l1"-->
+        <!--android:layout_marginLeft="10dp"-->
+        <!--android:layout_marginBottom="30dp"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--android:scrollbars="vertical" />-->
+
+<!--</RelativeLayout>-->
 

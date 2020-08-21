@@ -1,0 +1,335 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TabHost android:id="@android:id/tabhost"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="match_parent"
+        android:orientation="horizontal" >
+        <FrameLayout
+            android:id="@android:id/tabcontent"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+             />
+        <FrameLayout
+            android:id="@+id/frameLayoutTabs"
+            android:background="#113A4E"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent">
+
+            <!--android:layout_width="@dimen/framelayout_width_customtoolbar"/-->
+
+            <!--android:layout_width="@dimen/framelayout_width_customtoolbar"-->
+
+            <TabWidget
+                android:id="@android:id/tabs"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone" />
+
+            <LinearLayout
+                android:layout_marginLeft="@dimen/llimgBtn_leftmargin"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingTop="5dp"
+                android:weightSum="8"
+                android:paddingLeft="5dp">
+
+                <!--android:layout_height="0dp"-->
+                <!--android:layout_weight="1"-->
+
+                <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:gravity="right|center_vertical"
+                android:orientation="horizontal">
+
+                <ImageButton
+                    android:id="@+id/logout"
+                    android:layout_width="@dimen/imgbtn_logout_width"
+                    android:layout_height="@dimen/imgbtn_logout_height"
+                    android:onClick="tabHandler"
+                    android:background="@drawable/arrow"
+                    android:layout_marginRight="5dp"
+                    android:layout_gravity="center_vertical|right" />
+
+                <ImageButton
+                    android:layout_width="@dimen/rightarrow_width"
+                    android:background="@drawable/arrowright"
+                    android:layout_height="@dimen/rightarrow_height"
+                    android:layout_gravity="center_vertical"
+                    android:visibility="invisible"/>
+
+                <View
+                    android:layout_width="5dp"
+                    android:layout_height="42dp"
+                    android:background="@color/yellow"
+                    android:visibility="invisible"
+                    android:layout_marginLeft="5dp"
+                    android:layout_gravity="center_vertical|right" />
+
+            </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+
+                    android:gravity="right|center_vertical"
+                    android:orientation="horizontal"
+                   >
+
+                    <ImageButton
+                        android:id="@+id/customer"
+                        android:layout_width="@dimen/imgbtn_customer_width"
+                        android:layout_height="@dimen/imgbtn_customer_height"
+                        android:onClick="tabHandler"
+                        android:background="@drawable/customer"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="5dp"/>
+
+                    <ImageButton
+                        android:layout_width="@dimen/rightarrow_width"
+                        android:background="@drawable/arrowright"
+                        android:layout_height="@dimen/rightarrow_height"
+                        android:layout_gravity="center_vertical"
+                        android:visibility="invisible"/>
+
+
+
+                    <View
+                        android:layout_width="5dp"
+                        android:layout_height="42dp"
+                        android:id="@+id/viewHighlightCustomer"
+                        android:background="@color/yellow"
+                        android:visibility="invisible"
+                        android:layout_gravity="center_vertical|right"/>
+
+                    <!--android:layout_width="5dp"-->
+
+                    <!--android:layout_marginLeft="5dp"-->
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="right|center_vertical"
+                    android:orientation="horizontal">
+                    <ImageButton
+                        android:id="@+id/salesbtn"
+                        android:layout_width="@dimen/imgbtn_sales_width"
+                        android:layout_height="@dimen/imgbtn_sales_height"
+                        android:onClick="tabHandler"
+                        android:background="@drawable/sales"
+                        android:layout_marginRight="5dp"
+                        android:layout_gravity="center_vertical"/>
+                    <ImageButton
+                        android:id="@+id/sales"
+                        android:layout_width="@dimen/rightarrow_width"
+                        android:background="@drawable/arrowright"
+                        android:layout_height="@dimen/rightarrow_height"
+                        android:layout_gravity="center_vertical"/>
+
+                    <View
+                        android:layout_width="5dp"
+                        android:layout_height="42dp"
+                        android:id="@+id/viewHighlightSales"
+                        android:background="@color/yellow"
+                        android:visibility="invisible"
+                        android:layout_marginLeft="5dp"
+                        android:layout_gravity="center_vertical|right"
+                        />
+
+                    <!--android:layout_marginLeft="5dp"-->
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:gravity="right|center_vertical"
+                    android:layout_weight="1"
+                    android:orientation="horizontal">
+
+                    <ImageButton
+                        android:id="@+id/payment"
+                        android:layout_width="@dimen/imgbtn_payment_width"
+                        android:layout_height="@dimen/imgbtn_payment_height"
+                        android:onClick="tabHandler"
+                        android:background="@drawable/info"
+                        android:layout_marginRight="5dp"
+                        android:layout_gravity="center_vertical"/>
+
+                    <ImageButton
+                        android:layout_width="@dimen/rightarrow_width"
+                        android:background="@drawable/arrowright"
+                        android:layout_height="@dimen/rightarrow_height"
+                        android:layout_gravity="center_vertical"
+                        android:visibility="invisible"/>
+
+                    <View
+                        android:layout_width="5dp"
+                        android:layout_height="42dp"
+                        android:id="@+id/viewHighlightPayment"
+                        android:background="@color/yellow"
+                        android:visibility="invisible"
+                        android:layout_gravity="center_vertical|right"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_height="0dp"
+                    android:gravity="right|center_vertical"
+                    android:layout_weight="1">
+                    <ImageButton
+                        android:id="@+id/salesreturn"
+                        android:layout_width="@dimen/imgbtn_salesreturn_width"
+                        android:layout_height="@dimen/imgbtn_salesreturn_height"
+                        android:onClick="tabHandler"
+                        android:background="@drawable/sales"
+                        android:layout_marginRight="5dp"
+                        android:layout_gravity="center_vertical"/>
+                    <ImageButton
+                        android:id="@+id/salesreturnbtn"
+                        android:layout_width="@dimen/leftarrow_width"
+                        android:background="@drawable/leftarrow"
+                        android:layout_gravity="center_vertical"
+                        android:layout_height="@dimen/leftarrow_height"/>
+                    <View
+                        android:layout_width="5dp"
+                        android:layout_height="42dp"
+                        android:id="@+id/viewHighlightSalesReturn"
+                        android:background="@color/yellow"
+                        android:layout_gravity="center_vertical|right"
+                        android:visibility="invisible"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_height="0dp"
+                    android:gravity="right|center_vertical"
+                    android:layout_weight="1">
+
+                    <ImageButton
+                        android:id="@+id/retrieve"
+                        android:layout_width="@dimen/imgbtn_retrieve_width"
+                        android:layout_height="@dimen/imgbtn_retrieve_height"
+                        android:onClick="tabHandler"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginRight="5dp"
+                        android:background="@drawable/retrieve" />
+                    <ImageButton
+                        android:layout_width="@dimen/rightarrow_width"
+                        android:background="@drawable/arrowright"
+                        android:layout_height="@dimen/rightarrow_height"
+                        android:layout_gravity="center_vertical"
+                        android:visibility="invisible"/>
+
+
+                    <View
+                        android:layout_width="5dp"
+                        android:layout_height="42dp"
+                        android:id="@+id/viewHighlightRetrieve"
+                        android:background="@color/yellow"
+                        android:layout_gravity="center_vertical|right"
+                        android:visibility="invisible"/>
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"
+                    android:gravity="right|center_vertical"
+                    android:orientation="horizontal">
+
+                    <!--<ImageButton-->
+                        <!--android:id="@+id/logout"-->
+                        <!--android:layout_width="@dimen/imgbtn_logout_width"-->
+                        <!--android:layout_height="@dimen/imgbtn_logout_height"-->
+                        <!--android:onClick="tabHandler"-->
+                        <!--android:background="@drawable/arrow"-->
+                        <!--/>-->
+
+
+                    <ImageButton
+                        android:id="@+id/printer"
+                        android:layout_width="@dimen/imgbtn_print_width"
+                        android:background="@drawable/printer"
+                        android:layout_marginRight="5dp"
+                        android:layout_height="@dimen/imgbtn_print_height"
+                        android:layout_gravity="center_vertical|right"/>
+                    <ImageButton
+                        android:layout_width="@dimen/rightarrow_width"
+                        android:background="@drawable/arrowright"
+                        android:layout_height="@dimen/rightarrow_height"
+                        android:layout_gravity="center_vertical"
+                        android:visibility="invisible"/>
+
+                    <View
+                        android:layout_width="5dp"
+                        android:layout_height="42dp"
+                        android:background="@color/yellow"
+                        android:layout_gravity="center_vertical|right"
+                        android:visibility="invisible" />
+
+                </LinearLayout>
+
+                <!--android:layout_marginTop="87dp earlier this was"-->
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:orientation="horizontal"
+                    android:layout_height="0dp"
+                    android:gravity="right|center_vertical"
+                    android:layout_weight="1">
+
+                    <ImageButton
+                        android:id="@+id/imgBtnNewCustomer"
+                        android:layout_width="@dimen/imgbtn_newcustomer_width"
+                        android:layout_height="@dimen/imgbtn_newcustomer_height"
+                        android:onClick="tabHandler"
+                        android:layout_marginRight="5dp"
+                        android:layout_gravity="center_vertical"
+                        android:background="@drawable/plusicon" />
+
+                    <ImageButton
+                        android:layout_width="@dimen/rightarrow_width"
+                        android:background="@drawable/arrowright"
+                        android:layout_height="@dimen/rightarrow_height"
+                        android:layout_gravity="center_vertical"
+                        android:visibility="invisible"/>
+
+
+                    <!--android:layout_marginTop="87dp"-->
+
+                    <View
+                        android:layout_width="5dp"
+                        android:layout_height="42dp"
+                        android:id="@+id/viewHighlightNewCustomer"
+                        android:background="@color/yellow"
+                        android:layout_gravity="center_vertical|right"
+                        android:visibility="invisible" />
+
+                </LinearLayout>
+
+            </LinearLayout>
+
+        </FrameLayout>
+
+    </LinearLayout>
+
+</TabHost>
+

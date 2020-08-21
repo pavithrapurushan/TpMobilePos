@@ -1,19 +1,23 @@
 package in.co.techsmith.tpmobilepos;
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -43,6 +47,8 @@ import static android.content.Context.MODE_PRIVATE;
 //Modified by Pavithra on 22-07-2020
 //Modified by Pavithra on 29-07-2020
 //Modified by Pavithra on 30-07-2020
+//Modified by Pavithra on 10-08-2020
+//Modified by Pavithra on 21-08-2020
 
 public class ProductListCustomAdapter extends ArrayAdapter<Model> implements View.OnClickListener {
     ArrayList<Model> list;
@@ -110,7 +116,8 @@ public class ProductListCustomAdapter extends ArrayAdapter<Model> implements Vie
     public ProductListCustomAdapter(ArrayList<Model> listdata, Context context, ListView l2, TextView billno, TextView numofitems, TextView itemtotal, TextView disc_total,TextView taxtotal, TextView bill_disc,TextView billtotal, TextView billroundoff,String uperpack,TextView totalLinewiseTax) {
 
         /********** Take passed values **********/
-        super(context, R.layout.list_row, listdata);
+//        super(context, R.layout.list_row, listdata);  //Commented  by Pavithra on 10-08-2020
+        super(context, R.layout.list_row_new, listdata);  //Added by Pavithra on 10-08-2020
         this.l2 = l2;
         this.list = listdata;
         this.mContext = context;
@@ -142,7 +149,7 @@ public class ProductListCustomAdapter extends ArrayAdapter<Model> implements Vie
         if (convertView == null) {
             holder = new ViewHolder();
             LayoutInflater inflater = LayoutInflater.from(getContext());
-            convertView = inflater.inflate(R.layout.list_row, parent, false);
+            convertView = inflater.inflate(R.layout.list_row_new, parent, false);
             convertView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
@@ -236,14 +243,13 @@ public class ProductListCustomAdapter extends ArrayAdapter<Model> implements Vie
             holder.etQty.setText(qtyToDisplayStr);
         }
 
-
         //Qty shoud show like if uperpack = 1, packqty is qty then no seperator(-) else show with sepeartor for the time being commented
-
 
         holder.tvItemName.setText(model.tvItemName);
         holder.tvRate.setText(model.tvRate);
         holder.tvMRP.setText(model.MRP);
-//        holder.tvTotal.setText(model.getTvTotal());
+//        holder.tvRate.setText("11248.00");
+//        holder.tvMRP.setText("22541.00");
 
         //below two added by 1165 on 27-05-2020
 
@@ -253,6 +259,17 @@ public class ProductListCustomAdapter extends ArrayAdapter<Model> implements Vie
             holder.tvTotal.setText(String.format("%.2f", total));
             //            tvTotalAmount.setText("Total Amount : " + String.format("%.2f", totamnt));
         }
+
+
+/*****************Added by Pavithra on 10-08-2020***********************************************************************/
+        if (position % 2 == 0) {
+            convertView.setBackgroundColor(Color.parseColor("#8FFFFFFF"));
+        } else {
+            convertView.setBackgroundColor(Color.parseColor("#8FC4C4C4"));
+        }
+
+ /************************************************************************************/
+
 
         return convertView;
     }
@@ -1216,9 +1233,30 @@ public class ProductListCustomAdapter extends ArrayAdapter<Model> implements Vie
         dialog.getWindow().setBackgroundDrawableResource(R.color.colorPrimary);
         dialog. getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
-        int height_of_popup = 500;
-        int width_of_popup = 400;
-        dialog.getWindow().setLayout(width_of_popup, height_of_popup);
+
+        //Commented by Pavithra on 21-08-2020
+//        int height_of_popup = 500;
+//        int width_of_popup = 400;
+//        dialog.getWindow().setLayout(width_of_popup, height_of_popup);
+
+
+/*******************************************************************************************/
+        //    Added by Pavithra on 21-08-2020
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+//        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        displayMetrics=  mContext.getResources().getDisplayMetrics();
+        int screen_height = displayMetrics.heightPixels;
+        int screen_width = displayMetrics.widthPixels;
+
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+        layoutParams.copyFrom(dialog.getWindow().getAttributes());
+        int dialogWindowWidth = (int) (screen_width * 0.4f);
+        int dialogWindowHeight = (int) (screen_height * 0.4f);
+        layoutParams.width = dialogWindowWidth;
+        layoutParams.height = dialogWindowHeight;
+        dialog.getWindow().setAttributes(layoutParams);
+
+/*******************************************************************************************/
         dialog.show();
 
         final TextView tvSaveStatus = (TextView) dialog.findViewById(R.id.tvSaveStatus);

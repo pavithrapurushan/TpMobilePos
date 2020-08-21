@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--Modified by Pavithra on 09-07-2020-->
 <!--Modified by Pavithra on 31-07-2020-->
+<!--Modified by Pavithra on 19-08-2020-->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -8,8 +9,7 @@
     android:layout_width="match_parent"
     android:background="#113a4e"
     android:layout_height="match_parent"
-    tools:context=".LoginActivity"
-    >
+    tools:context=".LoginActivity">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,61 +18,57 @@
         android:id="@+id/ll1"
         android:gravity="center">
 
-
-
         <TextView
-            android:layout_width="443dp"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="Sign In"
             android:textStyle="bold"
             android:fontFamily="sans-serif"
             android:textColor="@color/white"
-            android:textSize="64sp"
-            android:layout_marginBottom="10dp"
-            android:gravity="center"
-            />
+            android:textSize="64px"
+            android:layout_marginBottom="10px"
+            android:layout_gravity="center_horizontal"
+            android:gravity="center" />
 
         <TextView
             android:id="@+id/tvBiilingDate"
-            android:layout_width="375dp"
+            android:layout_width="375px"
             android:layout_height="wrap_content"
-            android:text="@string/my_screen_size"
+            android:text="BILLING DATE"
             android:textStyle="bold"
             android:fontFamily="sans-serif"
             android:textColor="@color/white"
             android:textSize="@dimen/textView_font"
-            android:layout_marginTop="25dp"/>
+            android:layout_marginTop="25px"/>
 
-        <!--android:text="BILLING DATE"-->
-
-
+        <!--android:text="@string/my_screen_size"-->
         <!--android:textSize="21sp"-->
         <!--Edited by Pavithra on 05-08-2020-->
-
 
         <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:layout_marginTop="10dp">
+            android:layout_marginTop="10px">
 
             <EditText
                 android:id="@+id/etBillingDate"
-                android:layout_width="325dp"
+                android:layout_width="325px"
                 android:layout_height="wrap_content"
                 android:hint="Add Billing Date"
                 android:textColor="#FFFFFF"
-                android:textSize="24sp"
+                android:textSize="24px"
                 android:alpha="0.64"
                 android:fontFamily="sans-serif-thin"
                 android:textColorHint="#ffffff"
+                android:singleLine="true"
                 android:textCursorDrawable="@drawable/color_cursor"
                 android:background="@android:color/transparent" />
 
             <ImageButton
                 android:id="@+id/imageButtonCalender"
-                android:layout_width="50dp"
-                android:layout_height="40dp"
+                android:layout_width="50px"
+                android:layout_height="40px"
                 android:layout_alignBottom="@+id/etBillingDate"
                 android:layout_toRightOf="@+id/etBillingDate"
                 android:cropToPadding="true"
@@ -83,82 +79,85 @@
         </LinearLayout>
 
         <TextView
-            android:layout_width="375dp"
+            android:layout_width="375px"
             android:layout_height="wrap_content"
             android:text="USER NAME"
             android:textStyle="bold"
             android:fontFamily="sans-serif"
             android:textColor="@color/white"
-            android:textSize="21sp"
-            android:layout_marginTop="10dp"/>
+            android:textSize="21px"
+            android:layout_marginTop="10px"/>
 
         <EditText
             android:id="@+id/etUsername"
-            android:layout_width="375dp"
-            android:layout_height="36dp"
+            android:layout_width="375px"
+            android:layout_height="36px"
             android:textColor="#FFFFFF"
-            android:textSize="24sp"
+            android:textSize="24px"
             android:alpha="0.64"
             android:fontFamily="sans-serif-thin"
             android:textColorHint="#ffffff"
             android:textCursorDrawable="@drawable/color_cursor"
             android:background="@android:color/transparent"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="10px"
             android:hint="Enter your user name"
             android:gravity="bottom"
             android:singleLine="true"/>
 
         <TextView
-            android:layout_width="375dp"
+            android:layout_width="375px"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="10px"
             android:text="PASSWORD"
             android:textStyle="bold"
             android:fontFamily="sans-serif"
             android:textColor="@color/white"
-            android:textSize="21sp" />
+            android:textSize="21px" />
 
         <EditText
             android:id="@+id/etPassword"
-            android:layout_width="375dp"
-            android:layout_height="36dp"
+            android:layout_width="375px"
+            android:layout_height="36px"
             android:textColor="#FFFFFF"
-            android:textSize="24sp"
+            android:textSize="24px"
             android:alpha="0.64"
             android:inputType="textPassword"
             android:fontFamily="sans-serif-thin"
             android:textColorHint="#ffffff"
             android:textCursorDrawable="@drawable/color_cursor"
             android:background="@android:color/transparent"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="10px"
             android:hint="Enter Password"
             android:gravity="bottom"
             android:singleLine="true"/>
 
         <TextView
-            android:layout_width="375dp"
+            android:layout_width="375px"
             android:layout_height="wrap_content"
             android:id="@+id/tvValidateLoginMsg"
             android:text=""
             android:textColor="#FF0000"
-            android:layout_marginTop="15dp"
-            android:background="@null"
-            />
+            android:layout_marginTop="15px"
+            android:background="@null"/>
 
         <Button
             android:onClick="login"
             android:id="@+id/btnLogin"
-            android:layout_width="160dp"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="25dp"
+            android:layout_width="200px"
+            android:layout_height="80px"
+            android:layout_marginTop="25px"
             android:text="SUBMIT"
             android:textStyle="bold"
             android:gravity="center"
-            android:textSize="36dp"
+            android:textSize="36px"
             android:textColor="#FFFFFF"
             android:background="@drawable/rectangle"
             android:layout_gravity="center_horizontal"
-            android:padding="5dp"/>
+            android:padding="5px"/>
+
+        <!--android:layout_width="160px"-->
+
+
 
 
         <!--<TextView-->
@@ -180,7 +179,7 @@
         android:layout_alignParentTop="true"
         android:layout_alignParentRight="true"
         android:background="@null"
-        android:layout_marginTop="5dp"/>
+        android:layout_marginTop="5px"/>
 
 </RelativeLayout>
 

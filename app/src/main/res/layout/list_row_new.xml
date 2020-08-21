@@ -1,0 +1,227 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--Modified by Pavithra on 14-08-2020-->
+<!--Modified by Pavithra on 19-08-2020-->
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:id="@+id/saleslist"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical|right"
+    android:longClickable="true"
+    android:paddingRight="5px"
+    android:paddingLeft="5px">    <!--this property added by Pavithra on 28-07-2020 -->
+    <!--Earlier above linearlayout height was matchparent..to delete btn properly it changed to wrap content-->
+
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/imgBtnDelete"
+        android:src="@drawable/ic_close_btn"
+        android:background="@null"/>
+
+    <!--<dimen name="sales_lvheader_text_size">28px</dimen>  &lt;!&ndash; Added by Pavithra on 11-08-2020&ndash;&gt;-->
+    <!--<dimen name="sales_lv_item_text_size">26px</dimen>    &lt;!&ndash; Added -->
+    <TextView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:textStyle="bold"
+        android:textSize="@dimen/sales_lv_item_text_size"
+        android:fontFamily="sans-serif"
+        android:textColor="@color/black"
+        android:id="@+id/tvItemName"
+        android:clickable="false"
+        android:focusable="false"
+        android:layout_weight="3.5"
+        android:paddingRight="10px">
+    </TextView>
+    <TextView
+        android:id="@+id/tvRate"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="sans-serif"
+        android:gravity="center"
+        android:text="Rate"
+        android:textColor="@color/black"
+        android:textSize="@dimen/sales_lv_item_text_size"
+        android:layout_weight="1.5"
+        android:textStyle="bold">
+    </TextView>
+
+    <TextView
+        android:id="@+id/tvMRP"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sales_lv_item_text_size"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif"
+        android:textColor="@color/black"
+        android:padding="6sp"
+        android:clickable="false"
+        android:gravity="center"
+        android:focusable="false"
+        android:layout_weight="1.5">
+    </TextView>
+    <TextView
+        android:id="@+id/etQty"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sales_lv_item_text_size"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif"
+        android:textColor="@color/black"
+        android:text="1"
+        android:singleLine="true"
+        android:gravity="right"
+        android:inputType="numberDecimal"
+        android:layout_weight="1">
+    </TextView>
+    <TextView
+        android:id="@+id/tvTotal"
+        android:layout_width="0dp"
+        android:textSize="@dimen/sales_lv_item_text_size"
+        android:textStyle="bold"
+        android:fontFamily="sans-serif"
+        android:textColor="@color/black"
+        android:layout_gravity="right|center_vertical"
+        android:gravity="right"
+        android:layout_height="wrap_content"
+        android:layout_weight="2.5">
+    </TextView>
+
+</LinearLayout>
+
+
+
+
+    <!--Commented by Pavithra on 14-08-2020-->
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--&lt;!&ndash;Created by Pavithra on 10-08-2020&ndash;&gt;-->
+<!--&lt;!&ndash;Modified by Pavithra on 14-08-2020&ndash;&gt;-->
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:id="@+id/saleslist"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:gravity="center_vertical"-->
+    <!--android:longClickable="true">    &lt;!&ndash;this property added by Pavithra on 28-07-2020 &ndash;&gt;-->
+    <!--&lt;!&ndash;Earlier above linearlayout height was matchparent..to delete btn properly it changed to wrap content&ndash;&gt;-->
+
+    <!--<ImageButton-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:id="@+id/imgBtnDelete"-->
+        <!--android:src="@drawable/ic_close_btn"-->
+        <!--android:layout_marginTop="15dp"-->
+        <!--android:background="@null"-->
+        <!--android:gravity="top"-->
+        <!--android:layout_marginBottom="15dp"-->
+        <!--android:layout_marginLeft="15dp"/>-->
+
+    <!--&lt;!&ndash;android:src="@drawable/delete"&ndash;&gt;-->
+
+    <!--<TextView-->
+        <!--android:layout_marginLeft="46dp"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="15dp"-->
+        <!--android:gravity="center_vertical"-->
+        <!--android:textStyle="bold"-->
+        <!--android:textSize="@dimen/sales_lv_item_text_size"-->
+        <!--android:fontFamily="sans-serif"-->
+        <!--android:textColor="@color/black"-->
+        <!--android:id="@+id/tvItemName"-->
+        <!--android:layout_column="0"-->
+        <!--android:padding="1sp"-->
+        <!--android:clickable="false"-->
+        <!--android:focusable="false"-->
+        <!--android:layout_marginBottom="15dp"-->
+        <!--android:layout_weight="3.5">-->
+
+        <!--&lt;!&ndash;android:layout_marginTop="30dp" earlier&ndash;&gt;-->
+        <!--&lt;!&ndash;android:gravity="top"&ndash;&gt;-->
+
+    <!--</TextView>-->
+    <!--<TextView-->
+        <!--android:id="@+id/tvRate"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginTop="15dp"-->
+        <!--android:layout_marginLeft="28dp"-->
+        <!--android:layout_marginBottom="15dp"-->
+        <!--android:fontFamily="sans-serif"-->
+        <!--android:gravity="center_vertical"-->
+        <!--android:text="Rate"-->
+        <!--android:textColor="@color/black"-->
+        <!--android:textSize="@dimen/sales_lv_item_text_size"-->
+        <!--android:layout_weight="1.5"-->
+        <!--android:textStyle="bold">-->
+
+        <!--&lt;!&ndash;android:layout_marginLeft="46.55dp"   earlier&ndash;&gt;-->
+
+    <!--</TextView>-->
+
+    <!--&lt;!&ndash;android:layout_marginTop="30dp"&ndash;&gt;-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/tvMRP"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:textSize="@dimen/sales_lv_item_text_size"-->
+        <!--android:textStyle="bold"-->
+        <!--android:fontFamily="sans-serif"-->
+        <!--android:layout_marginTop="15dp"-->
+        <!--android:textColor="@color/black"-->
+        <!--android:gravity="top"-->
+        <!--android:layout_column="0"-->
+        <!--android:padding="6sp"-->
+        <!--android:clickable="false"-->
+        <!--android:focusable="false"-->
+        <!--android:layout_weight="1.5"-->
+        <!--android:layout_marginBottom="15dp">-->
+
+        <!--&lt;!&ndash;android:layout_marginLeft="72dp"  earlier&ndash;&gt;-->
+
+    <!--</TextView>-->
+
+
+    <!--<TextView-->
+        <!--android:id="@+id/etQty"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_marginLeft="64dp"-->
+        <!--android:textSize="@dimen/sales_lv_item_text_size"-->
+        <!--android:textStyle="bold"-->
+        <!--android:fontFamily="sans-serif"-->
+        <!--android:layout_marginTop="15dp"-->
+        <!--android:textColor="@color/black"-->
+        <!--android:gravity="top"-->
+        <!--android:text="1"-->
+        <!--android:textAlignment="center"-->
+        <!--android:padding="1sp"-->
+        <!--android:singleLine="true"-->
+        <!--android:inputType="numberDecimal"-->
+        <!--android:layout_weight="1"-->
+        <!--android:layout_marginBottom="15dp">-->
+    <!--</TextView>-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/tvTotal"-->
+        <!--android:layout_width="0dp"-->
+        <!--android:layout_marginLeft="20dp"-->
+        <!--android:textSize="@dimen/sales_lv_item_text_size"-->
+        <!--android:textStyle="bold"-->
+        <!--android:fontFamily="sans-serif"-->
+        <!--android:layout_marginTop="15dp"-->
+        <!--android:textColor="@color/black"-->
+        <!--android:layout_gravity="right|center_vertical"-->
+        <!--android:gravity="right"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_weight="2.5"-->
+        <!--android:layout_marginBottom="15dp"-->
+        <!--android:paddingRight="5dp">-->
+
+        <!--&lt;!&ndash;android:layout_marginLeft="80dp"&ndash;&gt;-->
+
+    <!--</TextView>-->
+
+<!--</LinearLayout>-->
+

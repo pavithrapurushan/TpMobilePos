@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -57,6 +58,8 @@ import java.util.List;
 //Modified by Pavithra on 31-07-2020
 //Modified by Pavithra on 04-08-2020
 //Modified by Pavithra on 05-08-2020
+//Modified by Pavithra on 10-08-2020
+//Modified by Pavithra on 11-08-2020
 
 public class SalesActivity extends AppCompatActivity {
 
@@ -167,6 +170,19 @@ public class SalesActivity extends AppCompatActivity {
 
     int posDisc;
 
+
+
+//Added by Pavithra on 10-08-2020
+    LinearLayout ll1_header;
+    LinearLayout llLvHeading;
+    LinearLayout ll_LvContents;
+    LinearLayout llTotalBillAmt_AndSuggestions;
+    LinearLayout llCalcBillAmountDisplay;
+
+    double llLvHeadingWidth;
+    double ll1_header_height;
+    double ll_calcBill_width;
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -197,8 +213,58 @@ public class SalesActivity extends AppCompatActivity {
 
 
 //        setContentView(R.layout.activity_sales);  //Commented by Pavithra on 29-07-2020
-        setContentView(R.layout.activity_sales_new);  //Added by Pavithra on 29-07-2020
+//        setContentView(R.layout.activity_sales_new);  //Added by Pavithra on 29-07-2020  //Commented by Pavithra on 10-08-2020
+        setContentView(R.layout.activity_sales);  //Added by Pavithra on 29-07-2020
         tsCommonMethods = new TsCommonMethods(this);
+
+
+/**************************Added by Pavithra on 10-08-2020******************************************************************************************************/
+
+        ll1_header = (LinearLayout)findViewById(R.id.ll1_header);
+        llLvHeading = (LinearLayout)findViewById(R.id.llLvHeading);
+        ll_LvContents = (LinearLayout)findViewById(R.id.ll_LvContents);
+        llTotalBillAmt_AndSuggestions = (LinearLayout)findViewById(R.id.llTotalBillAmtAndSuggestions);
+        llCalcBillAmountDisplay = (LinearLayout)findViewById(R.id.llCalcBillAmountDisplay);
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int screen_height = displayMetrics.heightPixels;
+        int screen_width = displayMetrics.widthPixels;
+
+//        ll1_header_height = (screen_height * 9.86)/100;
+        ll1_header_height = (screen_height * 9.38)/100;  //Added by Pavithra on 20-08-2020 // 72/768 from figma
+
+//        llLvHeadingWidth = (screen_width * 60.43)/100;  //Commented by Pavithra on 20-08-2020
+        llLvHeadingWidth = (screen_width * 57.68)/100;    // 788/1366 values from figma design
+//        ll_calcBill_width = (screen_width *34.17)/100;
+//        ll_calcBill_width = (screen_width *28)/100;  //commented by Pavithra on 20-08-2020
+        ll_calcBill_width = (screen_width *30.96)/100;   //Added by Pavithra on 20-08-2020 423/1366
+
+
+        LinearLayout.LayoutParams paramsllHeader = (LinearLayout.LayoutParams) ll1_header.getLayoutParams();
+        paramsllHeader.height = (int) ll1_header_height;
+        paramsllHeader.width = LinearLayout.LayoutParams.MATCH_PARENT;
+        ll1_header.setLayoutParams(paramsllHeader);
+
+// Gets the layout params that will allow you to resize the layout
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) llLvHeading.getLayoutParams();
+// Changes the height and width to the specified *pixels*
+        params.height = LinearLayout.LayoutParams.MATCH_PARENT;;
+        params.width = (int) llLvHeadingWidth;
+        llLvHeading.setLayoutParams(params);
+
+
+        LinearLayout.LayoutParams paramsllLvContents = (LinearLayout.LayoutParams) ll_LvContents.getLayoutParams();
+        paramsllLvContents.height = LinearLayout.LayoutParams.MATCH_PARENT;;
+        paramsllLvContents.width = (int) llLvHeadingWidth;
+        ll_LvContents.setLayoutParams(paramsllLvContents);
+
+
+        LinearLayout.LayoutParams paramsllCalBill = (LinearLayout.LayoutParams) llCalcBillAmountDisplay.getLayoutParams();
+        paramsllCalBill.height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        paramsllCalBill.width = (int) ll_calcBill_width;
+        llCalcBillAmountDisplay.setLayoutParams(paramsllCalBill);
+/********************************************************************************************************************************/
 
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -219,8 +285,17 @@ public class SalesActivity extends AppCompatActivity {
         etQty = (TextView) findViewById(R.id.etQty);
         main = (RelativeLayout) findViewById(R.id.main);
 
-        billno = (TextView) findViewById(R.id.billno);
+//        billno = (TextView) findViewById(R.id.billno);
+//        numofitems = (TextView) findViewById(R.id.numofitems);
+//        itemtotal = (TextView) findViewById(R.id.itemtotal);
+//        disctotal = (TextView) findViewById(R.id.disctotal);
+//        taxtotal = (TextView) findViewById(R.id.taxtotal);
+//        billdisc = (TextView) findViewById(R.id.billdisc);
+//        billroundoff = (TextView) findViewById(R.id.billroundoff);
+//        billtotal = (TextView) findViewById(R.id.billtotal);
+//        tvtotalLinewiseDiscount = (TextView) findViewById(R.id.tvtotalLinewiseDiscount);
 
+        billno = (TextView) findViewById(R.id.billno);
         numofitems = (TextView) findViewById(R.id.numofitems);
         itemtotal = (TextView) findViewById(R.id.itemtotal);
         disctotal = (TextView) findViewById(R.id.disctotal);
@@ -229,6 +304,9 @@ public class SalesActivity extends AppCompatActivity {
         billroundoff = (TextView) findViewById(R.id.billroundoff);
         billtotal = (TextView) findViewById(R.id.billtotal);
         tvtotalLinewiseDiscount = (TextView) findViewById(R.id.tvtotalLinewiseDiscount);
+
+
+
 
         prefs = PreferenceManager.getDefaultSharedPreferences(this);
         SalesdetailPLObjStr = prefs.getString("SalesdetailPLObjStr", "");
@@ -339,6 +417,53 @@ public class SalesActivity extends AppCompatActivity {
         super.onResume();
         l2.setAdapter(adapter); //Added by Pavithra on 15-07-2020 to make delete button disable
 
+
+
+
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int screen_height = displayMetrics.heightPixels;
+        int screen_width = displayMetrics.widthPixels;
+
+        ll1_header_height = (screen_height * 9.86)/100;
+        llLvHeadingWidth = (screen_width * 60.43)/100;
+//        ll_calcBill_width = (screen_width *34.17)/100;
+        ll_calcBill_width = (screen_width *28)/100;
+
+        LinearLayout.LayoutParams paramsllHeader = (LinearLayout.LayoutParams) ll1_header.getLayoutParams();
+        paramsllHeader.height = (int) ll1_header_height;
+        paramsllHeader.width = LinearLayout.LayoutParams.MATCH_PARENT;
+        ll1_header.setLayoutParams(paramsllHeader);
+
+// Gets the layout params that will allow you to resize the layout
+        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) llLvHeading.getLayoutParams();
+// Changes the height and width to the specified *pixels*
+        params.height = LinearLayout.LayoutParams.MATCH_PARENT;;
+        params.width = (int) llLvHeadingWidth;
+        llLvHeading.setLayoutParams(params);
+
+
+        LinearLayout.LayoutParams paramsllLvContents = (LinearLayout.LayoutParams) ll_LvContents.getLayoutParams();
+        paramsllLvContents.height = LinearLayout.LayoutParams.MATCH_PARENT;;
+        paramsllLvContents.width = (int) llLvHeadingWidth;
+        ll_LvContents.setLayoutParams(paramsllLvContents);
+
+
+        LinearLayout.LayoutParams paramsllCalBill = (LinearLayout.LayoutParams) llCalcBillAmountDisplay.getLayoutParams();
+        paramsllCalBill.height = LinearLayout.LayoutParams.WRAP_CONTENT;
+        paramsllCalBill.width = (int) ll_calcBill_width;
+        llCalcBillAmountDisplay.setLayoutParams(paramsllCalBill);
+
+
+
+
+
+
+
+
+
+
         prefs = PreferenceManager.getDefaultSharedPreferences(SalesActivity.this);
         String bill_series = prefs.getString("BillSeries", "");
         String bill_no = prefs.getString("BillNo", "");
@@ -373,7 +498,7 @@ public class SalesActivity extends AppCompatActivity {
             if (billrow_list_json_str.equals("")) {
                 l2.setAdapter(null);
 
-                billno.setText("");
+//                billno.setText(""); //Commented by Pavithra on 11-08-2020
                 numofitems.setText("0");
                 itemtotal.setText("0");
                 disctotal.setText("0");
@@ -409,9 +534,26 @@ public class SalesActivity extends AppCompatActivity {
         dialog.getWindow().setBackgroundDrawableResource(R.color.colorPrimary);
         dialog. getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
-        int height_of_popup = 500;
-        int width_of_popup = 400;
-        dialog.getWindow().setLayout(width_of_popup, height_of_popup);
+        //Commented by Pavithra on 20-08-2020
+//        int height_of_popup = 500;
+//        int width_of_popup = 400;
+//        dialog.getWindow().setLayout(width_of_popup, height_of_popup);
+
+
+//    Added by Pavithra on 20-08-2020
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int screen_height = displayMetrics.heightPixels;
+        int screen_width = displayMetrics.widthPixels;
+
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+        layoutParams.copyFrom(dialog.getWindow().getAttributes());
+        int dialogWindowWidth = (int) (screen_width * 0.4f);
+        int dialogWindowHeight = (int) (screen_height * 0.4f);
+        layoutParams.width = dialogWindowWidth;
+        layoutParams.height = dialogWindowHeight;
+        dialog.getWindow().setAttributes(layoutParams);
+
         dialog.show();
 
         final TextView tvSaveStatus = (TextView) dialog.findViewById(R.id.tvSaveStatus);
@@ -525,6 +667,7 @@ public class SalesActivity extends AppCompatActivity {
                     BufferedReader reader = new BufferedReader(streamReader);
                     StringBuilder sb = new StringBuilder();
                     String inputLine = "";
+
                     while ((inputLine = reader.readLine()) != null) {
                         sb.append(inputLine);
                         break;
@@ -652,7 +795,7 @@ public class SalesActivity extends AppCompatActivity {
                     } else {
                         Toast.makeText(SalesActivity.this, "" + detailsPL.Message, Toast.LENGTH_SHORT).show();
                         tsErrorMessage(detailsPL.Message); //Added by Pavithra on 29-07-2020
-                        showPopUP("" + detailsPL.Message);
+//                        showPopUP("" + detailsPL.Message);
                     }
                 }
             } catch (Exception ex) {
@@ -660,7 +803,6 @@ public class SalesActivity extends AppCompatActivity {
             }
         }
     }
-
 
 
     //Added by Pavithra on 28-07-2020

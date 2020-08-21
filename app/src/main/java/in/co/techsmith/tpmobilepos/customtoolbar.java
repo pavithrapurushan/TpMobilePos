@@ -7,10 +7,13 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.FrameLayout;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.TabHost;
 import android.widget.TabHost.TabSpec;
 import android.widget.Toast;
@@ -32,6 +35,10 @@ public class customtoolbar extends TabActivity {
     View viewHighlightPayment;
     View viewHighlightRetrieve;
     View viewHighlightNewCustomer;
+
+
+    FrameLayout frameLayoutTabs;
+    FrameLayout frameLayoutContnts;
 
     Runnable run;
 
@@ -56,7 +63,9 @@ public class customtoolbar extends TabActivity {
                         | View.SYSTEM_UI_FLAG_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
 
-        setContentView(R.layout.activity_customtoolbar);
+//        setContentView(R.layout.activity_customtoolbar);
+        setContentView(R.layout.activity_customtoolbar_new);
+//        setContentView(R.layout.activity_customtab);
         logout = (ImageButton) findViewById(R.id.logout);
         customer = (ImageButton) findViewById(R.id.customer);
         sales = (ImageButton) findViewById(R.id.sales);
@@ -72,6 +81,30 @@ public class customtoolbar extends TabActivity {
         viewHighlightPayment = (View) findViewById(R.id.viewHighlightPayment);
         viewHighlightRetrieve = (View) findViewById(R.id.viewHighlightRetrieve);
         viewHighlightNewCustomer = (View) findViewById(R.id.viewHighlightNewCustomer);
+
+
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int screen_height = displayMetrics.heightPixels;
+        int screen_width = displayMetrics.widthPixels;
+        frameLayoutTabs = (FrameLayout)findViewById(R.id.frameLayoutTabs);
+        frameLayoutContnts = (FrameLayout)findViewById(android.R.id.tabcontent);
+
+
+
+        double framLayoutcontnet_width = (screen_width *91)/100;
+        LinearLayout.LayoutParams paramsllHeader = (LinearLayout.LayoutParams) frameLayoutContnts.getLayoutParams();
+        paramsllHeader.width = (int) framLayoutcontnet_width;
+        paramsllHeader.height = LinearLayout.LayoutParams.MATCH_PARENT;
+        frameLayoutContnts.setLayoutParams(paramsllHeader);
+
+        double framLayout_width = (screen_width *9)/100;
+        LinearLayout.LayoutParams paramsllHeader1 = (LinearLayout.LayoutParams) frameLayoutTabs.getLayoutParams();
+        paramsllHeader1.width = (int) framLayout_width;
+        paramsllHeader1.height = LinearLayout.LayoutParams.MATCH_PARENT;
+        frameLayoutTabs.setLayoutParams(paramsllHeader1);
+
 
 
 //        imgBtnSave=(ImageButton)findViewById(R.id.imgBtnSave);
@@ -179,6 +212,8 @@ public class customtoolbar extends TabActivity {
                 int i = tabHost.getCurrentTab();
                 if (i == 4) {
 
+                    Toast.makeText(customtoolbar.this, ""+i, Toast.LENGTH_SHORT).show();
+
 //                    SalessummaryDetailObjStr = prefs.getString("SalessummaryDetailObjStr", "");
 ////                    NumberOfItemsStr = prefs.getString("NumberOfItems", "");
 //
@@ -196,6 +231,16 @@ public class customtoolbar extends TabActivity {
 
                 } else if (i == 1) {
 //                    displayPlayer1NewListView();
+                    Toast.makeText(customtoolbar.this, ""+i, Toast.LENGTH_SHORT).show();
+
+                } else if (i == 2) {
+//                    displayPlayer1NewListView();
+                    Toast.makeText(customtoolbar.this, ""+i, Toast.LENGTH_SHORT).show();
+
+                } else if (i == 3) {
+//                    displayPlayer1NewListView();
+
+                    Toast.makeText(customtoolbar.this, ""+i, Toast.LENGTH_SHORT).show();
                 }
             }
         });

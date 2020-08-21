@@ -11,20 +11,22 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
+        android:usesCleartextTraffic="true"
         android:theme="@style/AppTheme">
-        <activity android:name="in.co.techsmith.tpmobilepos.customtoolbar"/>
-        <activity android:name="in.co.techsmith.tpmobilepos.SalesActivity" />
-        <activity android:name="in.co.techsmith.tpmobilepos.RetrieveActivity" />
-        <activity android:name="in.co.techsmith.tpmobilepos.CustomerInformation" />
-        <activity android:name="in.co.techsmith.tpmobilepos.SalesReturnActivity" />
-        <activity android:name="in.co.techsmith.tpmobilepos.SettingsActivity" />
+        <activity android:name="in.co.techsmith.tpmobilepos.customtoolbar" android:screenOrientation="landscape"/>
+        <activity android:name="in.co.techsmith.tpmobilepos.SalesActivity" android:screenOrientation="landscape" />
+        <activity android:name="in.co.techsmith.tpmobilepos.RetrieveActivity" android:screenOrientation="landscape" />
+        <activity android:name="in.co.techsmith.tpmobilepos.CustomerInformation" android:screenOrientation="landscape" />
+        <activity android:name="in.co.techsmith.tpmobilepos.SalesReturnActivity" android:screenOrientation="landscape" />
+        <activity android:name="in.co.techsmith.tpmobilepos.SettingsActivity" android:screenOrientation="landscape" />
         <activity android:name="in.co.techsmith.tpmobilepos.PaymentActivityNew"
-            android:windowSoftInputMode="stateAlwaysVisible"/>
+            android:windowSoftInputMode="stateAlwaysVisible" android:screenOrientation="landscape"/>
 
         <activity
             android:name="in.co.techsmith.tpmobilepos.LoginActivity"
             android:configChanges="screenLayout|orientation|screenSize"
-            android:windowSoftInputMode="adjustResize">
+            android:windowSoftInputMode="adjustResize"
+            android:screenOrientation="landscape">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

@@ -28,8 +28,10 @@ import java.util.List;
 
 
 //Modified by Pavithra on 04-08-2020
+//Modified by Pavithra on 20-08-2020
 public class LoyaltyCustomerLookupAdapter extends RecyclerView.Adapter<LoyaltyCustomerLookupAdapter.ViewHolder> {
-    private ArrayList<LoyaltyCustomerList> listdata;
+//    private ArrayList<LoyaltyCustomerList> listdata;
+    private List<LoyaltyCustomer> listdata;
     EditText name,number,mail,loyaltycode;
     int index=-1;
     Dialog dialog;
@@ -45,7 +47,8 @@ public class LoyaltyCustomerLookupAdapter extends RecyclerView.Adapter<LoyaltyCu
 
     SharedPreferences prefs;
 
-    public LoyaltyCustomerLookupAdapter(Context context,ArrayList<LoyaltyCustomerList> myListData, EditText edtname, EditText edtmob, EditText edtmail, EditText edtloyaltycode, Dialog dialog) {
+//    public LoyaltyCustomerLookupAdapter(Context context,ArrayList<LoyaltyCustomerList> myListData, EditText edtname, EditText edtmob, EditText edtmail, EditText edtloyaltycode, Dialog dialog) {
+    public LoyaltyCustomerLookupAdapter(Context context,List<LoyaltyCustomer> myListData, EditText edtname, EditText edtmob, EditText edtmail, EditText edtloyaltycode, Dialog dialog) {
         this.listdata=myListData;
         this.name=edtname;
         this.number=edtmob;
@@ -78,14 +81,27 @@ public class LoyaltyCustomerLookupAdapter extends RecyclerView.Adapter<LoyaltyCu
             holder.itemView.setBackgroundColor(Color.parseColor("#8FC4C4C4"));
             //  holder.imageView.setBackgroundColor(Color.parseColor("#FFFAF8FD"));
         }
-        final LoyaltyCustomerList myListData = listdata.get(position);
+//        final LoyaltyCustomerList myListData = listdata.get(position);
+        final LoyaltyCustomer myListData = listdata.get(position);
+
+
        // name.setText(""+listdata.get(position).getName());
      //   number.setText(""+listdata.get(position).getNumber());
-        holder.textViewid.setText("" + listdata.get(position).getid());
-        holder.textViewnumber.setText("" + listdata.get(position).getNumber());
-        holder.textViewname.setText("" + listdata.get(position).getName());
-        holder.textViewpnumber.setText("" + listdata.get(position).getphoneNumber());
-        holder.textViewtype.setText("" + listdata.get(position).getType());
+
+
+//        holder.textViewid.setText("" + listdata.get(position).getid());
+//        holder.textViewnumber.setText("" + listdata.get(position).getNumber());
+//        holder.textViewname.setText("" + listdata.get(position).getName());
+//        holder.textViewpnumber.setText("" + listdata.get(position).getphoneNumber());
+//        holder.textViewtype.setText("" + listdata.get(position).getType());
+
+        //Modified by Pavithra on 20-08-2020
+
+        holder.textViewid.setText("" + myListData.LoyaltyId);
+        holder.textViewnumber.setText("" + myListData.LoyaltyNo);
+        holder.textViewname.setText("" + myListData.Name);
+        holder.textViewpnumber.setText("" + myListData.Phone2);
+        holder.textViewtype.setText("" +myListData.Type);
 
      holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 <!--Created by Pavithra on 29-07-2020-->
+<!--Modified by Pavithra on 06-08-2020-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -15,68 +16,69 @@
         android:id="@+id/l1"
         android:layout_below="@+id/title"
         android:background="#113A4E"
-        android:layout_width="788dp"
+        android:layout_width="@dimen/ll_sales_width"
         android:orientation="horizontal"
-        android:layout_height="72dp">
+        android:layout_height="@dimen/ll_sales_height">
 
         <TextView
             android:text="Item Name"
             android:gravity="right"
-            android:layout_width="175dp"
-            android:layout_marginTop="16dp"
-            android:textSize="24sp"
+            android:layout_width="@dimen/tv_itemname_lvtitle_width"
+            android:layout_marginTop="@dimen/ll_title_tv_topmargin"
+            android:textSize="@dimen/sales_layout_tv_size"
             android:textStyle="bold"
             android:textColor="@color/white"
-            android:layout_height="30dp" />
+            android:layout_height="@dimen/tv_itemname_lvtitle_height" />
 
         <TextView
             android:text="Rate"
             android:gravity="center"
-            android:layout_width="60dp"
-            android:layout_marginTop="16dp"
+            android:layout_width="@dimen/tv_rate_lvtitle_width"
+            android:layout_marginTop="@dimen/ll_title_tv_topmargin"
             android:textStyle="bold"
-            android:textSize="24sp"
+            android:textSize="@dimen/sales_layout_tv_size"
             android:layout_marginLeft="90dp"
             android:textColor="@color/white"
-            android:layout_height="30dp" />
+            android:layout_height="@dimen/tv_itemname_lvtitle_height" />
 
         <TextView
-            android:layout_width="57dp"
-            android:layout_height="30dp"
+            android:layout_width="@dimen/tv_mrp_lvtitle_width"
+            android:layout_height="@dimen/tv_itemname_lvtitle_height"
             android:layout_marginLeft="95dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/ll_title_tv_topmargin"
             android:gravity="center"
             android:text="MRP"
             android:textColor="@color/white"
-            android:textSize="24sp"
+            android:textSize="@dimen/sales_layout_tv_size"
             android:textStyle="bold" />
 
         <TextView
-            android:layout_width="48dp"
-            android:layout_height="30dp"
+            android:layout_width="@dimen/tv_qty_lvtitle_width"
+            android:layout_height="@dimen/tv_itemname_lvtitle_height"
             android:layout_marginLeft="95dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/ll_title_tv_topmargin"
             android:gravity="right"
             android:text="QTY"
             android:textColor="@color/white"
-            android:textSize="24sp"
+            android:textSize="@dimen/sales_layout_tv_size"
             android:textStyle="bold" />
         <TextView
-            android:layout_width="65dp"
-            android:layout_height="30dp"
+            android:layout_width="@dimen/tv_total_lvtitle_width"
+            android:layout_height="@dimen/tv_itemname_lvtitle_height"
             android:layout_marginLeft="90dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="@dimen/ll_title_tv_topmargin"
             android:gravity="center"
             android:text="Total"
             android:textColor="@color/white"
-            android:textSize="24sp"
+            android:textSize="@dimen/sales_layout_tv_size"
             android:textStyle="bold" />
 
     </LinearLayout>
+
     <ListView
         android:id="@+id/productlist"
         android:layout_gravity="left"
-        android:layout_width="790dp"
+        android:layout_width="@dimen/sales_lv_width"
         android:layout_height="wrap_content"
         android:dividerHeight="2dp"
         android:divider="#2A4F4B"
@@ -88,23 +90,24 @@
     </ListView>
     <LinearLayout
 
+        android:id="@+id/llImgBtnInSales"
         android:layout_below="@+id/title"
         android:background="#113A4E"
-        android:layout_width="451dp"
-        android:layout_marginLeft="788dp"
+        android:layout_width="@dimen/ll_imgbtns_sales_width"
+        android:layout_marginLeft="@dimen/llImgBtnInSales_leftmargin"
         android:orientation="horizontal"
-        android:layout_height="72dp">
+        android:layout_height="@dimen/ll_sales_height">
         <ImageButton
             android:id="@+id/imgBtnScanBarcode"
             android:background="@drawable/scanicon"
             android:layout_marginTop="8dp"
             android:layout_marginLeft="10dp"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:layout_width="@dimen/ll_imgbtns_sales_width_and_height"
+            android:layout_height="@dimen/ll_imgbtns_sales_width_and_height"
             />
         <EditText
-            android:layout_width="219dp"
-            android:layout_height="56dp"
+            android:layout_width="@dimen/ll_et_sales_width_and_height"
+            android:layout_height="@dimen/ll_imgbtns_sales_width_and_height"
             android:background="#B7DAE6"
             android:layout_marginLeft="12dp"
             android:layout_marginTop="8dp"
@@ -116,16 +119,16 @@
             android:background="@drawable/selection"
             android:layout_marginTop="8dp"
             android:layout_marginLeft="10dp"
-            android:layout_width="56dp"
-            android:layout_height="56dp" />
+            android:layout_width="@dimen/ll_imgbtns_sales_width_and_height"
+            android:layout_height="@dimen/ll_imgbtns_sales_width_and_height" />
 
         <ImageButton
             android:id="@+id/imgBtnSearchProductFromLookup"
             android:background="@drawable/searchicon"
             android:layout_marginTop="8dp"
             android:layout_marginLeft="10dp"
-            android:layout_width="56dp"
-            android:layout_height="56dp"
+            android:layout_width="@dimen/ll_imgbtns_sales_width_and_height"
+            android:layout_height="@dimen/ll_imgbtns_sales_width_and_height"
             android:onClick="gotoproductlookup"/>
 
     </LinearLayout>
@@ -134,11 +137,11 @@
         android:layout_marginLeft="790dp"
         android:background="#5CABC7"
         android:layout_marginTop="72dp"
-        android:layout_width="448dp"
+        android:layout_width="@dimen/rlSuggestions_width"
         android:layout_height="700dp">
         <TextView
             android:textStyle="bold"
-            android:textSize="24sp"
+            android:textSize="@dimen/sales_layout_tv_size"
             android:id="@+id/tvsuggestions"
             android:layout_below="@+id/rlTotalBillamount"
             android:textColor="@color/white"
@@ -173,294 +176,303 @@
                 android:textColor="@color/white"
                 android:text="From previous purchases"
                 android:layout_marginLeft="13dp"
-                android:layout_marginTop="50dp"
-                />
+                android:layout_marginTop="50dp"/>
         </RelativeLayout>
 
         <LinearLayout
-            android:layout_width="430dp"
-            android:layout_height="470dp"
+            android:layout_width="@dimen/rlTotalBillamount_width"
+            android:layout_height="@dimen/rlTotalBillamount_height"
             android:orientation="vertical"
             android:layout_marginTop="18dp"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="@dimen/rlTotalBillamount_ll1_leftmargin"
             android:background="#005068"
             android:id="@+id/rlTotalBillamount">
             <!--android:layout_height="425dp"  previos-->
 
             <LinearLayout
-                android:layout_width="430dp"
+                android:layout_width="@dimen/rlTotalBillamount_width"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
-                android:layout_marginLeft="13dp"
+                android:layout_marginLeft="@dimen/rlTotalBillamount_ll2_leftmargin"
                 android:layout_marginTop="14dp">
 
                 <TextView
-                    android:layout_width="197dp"
+                    android:layout_width="@dimen/llCalcBill_tv_width"
                     android:layout_height="wrap_content"
                     android:gravity="right|center_vertical"
                     android:text="Store Id:"
                     android:fontFamily="sans-serif"
                     android:textColor="@color/white"
-                    android:textSize="24sp" />
+                    android:textSize="@dimen/sales_layout_tv_size"/>
                 <TextView
-                    android:layout_width="200dp"
+                    android:layout_width="@dimen/llCalcBill_tv_value_width"
                     android:textColor="#FFBB33"
-                    android:textSize="24sp"
+                    android:textSize="@dimen/sales_layout_tv_size"
                     android:textStyle="bold"
                     android:fontFamily="sans-serif"
                     android:gravity="right|center_vertical"
                     android:layout_height="wrap_content"
                     android:id="@+id/storeid"
-                    android:text=""/>
+                    android:text=""
+                    android:paddingRight="@dimen/llCalcBill_tv_value_rightpadding"/>
 
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="430dp"
+                android:layout_width="@dimen/rlTotalBillamount_width"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginLeft="13dp"
                 android:layout_marginTop="14dp">
 
                 <TextView
-                    android:layout_width="197dp"
+                    android:layout_width="@dimen/llCalcBill_tv_width"
                     android:layout_height="wrap_content"
                     android:gravity="right|center_vertical"
                     android:text="Shift Id:"
                     android:fontFamily="sans-serif"
                     android:textColor="@color/white"
-                    android:textSize="24sp" />
+                    android:textSize="@dimen/sales_layout_tv_size" />
                 <TextView
-                    android:layout_width="200dp"
+                    android:layout_width="@dimen/llCalcBill_tv_value_width"
                     android:textColor="#FFBB33"
-                    android:textSize="24sp"
+                    android:textSize="@dimen/sales_layout_tv_size"
                     android:textStyle="bold"
                     android:fontFamily="sans-serif"
                     android:gravity="right|center_vertical"
                     android:layout_height="wrap_content"
                     android:id="@+id/shiftid"
-                    android:text=""/>
+                    android:text=""
+                    android:paddingRight="@dimen/llCalcBill_tv_value_rightpadding"/>
 
             </LinearLayout>
-
             <LinearLayout
-                android:layout_width="430dp"
+                android:layout_width="@dimen/rlTotalBillamount_width"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginLeft="13dp"
                 android:layout_marginTop="14dp">
 
                 <TextView
-                    android:layout_width="197dp"
+                    android:layout_width="@dimen/llCalcBill_tv_width"
                     android:layout_height="wrap_content"
                     android:gravity="right|center_vertical"
                     android:text="Bill No:"
                     android:fontFamily="sans-serif"
                     android:textColor="@color/white"
-                    android:textSize="24sp" />
+                    android:textSize="@dimen/sales_layout_tv_size" />
                 <TextView
-                    android:layout_width="200dp"
+                    android:layout_width="@dimen/llCalcBill_tv_value_width"
                     android:textColor="#FFBB33"
-                    android:textSize="24sp"
+                    android:textSize="@dimen/sales_layout_tv_size"
                     android:textStyle="bold"
                     android:fontFamily="sans-serif"
                     android:gravity="right|center_vertical"
                     android:layout_height="wrap_content"
                     android:id="@+id/billno"
-                    android:text=""/>
+                    android:text=""
+                    android:paddingRight="@dimen/llCalcBill_tv_value_rightpadding"/>
 
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="430dp"
+                android:layout_width="@dimen/rlTotalBillamount_width"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginLeft="13dp"
                 android:layout_marginTop="10dp">
 
                 <TextView
-                    android:layout_width="197dp"
+                    android:layout_width="@dimen/llCalcBill_tv_width"
                     android:layout_height="wrap_content"
-                    android:textSize="24sp"
+                    android:textSize="@dimen/sales_layout_tv_size"
                     android:fontFamily="sans-serif"
                     android:textColor="@color/white"
                     android:text="Number Of Items:"
                     android:gravity="right|center_vertical" />
                 <TextView
-                    android:layout_width="200dp"
+                    android:layout_width="@dimen/llCalcBill_tv_value_width"
                     android:textColor="#000000"
-                    android:textSize="24sp"
+                    android:textSize="@dimen/sales_layout_tv_size"
                     android:textStyle="bold"
                     android:gravity="right|center_vertical"
                     android:fontFamily="sans-serif"
                     android:layout_height="wrap_content"
                     android:id="@+id/numofitems"
-                    android:text="0"/>
+                    android:text="0"
+                    android:paddingRight="@dimen/llCalcBill_tv_value_rightpadding"/>
 
             </LinearLayout>
             <LinearLayout
-                android:layout_width="430dp"
+                android:layout_width="@dimen/rlTotalBillamount_width"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginLeft="13dp"
                 android:layout_marginTop="10dp">
 
                 <TextView
-                    android:layout_width="197dp"
+                    android:layout_width="@dimen/llCalcBill_tv_width"
                     android:layout_height="wrap_content"
-                    android:textSize="24sp"
+                    android:textSize="@dimen/sales_layout_tv_size"
                     android:textColor="@color/white"
                     android:text="Total Amount:"
                     android:fontFamily="sans-serif"
                     android:gravity="right|center_vertical"/>
                 <TextView
-                    android:layout_width="200dp"
+                    android:layout_width="@dimen/llCalcBill_tv_value_width"
                     android:textColor="#000000"
-                    android:textSize="24sp"
+                    android:textSize="@dimen/sales_layout_tv_size"
                     android:textStyle="bold"
                     android:gravity="right|center_vertical"
                     android:fontFamily="sans-serif"
                     android:layout_height="wrap_content"
                     android:id="@+id/itemtotal"
-                    android:text="0" />
+                    android:text="0"
+                    android:paddingRight="@dimen/llCalcBill_tv_value_rightpadding"/>
 
             </LinearLayout>
+
             <LinearLayout
-                android:layout_width="430dp"
+                android:layout_width="@dimen/rlTotalBillamount_width"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginLeft="13dp"
                 android:layout_marginTop="10dp">
 
                 <TextView
-                    android:layout_width="197dp"
+                    android:layout_width="@dimen/llCalcBill_tv_width"
                     android:layout_height="63dp"
                     android:fontFamily="sans-serif"
                     android:gravity="right|center_vertical"
                     android:text="Total Linewise Discount:"
                     android:textColor="@color/white"
-                    android:textSize="24sp" />
+                    android:textSize="@dimen/sales_layout_tv_size" />
                 <TextView
-                    android:layout_width="200dp"
+                    android:layout_width="@dimen/llCalcBill_tv_value_width"
                     android:textColor="#000000"
-                    android:textSize="24sp"
+                    android:textSize="@dimen/sales_layout_tv_size"
                     android:textStyle="bold"
                     android:gravity="right|center_vertical"
                     android:fontFamily="sans-serif"
                     android:layout_height="wrap_content"
                     android:id="@+id/tvtotalLinewiseDiscount"
                     android:text="0"
-                    android:layout_gravity="center_vertical"/>
+                    android:layout_gravity="center_vertical"
+                    android:paddingRight="@dimen/llCalcBill_tv_value_rightpadding"/>
 
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="430dp"
+                android:layout_width="@dimen/rlTotalBillamount_width"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginLeft="13dp"
                 android:layout_marginTop="10dp">
 
                 <TextView
-                    android:layout_width="197dp"
+                    android:layout_width="@dimen/llCalcBill_tv_width"
                     android:layout_height="wrap_content"
-                    android:textSize="24sp"
+                    android:textSize="@dimen/sales_layout_tv_size"
                     android:textColor="@color/white"
                     android:text="Tax Total:"
                     android:fontFamily="sans-serif"
                     android:gravity="right|center_vertical"/>
                 <TextView
-                    android:layout_width="200dp"
+                    android:layout_width="@dimen/llCalcBill_tv_value_width"
                     android:textColor="#000000"
-                    android:textSize="24sp"
+                    android:textSize="@dimen/sales_layout_tv_size"
                     android:textStyle="bold"
                     android:gravity="right|center_vertical"
                     android:fontFamily="sans-serif"
                     android:layout_height="wrap_content"
                     android:id="@+id/taxtotal"
-                    android:text="0"/>
+                    android:text="0"
+                    android:paddingRight="@dimen/llCalcBill_tv_value_rightpadding"/>
 
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="430dp"
+                android:layout_width="@dimen/rlTotalBillamount_width"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginLeft="13dp"
                 android:layout_marginTop="10dp">
 
                 <TextView
-                    android:layout_width="197dp"
+                    android:layout_width="@dimen/llCalcBill_tv_width"
                     android:layout_height="wrap_content"
-                    android:textSize="24sp"
+                    android:textSize="@dimen/sales_layout_tv_size"
                     android:fontFamily="sans-serif"
                     android:textColor="@color/white"
                     android:text="Total Discount:"
                     android:gravity="right|center_vertical"/>
                 <TextView
-                    android:layout_width="200dp"
+                    android:layout_width="@dimen/llCalcBill_tv_value_width"
                     android:textColor="#000000"
-                    android:textSize="24sp"
+                    android:textSize="@dimen/sales_layout_tv_size"
                     android:textStyle="bold"
                     android:gravity="right|center_vertical"
                     android:fontFamily="sans-serif"
                     android:layout_height="wrap_content"
                     android:id="@+id/billdisc"
-                    android:text="0" />
+                    android:text="0"
+                    android:paddingRight="@dimen/llCalcBill_tv_value_rightpadding"/>
             </LinearLayout>
             <LinearLayout
-                android:layout_width="430dp"
+                android:layout_width="@dimen/rlTotalBillamount_width"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginLeft="13dp"
                 android:layout_marginTop="10dp">
 
                 <TextView
-                    android:layout_width="197dp"
+                    android:layout_width="@dimen/llCalcBill_tv_width"
                     android:layout_height="wrap_content"
-                    android:textSize="24sp"
+                    android:textSize="@dimen/sales_layout_tv_size"
                     android:fontFamily="sans-serif"
                     android:textColor="@color/white"
                     android:text="Bill R.Off:"
                     android:gravity="right|center_vertical"/>
                 <TextView
-                    android:layout_width="200dp"
+                    android:layout_width="@dimen/llCalcBill_tv_value_width"
                     android:textColor="#000000"
-                    android:textSize="24sp"
+                    android:textSize="@dimen/sales_layout_tv_size"
                     android:textStyle="bold"
                     android:gravity="right|center_vertical"
                     android:fontFamily="sans-serif"
                     android:layout_height="wrap_content"
                     android:id="@+id/billroundoff"
-                    android:text="0"/>
+                    android:text="0"
+                    android:paddingRight="@dimen/llCalcBill_tv_value_rightpadding"/>
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="430dp"
+                android:layout_width="@dimen/rlTotalBillamount_width"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
                 android:layout_marginLeft="13dp"
                 android:layout_marginTop="10dp">
 
                 <TextView
-                    android:layout_width="197dp"
+                    android:layout_width="@dimen/llCalcBill_tv_width"
                     android:layout_height="wrap_content"
-                    android:textSize="24sp"
+                    android:textSize="@dimen/sales_layout_tv_size"
                     android:fontFamily="sans-serif"
                     android:textColor="@color/white"
                     android:text="Net Amount:"
                     android:gravity="right|bottom"/>
 
                 <TextView
-                    android:layout_width="200dp"
+                    android:layout_width="@dimen/llCalcBill_tv_value_width"
                     android:textColor="#000000"
-                    android:textSize="24sp"
+                    android:textSize="@dimen/sales_layout_tv_size"
                     android:textStyle="bold"
                     android:gravity="right|center_vertical"
                     android:fontFamily="sans-serif"
                     android:layout_height="wrap_content"
                     android:id="@+id/billtotal"
-                    android:text="0" />
+                    android:text="0"
+                    android:paddingRight="@dimen/llCalcBill_tv_value_rightpadding"/>
             </LinearLayout>
 
 

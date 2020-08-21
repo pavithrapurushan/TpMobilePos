@@ -14,12 +14,14 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Editable;
 import android.text.Html;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -46,6 +48,7 @@ import java.util.List;
 //Modified by Pavithra on 23-07-2020
 //Modified by Pavithra on 29-07-2020
 //Modified by Pavithra on 03-08-2020
+//Modified by Pavithra on 13-08-2020
 
 public class PaymentActivityNew extends AppCompatActivity {
 
@@ -120,6 +123,17 @@ public class PaymentActivityNew extends AppCompatActivity {
     ImageButton imgBtnAutofillCardAmt;
     ImageButton imgBtnAutofillWalletAmt;
 
+//Following added by Pavithra on 13-08-2020
+    LinearLayout ll1_header_payment;
+    LinearLayout ll_payment_body;
+    LinearLayout ll_payment_tabs;
+    LinearLayout ll_payment_window;
+    double ll1_header_payment_height;
+    double ll_payment_body_height;
+    double ll_payment_tabs_width;
+    double ll_payment_window_width;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -148,7 +162,51 @@ public class PaymentActivityNew extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
 
 //        setContentView(R.layout.activity_payment);      //Commented by Pavithra on 06-07-2020
-        setContentView(R.layout.activity_payment_new);    //Added by Pavithra on 06-07-2020
+//        setContentView(R.layout.activity_payment_new);    //Added  by Pavithra on 06-07-2020  :Commenetd by Pavithra on 13-08-2020
+        setContentView(R.layout.activity_payment);    //Added by Pavithra on 13-08-2020
+
+
+/************************Added by Pavithra on 13-08-2020******************************************************************/
+
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int screen_height = displayMetrics.heightPixels;
+        int screen_width = displayMetrics.widthPixels;
+
+        ll1_header_payment = (LinearLayout)findViewById(R.id.ll1_header_payment);
+        ll_payment_body = (LinearLayout)findViewById(R.id.ll_payment_body);
+        ll_payment_tabs = (LinearLayout)findViewById(R.id.ll_payment_tabs);
+        ll_payment_window = (LinearLayout)findViewById(R.id.ll_payment_window);
+        ll1_header_payment_height = (screen_height * 9.86)/100;
+        ll_payment_body_height = (screen_height * 58.37)/100;
+        ll_payment_tabs_width = (screen_width * 9.07)/100;
+//        ll_payment_window_width = (screen_width * 51.59)/100; //Commented by Pavithra on 19-08-2020
+        ll_payment_window_width = (screen_width * 44)/100;  //Added by Pavithra on 19-08-2020 to increase width of tenderlist
+
+        LinearLayout.LayoutParams paramsllHeaderPaymnt = (LinearLayout.LayoutParams) ll1_header_payment.getLayoutParams();
+        paramsllHeaderPaymnt.height = (int) ll1_header_payment_height;
+        paramsllHeaderPaymnt.width = LinearLayout.LayoutParams.MATCH_PARENT;
+        ll1_header_payment.setLayoutParams(paramsllHeaderPaymnt);
+
+        LinearLayout.LayoutParams parms = (LinearLayout.LayoutParams) ll_payment_body.getLayoutParams();
+        parms.height = (int) ll_payment_body_height;
+        parms.width = LinearLayout.LayoutParams.MATCH_PARENT;
+        ll_payment_body.setLayoutParams(parms);
+
+
+        LinearLayout.LayoutParams parmspaymnttabs = (LinearLayout.LayoutParams) ll_payment_tabs.getLayoutParams();
+        parmspaymnttabs.width = (int) ll_payment_tabs_width;
+        parmspaymnttabs.height = LinearLayout.LayoutParams.MATCH_PARENT;
+        ll_payment_tabs.setLayoutParams(parmspaymnttabs);
+
+
+        LinearLayout.LayoutParams paramsPayWindow = (LinearLayout.LayoutParams) ll_payment_window.getLayoutParams();
+        paramsPayWindow.width = (int) ll_payment_window_width;
+        paramsPayWindow.height = LinearLayout.LayoutParams.MATCH_PARENT;
+        ll_payment_window.setLayoutParams(paramsPayWindow);
+
+/***************************************************************************************************************************/
+
 
         salessummaryDetail = new SalessummaryDetail();
         salesdetailPLObj = new Salesdetail();
@@ -200,7 +258,7 @@ public class PaymentActivityNew extends AppCompatActivity {
         etAUCodeWallet = (EditText) findViewById(R.id.etWalletAUCode);
 
 //        btnPaymentTenderList = (Button) findViewById(R.id.btnPaymntTndrList);
-        tvBadge_count_tenderlist = (TextView) findViewById(R.id.badge_count_tenderlist);
+//        tvBadge_count_tenderlist = (TextView) findViewById(R.id.badge_count_tenderlist);
 
         imgBtnAutofillCashAmt = (ImageButton) findViewById(R.id.imgbBtnAutofillPayment);
         imgBtnAutofillCardAmt = (ImageButton) findViewById(R.id.imgbBtnAutofillPaymentCard);
@@ -215,8 +273,8 @@ public class PaymentActivityNew extends AppCompatActivity {
         String store_id = "3";
         String textStore = "<font color=#ffffff>StoreId : </font> <font color=#ffcc00>"+ store_id +"</font>";
         String textShift = "<font color=#ffffff>ShiftId : </font> <font color=#ffcc00>"+ shiftId +"</font>";
-        tvStoreId.setText(Html.fromHtml(textStore));
-        tvShiftId.setText(Html.fromHtml(textShift));
+//        tvStoreId.setText(Html.fromHtml(textStore));
+//        tvShiftId.setText(Html.fromHtml(textShift));
 /****************************************************************************************************************************/
 
 
@@ -1451,7 +1509,7 @@ public class PaymentActivityNew extends AppCompatActivity {
 
         try {
 
-            tvBadge_count_tenderlist = (TextView) findViewById(R.id.badge_count_tenderlist);
+//            tvBadge_count_tenderlist = (TextView) findViewById(R.id.badge_count_tenderlist);
 
 
             //Below line added by Pavithra on 23-06-2020 to avoid billrow missing in SaveBill

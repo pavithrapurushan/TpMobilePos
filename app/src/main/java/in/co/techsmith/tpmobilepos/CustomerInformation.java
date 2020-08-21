@@ -13,6 +13,7 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
@@ -20,6 +21,8 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,6 +45,7 @@ import java.util.regex.Pattern;
 //Modified by Pavithra on 15-07-2020
 //Modified by Pavithra on 29-07-2020
 //Modified by Pavithra on 03-08-2020
+//Modified by Pavithra on 20-08-2020
 
 
 public class CustomerInformation extends AppCompatActivity {
@@ -73,6 +77,12 @@ public class CustomerInformation extends AppCompatActivity {
 
     Runnable run;
 
+    LinearLayout ll1_header_custinfo;    //Added by Pavithra on 12-08-2020
+    LinearLayout llCustInfoLeftSide;    //Added by Pavithra on 12-08-2020
+    double ll1_header_custinfo_height;   //Added by Pavithra on 12-08-2020
+    double llCustInfoLeftSide_width;   //Added by Pavithra on 12-08-2020
+    double  rlMobNumLookup_width ;   //Added by Pavithra on 12-08-2020
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,7 +90,6 @@ public class CustomerInformation extends AppCompatActivity {
             this.getSupportActionBar().hide();
         } catch (NullPointerException e) {
         }
-
 
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
@@ -100,8 +109,9 @@ public class CustomerInformation extends AppCompatActivity {
                         | View.SYSTEM_UI_FLAG_FULLSCREEN
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
 
-        setContentView(R.layout.activity_customer_information);          //Masked by Pavithra on 28-07-2020
+//        setContentView(R.layout.activity_customer_information);          //Masked by Pavithra on 28-07-2020
 //        setContentView(R.layout.activity_customer_information_new);   // Added by Pavithra on 28-07-2020
+        setContentView(R.layout.activity_customerinformation);   // Added by Pavithra on 12-08-2020
 
 //        TextView tvCustInfo = (TextView) findViewById(R.id.customer_in);
 ////        String text = "<font color=#cc0029>Customer</font> <font color=#ffcc00>Information</font>";
@@ -109,6 +119,31 @@ public class CustomerInformation extends AppCompatActivity {
 //        String text = "<font color=#cc0029>StoreId : </font> <font color=#ffcc00> Information"+ temp +"</font>";
 //        tvCustInfo.setText(Html.fromHtml(text));
 
+/*******************Added by Pavithra on 12-08-2020****************************************************/
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int screen_height = displayMetrics.heightPixels;
+        int screen_width = displayMetrics.widthPixels;
+
+
+        ll1_header_custinfo = (LinearLayout)findViewById(R.id.ll1_header_custinfo);
+        llCustInfoLeftSide = (LinearLayout)findViewById(R.id.llCustInfoLeftSide);
+        ll1_header_custinfo_height = (screen_height * 9.86)/100;
+        llCustInfoLeftSide_width = (screen_width * 45)/100;
+        rlMobNumLookup_width  = (screen_width * 50)/100;
+
+        LinearLayout.LayoutParams paramsllHeader = (LinearLayout.LayoutParams) ll1_header_custinfo.getLayoutParams();
+        paramsllHeader.height = (int) ll1_header_custinfo_height;
+        paramsllHeader.width = LinearLayout.LayoutParams.MATCH_PARENT;
+        ll1_header_custinfo.setLayoutParams(paramsllHeader);
+
+
+        LinearLayout.LayoutParams parammsCustLeftSide = (LinearLayout.LayoutParams) llCustInfoLeftSide.getLayoutParams();
+        parammsCustLeftSide.height =  LinearLayout.LayoutParams.MATCH_PARENT;
+        parammsCustLeftSide.width = (int) llCustInfoLeftSide_width;
+        llCustInfoLeftSide.setLayoutParams(parammsCustLeftSide);
+
+/******************************************************************************************************/
 
         TextView tvStoreId = (TextView) findViewById(R.id.tvStoreIdCustInfo);
         TextView tvShiftId = (TextView) findViewById(R.id.tvShiftIdCustInfo);
@@ -141,8 +176,8 @@ public class CustomerInformation extends AppCompatActivity {
         String store_id = "3";
         String textStore = "<font color=#ffffff>StoreId : </font> <font color=#ffcc00>"+ store_id +"</font>";
         String textShift = "<font color=#ffffff>ShiftId : </font> <font color=#ffcc00>"+ shiftId +"</font>";
-        tvStoreId.setText(Html.fromHtml(textStore));
-        tvShiftId.setText(Html.fromHtml(textShift));
+//        tvStoreId.setText(Html.fromHtml(textStore));  //commented tem by pavithra on 12-08-2020
+//        tvShiftId.setText(Html.fromHtml(textShift));
 /****************************************************************************************************************************/
 
 
@@ -518,12 +553,7 @@ public class CustomerInformation extends AppCompatActivity {
                     String loyaltycustomerDetailsResponseObjStr = gson.toJson(loyaltycustomerDetailsResponseObj);
 
 
-
-
 /********************************************************************************************************************************************************/
-
-
-
 
                 String loyalty_id = prefs.getString("LoyaltyId", "");
                 loyaltyCustomer.LoyaltyId = loyalty_id; //LoyaltyId should pass here
@@ -637,6 +667,14 @@ public class CustomerInformation extends AppCompatActivity {
                     dialog.setCanceledOnTouchOutside(false);
                     dialog.setTitle("Customer Lookup");
 
+//                    RelativeLayout rlMobNumLookup = (RelativeLayout)findViewById(R.id.rlMobNumLookup);
+//
+//                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) rlMobNumLookup.getLayoutParams();
+//                    params.height =  LinearLayout.LayoutParams.WRAP_CONTENT;
+//                    params.width = (int) rlMobNumLookup_width;
+//                    rlMobNumLookup.setLayoutParams(params);
+
+
                     RecyclerView recyclerView = (RecyclerView) dialog.findViewById(R.id.mobilelist);
                     //Below context added by 1165 on 12-02-2020
                     cadapter = new CustomerLookupAdapter(CustomerInformation.this, items, edtname, edtmob, edtmail, address1, edtaddress2, edtaddress3, edtmob2, edtPrescribingDoctor, dialog);
@@ -735,7 +773,7 @@ public class CustomerInformation extends AppCompatActivity {
                     ArrayList<LoyaltyCustomerList> items = new ArrayList<>();
                     LoyaltyCustomerLookUpResponse loyaltyCustomerLookUpResponse = new LoyaltyCustomerLookUpResponse();
                     loyaltyCustomerLookUpResponse = gson.fromJson(result, LoyaltyCustomerLookUpResponse.class);
-                    List<LoyaltyCustomer> LoyaltyCustomer = loyaltyCustomerLookUpResponse.LoyaltyCustomerLookup.LoyaltyCustomer;
+                    List<LoyaltyCustomer> LoyaltyCustomer = loyaltyCustomerLookUpResponse.LoyaltyCustomerLookup.LoyaltyCustomer;  //Pass this LoyaltyCustomer to Adapter
                     LoyaltyCustomerList[] myListData = new LoyaltyCustomerList[0];
                    // Toast.makeText(CustomerInformation.this, "helloo", Toast.LENGTH_SHORT).show();
                     if(loyaltyCustomerLookup.ErrorStatus==1)
@@ -749,7 +787,8 @@ public class CustomerInformation extends AppCompatActivity {
                         dialog.setCanceledOnTouchOutside(false);
                         dialog.setTitle("Loyalty Customer Lookup");
                         RecyclerView recyclerView = (RecyclerView) dialog.findViewById(R.id.loyaltylist);
-                        adapter = new LoyaltyCustomerLookupAdapter(CustomerInformation.this,items, edtname, edtmob, edtmail, edtloyaltycode, dialog);
+//                        adapter = new LoyaltyCustomerLookupAdapter(CustomerInformation.this,items, edtname, edtmob, edtmail, edtloyaltycode, dialog); //commented by Pavithra on 20-08-2020
+                        adapter = new LoyaltyCustomerLookupAdapter(CustomerInformation.this,LoyaltyCustomer, edtname, edtmob, edtmail, edtloyaltycode, dialog); //Added by Pavithra on 20-08-2020
                         recyclerView.setAdapter(adapter);
                         for (int i = 0; i < LoyaltyCustomer.size(); i++) {
                             LoyaltyCustomer loyaltyCustomer = LoyaltyCustomer.get(i);

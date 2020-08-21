@@ -1,96 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!--Added by Pavithra on 14-08-2020-->
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:gravity="center_vertical">
 
     <LinearLayout
-        android:layout_width="900dp"
-        android:layout_height="56dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="horizontal"
-        android:background="@drawable/batchlst2">
-        <!--android:layout_width="1109dp"-->
-
-        <TextView
-            android:layout_marginLeft="30.32dp"
-            android:layout_width="29.24dp"
-            android:fontFamily="sans-serif"
-            android:textStyle="bold"
-            android:textColor="#000000"
-            android:layout_marginTop="16dp"
-            android:layout_height="23dp"
-            android:id="@+id/slno" />
-        <TextView
-            android:layout_marginLeft="30.32dp"
-            android:layout_width="175.45dp"
-            android:textStyle="bold"
-            android:textColor="#000000"
-            android:layout_marginTop="16dp"
-            android:layout_height="wrap_content"
-            android:id="@+id/tvTenderType"/>
-        <TextView
-            android:layout_marginLeft="85.32dp"
-            android:layout_width="190dp"
-            android:textStyle="bold"
-            android:textColor="#000000"
-            android:layout_marginTop="16dp"
-            android:layout_height="23dp"
-            android:id="@+id/tvTenderDetail"/>
-
-        <!--android:layout_width="145.12dp"-->
-
-        <TextView
-            android:layout_marginLeft="35.38dp"
-            android:layout_width="150dp"
-            android:textStyle="bold"
-            android:textColor="#000000"
-            android:layout_marginTop="16dp"
-            android:layout_height="24dp"
-            android:id="@+id/manufacturer"/>
-        <TextView
-            android:layout_marginLeft="20dp"
-            android:layout_width="100dp"
-            android:textStyle="bold"
-            android:textColor="#000000"
-            android:layout_marginTop="16dp"
-            android:layout_height="23dp"
-            android:id="@+id/tvTenderValue"
-            android:gravity="right"
-            android:layout_marginRight="10dp"/> <!--Added by Pavithra on 02-07-2020 -->
-        <!--android:layout_marginLeft="82.12dp"-->
-        <!--android:layout_marginLeft="32.12dp"-->
-
-
-
+        android:background="@drawable/batchlst2"
+        android:layout_gravity="center_vertical">
         <ImageButton
 
-            android:layout_marginLeft="10dp"
-            android:layout_width="24dp"
+            android:layout_width="wrap_content"
             android:textStyle="bold"
-            android:layout_marginTop="16dp"
-            android:layout_height="24dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
             android:id="@+id/imgBtnTenderDelete"
             android:src="@drawable/delete"
             android:background="@null"
-            android:layout_marginRight="20dp"/>
+            android:layout_weight="0.1" />
 
-        <!--<TextView-->
-            <!--android:layout_marginLeft="10.24dp"-->
-            <!--android:layout_width="100dp"-->
-            <!--android:textStyle="bold"-->
-            <!--android:textColor="#000000"-->
-            <!--android:layout_marginTop="16dp"-->
-            <!--android:layout_height="23dp"-->
-            <!--android:id="@+id/mrp"/>-->
+        <TextView
+            android:layout_width="0dp"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:id="@+id/tvTenderDetail"
+            android:layout_gravity="center_vertical" />
 
-        <!--<TextView-->
-            <!--android:layout_marginLeft="44.95dp"-->
-            <!--android:layout_width="62.81dp"-->
-            <!--android:textStyle="bold"-->
-            <!--android:textColor="#000000"-->
-            <!--android:layout_marginTop="16dp"-->
-            <!--android:layout_height="23dp"-->
-            <!--android:id="@+id/soh"/>-->
+        <ImageButton
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textStyle="bold"
+            android:id="@+id/imgBtnTenderType"
+            android:background="@null"
+            android:layout_weight="0.1"
+            android:layout_gravity="center_vertical" />
+
+        <!--24dp 32dp-->
+
+        <TextView
+            android:layout_width="0dp"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:layout_gravity="center_vertical"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvTenderValue"
+            android:gravity="right"
+            android:layout_weight="0.3"
+            android:layout_marginRight="10dp"
+            android:paddingRight="5dp"/>
 
     </LinearLayout>
 

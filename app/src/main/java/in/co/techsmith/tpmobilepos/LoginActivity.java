@@ -14,8 +14,10 @@ import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.DatePicker;
@@ -262,27 +264,56 @@ public class LoginActivity extends AppCompatActivity {
 
 
     //Added by Pavithra on 29-07-2020
-    public void tsErrorMessage(String error_massage){
+    public void tsErrorMessage(String error_massage) {
 
         final Dialog dialog = new Dialog(LoginActivity.this);
         dialog.setContentView(R.layout.custom_save_popup);
         final String title = "Message";
 
-        TextView dialogTitle = (TextView)dialog.findViewById(R.id.txvSaveTitleDialog);
+        TextView dialogTitle = (TextView) dialog.findViewById(R.id.txvSaveTitleDialog);
         dialogTitle.setText(title);
         dialog.getWindow().setBackgroundDrawableResource(R.color.colorPrimary);
-        dialog. getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+//Commented by Pavithra on 20-08-2020 followin 2 lines
+//        int height_of_popup = 500;
+//        int width_of_popup = 400;
+//        int height_of_popup = 700;
+//        int width_of_popup = 500;
 
-        int height_of_popup = 500;
-        int width_of_popup = 400;
-        dialog.getWindow().setLayout(width_of_popup, height_of_popup);
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        int screen_height = displayMetrics.heightPixels;
+        int screen_width = displayMetrics.widthPixels;
+
+
+
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+        layoutParams.copyFrom(dialog.getWindow().getAttributes());
+        int dialogWindowWidth = (int) (screen_width * 0.3f);
+        int dialogWindowHeight = (int) (screen_height * 0.3f);
+        layoutParams.width = dialogWindowWidth;
+        layoutParams.height = dialogWindowHeight;
+        dialog.getWindow().setAttributes(layoutParams);
+
+
+//        int height_of_popup = (int) ((screen_height * 40) / 100);
+//        int width_of_popup = (int) ((screen_width * 25) / 100);
+
+
+//        int width = (int)(getResources().getDisplayMetrics().widthPixels*0.90);
+//        int height = (int)(getResources().getDisplayMetrics().heightPixels*0.90);
+//
+//        dialog.getWindow().setLayout(width,  ViewGroup.LayoutParams.MATCH_PARENT);
+
+
+//        dialog.getWindow().setLayout(width_of_popup, height_of_popup);
         dialog.show();
 
         final TextView tvSaveStatus = (TextView) dialog.findViewById(R.id.tvSaveStatus);
 //        tvSaveStatus.setText("Successfully saved \n Token No = "+tokenNo);
-        tvSaveStatus.setText(""+error_massage);
+        tvSaveStatus.setText("" + error_massage);
 
-        Button btnOkPopup = (Button)dialog.findViewById(R.id.btnOkPopUp);
+        Button btnOkPopup = (Button) dialog.findViewById(R.id.btnOkPopUp);
 
         btnOkPopup.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -291,7 +322,6 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
-
 
 
     public void tsMessage(String msg) {

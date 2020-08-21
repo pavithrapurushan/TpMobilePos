@@ -17,6 +17,7 @@ import java.util.ArrayList;
 
 
 //Modified by Pavithra on 02-07-2020
+//Modified by Pavithra on 14-08-2020
 class WalletLookupAdapter extends RecyclerView.Adapter<WalletLookupAdapter.ViewHolder>  {
 
     int index = -1;
@@ -49,7 +50,7 @@ class WalletLookupAdapter extends RecyclerView.Adapter<WalletLookupAdapter.ViewH
        // final Walletlist walletlist = listdata[position];
         holder.txtwalletid.setText(walletlistdata.get(position).getWalletdid());
         holder.txtwalletname.setText(walletlistdata.get(position).getWalletname());
-        holder.txtcompany.setText(walletlistdata.get(position).getCompany());
+//        holder.txtcompany.setText(walletlistdata.get(position).getCompany()); //Commented by Pavithra on 14-08-2020
 
         holder.relativeLayout.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -111,7 +112,7 @@ class WalletLookupAdapter extends RecyclerView.Adapter<WalletLookupAdapter.ViewH
             super(itemView);
             this.txtwalletid = (TextView) itemView.findViewById(R.id.walletId);
             this.txtwalletname = (TextView) itemView.findViewById(R.id.walletName);
-            this.txtcompany = (TextView) itemView.findViewById(R.id.company);
+//            this.txtcompany = (TextView) itemView.findViewById(R.id.company);  //Commented by Pavithra on 14-08-2020
             relativeLayout = (RelativeLayout) itemView.findViewById(R.id.walletlookuprow);
         }
     }

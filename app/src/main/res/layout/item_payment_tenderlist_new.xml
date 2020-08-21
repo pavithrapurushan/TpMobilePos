@@ -2,6 +2,8 @@
 
 <!--Created by Pavithra on 07-07-2020-->
 
+<!--currently not used this layout-->
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"

@@ -2,6 +2,7 @@
 
 <!-- Modified by Pavithra on 02-07-2020-->
 <!-- Modified by Pavithra on 30-07-2020-->
+<!-- Modified by Pavithra on 18-08-2020-->
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -15,42 +16,35 @@
     android:id="@+id/qtysearch"
     tools:context=".SalesActivity">
     <ImageButton
-        android:layout_width="37.33dp"
-        android:layout_height="37.33dp"
-        android:layout_marginLeft="31.33dp"
-        android:layout_marginTop="39.33dp"
+        android:layout_width="37.33px"
+        android:layout_height="37.33px"
+        android:layout_marginLeft="31.33px"
+        android:layout_marginTop="39.33px"
         android:background="@drawable/batchdelete"
         android:id="@+id/cancel"/>
 
-    <!--<TextView-->
-        <!--android:layout_width="match_parent"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:text="Quantity Selection"-->
-        <!--android:textSize="50dp"-->
-        <!--android:gravity="center"-->
-        <!--android:textColor="@color/white"-->
-        <!--android:textStyle="bold"/>-->
+
 
     <EditText
         android:id="@+id/etqtyselection"
-        android:layout_width ="800dp"
+        android:layout_width ="800px"
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/view2"
         android:layout_alignParentTop="true"
         android:layout_alignStart="@+id/view2"
-        android:layout_marginTop="11dp"
+        android:layout_marginTop="11px"
         android:background="@android:color/transparent"
         android:fontFamily="sans-serif"
         android:textColor="#FFBB33"
         android:textCursorDrawable="@drawable/color_cursor"
-        android:textSize="40sp"
+        android:textSize="40px"
         android:enabled="false"
         android:textStyle="bold" />
     <!--android:textSize="50sp"-->
 
     <View
-        android:layout_width="750dp"
-        android:layout_height="5dp"
+        android:layout_width="750px"
+        android:layout_height="5px"
         android:layout_alignLeft="@+id/etqtyselection"
         android:layout_alignStart="@+id/etqtyselection"
         android:layout_below="@+id/etqtyselection"
@@ -63,8 +57,8 @@
         android:layout_height="wrap_content"
         android:layout_toRightOf="@+id/etview"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="11dp"
-        android:layout_marginLeft="100dp"
+        android:layout_marginTop="11px"
+        android:layout_marginLeft="100px"
         android:background="@android:color/transparent"
         android:fontFamily="sans-serif"
         android:textColor="@color/white"
@@ -72,53 +66,42 @@
         android:enabled="false"
         android:textStyle="bold"
         android:singleLine="true"
-        android:textSize="40sp" /> <!-- Added by Pavithra on 02-07-2020-->
+        android:textSize="40px" /> <!-- Added by Pavithra on 02-07-2020-->
 
     <!-- earlier textsize 50sp-->
     <View
-        android:layout_width="200dp"
-        android:layout_height="6dp"
+        android:layout_width="200px"
+        android:layout_height="6px"
         android:layout_alignLeft="@+id/etbatch"
         android:layout_alignStart="@+id/etbatch"
         android:layout_below="@+id/etbatch"
         android:background="@drawable/batchline"
         android:id="@+id/etview1"
-        android:layout_marginBottom="100dp"/>
-
-
-
-
-    <!--<RelativeLayout-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-
-        <!--android:layout_marginTop="200dp">-->
+        android:layout_marginBottom="100px"/>
 
 
     <View
-        android:layout_width="194.02dp"
-        android:layout_height="196dp"
+        android:layout_width="194.02px"
+        android:layout_height="196px"
         android:background="#005068"
-        android:layout_marginTop="121dp"
-
-        android:layout_marginLeft="129dp"
+        android:layout_marginTop="121px"
+        android:layout_marginLeft="129px"
         android:id="@+id/view2" />
     <!--android:layout_marginTop="121dp"-->
 
     <TextView
-        android:layout_width="180.16dp"
+        android:layout_width="180.16px"
         android:layout_height="wrap_content"
-        android:textSize="24sp"
+        android:textSize="24px"
         android:textStyle="bold"
-        android:layout_marginTop="141dp"
-        android:layout_marginLeft="144.84dp"
+        android:layout_marginTop="141px"
+        android:layout_marginLeft="144.84px"
         android:gravity="center_vertical"
         android:textColor="@color/white"
-        android:text="Pack Quantity"
-        />
+        android:text="Pack Quantity"/>
 
     <EditText
-        android:layout_width="161.35dp"
+        android:layout_width="161.35px"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/view3"
         android:layout_alignEnd="@+id/view2"
@@ -129,56 +112,56 @@
         android:id="@+id/packqty"
         android:textColor="#FFBB33"
         android:textCursorDrawable="@drawable/color_cursor"
-        android:textSize="64dp"
+        android:textSize="64px"
         android:textStyle="bold"
         android:inputType="numberDecimal"/>
 
     <View
-        android:layout_width="118.79dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="271dp"
-        android:layout_marginLeft="144.84dp"
+        android:layout_width="118.79px"
+        android:layout_height="1px"
+        android:layout_marginTop="271px"
+        android:layout_marginLeft="144.84px"
         android:background="@drawable/qtyline"
         android:id="@+id/view3" />
     <ImageButton
         android:id="@+id/qtyadd"
-        android:layout_width="53.33dp"
-        android:layout_height="53.33dp"
-        android:layout_marginLeft="342.33dp"
-        android:layout_marginTop="126.33dp"
+        android:layout_width="53.33px"
+        android:layout_height="53.33px"
+        android:layout_marginLeft="342.33px"
+        android:layout_marginTop="126.33px"
         android:background="@drawable/plusicon"
         />
     <ImageButton
         android:id="@+id/qtyminus"
-        android:layout_width="53.33dp"
-        android:layout_height="53.33dp"
-        android:layout_marginTop="258.33dp"
-        android:layout_marginLeft="342.33dp"
+        android:layout_width="53.33px"
+        android:layout_height="53.33px"
+        android:layout_marginTop="258.33px"
+        android:layout_marginLeft="342.33px"
         android:background="@drawable/minusicon"
         />
 
 
     <View
-        android:layout_width="193.95dp"
-        android:layout_height="196dp"
+        android:layout_width="193.95px"
+        android:layout_height="196px"
         android:background="#005068"
-        android:layout_marginTop="121dp"
-        android:layout_marginLeft="473dp"
+        android:layout_marginTop="121px"
+        android:layout_marginLeft="473px"
         android:id="@+id/view" />
 
     <TextView
         android:id="@+id/tvUnitQtyHeading"
-        android:layout_width="180.1dp"
+        android:layout_width="180.1px"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:text="Unit Quantity"
-        android:layout_marginTop="140.44dp"
-        android:layout_marginLeft="488.76dp"
+        android:layout_marginTop="140.44px"
+        android:layout_marginLeft="488.76px"
         android:textColor="@color/white"
-        android:textSize="24sp"
+        android:textSize="24px"
         android:textStyle="bold" />
     <EditText
-        android:layout_width="161.35dp"
+        android:layout_width="161.35px"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/unitline"
         android:layout_alignEnd="@+id/view"
@@ -190,54 +173,54 @@
         android:id="@+id/unitqty"
         android:textColor="#FFBB33"
         android:textCursorDrawable="@drawable/color_cursor"
-        android:textSize="64dp"
+        android:textSize="64px"
         android:textStyle="bold"
         android:enabled="true"
-        android:inputType="numberDecimal"/>  <!--added by Pavithra on 30-07-2020 -->
+        android:inputType="numberDecimal"/>  <!--added by Pavithra on 30-07-2020-->
     <View
-        android:layout_width="118.79dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="271dp"
-        android:layout_marginLeft="488.83dp"
+        android:layout_width="118.79px"
+        android:layout_height="1px"
+        android:layout_marginTop="271px"
+        android:layout_marginLeft="488.83px"
         android:background="@drawable/qtyline"
         android:id="@+id/unitline"/>
     <ImageButton
         android:id="@+id/unitqtyadd"
-        android:layout_width="53.33dp"
-        android:layout_height="53.33dp"
-        android:layout_marginLeft="686.33dp"
-        android:layout_marginTop="126.33dp"
+        android:layout_width="53.33px"
+        android:layout_height="53.33px"
+        android:layout_marginLeft="686.33px"
+        android:layout_marginTop="126.33px"
         android:background="@drawable/plusicon" />
     <ImageButton
         android:id="@+id/unitqtyminus"
-        android:layout_width="53.33dp"
-        android:layout_height="53.33dp"
-        android:layout_marginTop="258.33dp"
-        android:layout_marginLeft="686.33dp"
+        android:layout_width="53.33px"
+        android:layout_height="53.33px"
+        android:layout_marginTop="258.33px"
+        android:layout_marginLeft="686.33px"
         android:background="@drawable/minusicon" />
 
     <View
-        android:layout_width="193.95dp"
-        android:layout_height="196dp"
+        android:layout_width="193.95px"
+        android:layout_height="196px"
         android:background="#005068"
-        android:layout_marginTop="121dp"
-        android:layout_marginLeft="807dp"
+        android:layout_marginTop="121px"
+        android:layout_marginLeft="807px"
         android:id="@+id/totalview" />
 
     <TextView
-        android:layout_width="180.1dp"
+        android:layout_width="180.1px"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
         android:text="Total Quantity"
-        android:layout_marginTop="140.44dp"
-        android:layout_marginLeft="822.76dp"
+        android:layout_marginTop="140.44px"
+        android:layout_marginLeft="822.76px"
         android:textColor="@color/white"
-        android:textSize="24sp"
+        android:textSize="24px"
         android:textStyle="bold"
         />
 
     <EditText
-        android:layout_width="161.35dp"
+        android:layout_width="161.35px"
         android:layout_height="wrap_content"
         android:layout_alignBaseline="@+id/unitqty"
         android:layout_alignBottom="@+id/unitqty"
@@ -248,31 +231,318 @@
         android:gravity="bottom"
         android:textColor="#FFBB33"
         android:textCursorDrawable="@drawable/color_cursor"
-        android:textSize="64dp"
+        android:textSize="64px"
         android:id="@+id/totalqty"
         android:enabled="false"/>  <!--Added by Pavithra on 17-07-2020 -->
     <View
-        android:layout_width="118.79dp"
-        android:layout_height="1dp"
-        android:layout_marginTop="271dp"
-        android:layout_marginLeft="1500dp"
+        android:layout_width="118.79px"
+        android:layout_height="1px"
+        android:layout_marginTop="271px"
+        android:layout_marginLeft="822.76px"
         android:background="@drawable/qtyline"
         android:id="@+id/view6" />
+
+    <!--prev 1500-->
 
     <!--</RelativeLayout>-->
 
     <Button
-        android:layout_width="150dp"
-        android:layout_height="wrap_content"
+        android:layout_width="160px"
+        android:layout_height="72px"
         android:gravity="center"
         android:textStyle="bold"
         android:fontFamily="sans-serif"
         android:textColor="@color/white"
-        android:textSize="36dp"
+        android:textSize="36px"
         android:background="@drawable/editbutton"
-        android:layout_marginLeft="1089dp"
-        android:layout_marginTop="199dp"
+        android:layout_marginLeft="1089px"
+        android:layout_marginTop="199px"
         android:text="Submit"
-        android:id="@+id/submit"
-        />
+        android:id="@+id/submit"/>
 </RelativeLayout>
+
+
+
+
+
+
+
+<!--Following commented by Pavithra on 18-08-2020-->
+    <!--<?xml version="1.0" encoding="utf-8"?>-->
+
+<!--&lt;!&ndash; Modified by Pavithra on 02-07-2020&ndash;&gt;-->
+<!--&lt;!&ndash; Modified by Pavithra on 30-07-2020&ndash;&gt;-->
+
+<!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--xmlns:app="http://schemas.android.com/apk/res-auto"-->
+    <!--xmlns:tools="http://schemas.android.com/tools"-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:orientation="horizontal"-->
+    <!--android:layout_alignParentLeft="true"-->
+    <!--android:layout_gravity="center"-->
+    <!--android:background="#237C96"-->
+    <!--android:layout_height="match_parent"-->
+    <!--android:id="@+id/qtysearch"-->
+    <!--tools:context=".SalesActivity">-->
+    <!--<ImageButton-->
+        <!--android:layout_width="37.33dp"-->
+        <!--android:layout_height="37.33dp"-->
+        <!--android:layout_marginLeft="31.33dp"-->
+        <!--android:layout_marginTop="39.33dp"-->
+        <!--android:background="@drawable/batchdelete"-->
+        <!--android:id="@+id/cancel"/>-->
+
+    <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_width="match_parent"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:text="Quantity Selection"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:textSize="50dp"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:gravity="center"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:textColor="@color/white"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:textStyle="bold"/>&ndash;&gt;-->
+
+    <!--<EditText-->
+        <!--android:id="@+id/etqtyselection"-->
+        <!--android:layout_width ="800dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignLeft="@+id/view2"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_alignStart="@+id/view2"-->
+        <!--android:layout_marginTop="11dp"-->
+        <!--android:background="@android:color/transparent"-->
+        <!--android:fontFamily="sans-serif"-->
+        <!--android:textColor="#FFBB33"-->
+        <!--android:textCursorDrawable="@drawable/color_cursor"-->
+        <!--android:textSize="40sp"-->
+        <!--android:enabled="false"-->
+        <!--android:textStyle="bold" />-->
+    <!--&lt;!&ndash;android:textSize="50sp"&ndash;&gt;-->
+
+    <!--<View-->
+        <!--android:layout_width="750dp"-->
+        <!--android:layout_height="5dp"-->
+        <!--android:layout_alignLeft="@+id/etqtyselection"-->
+        <!--android:layout_alignStart="@+id/etqtyselection"-->
+        <!--android:layout_below="@+id/etqtyselection"-->
+        <!--android:background="@drawable/batchline"-->
+        <!--android:id="@+id/etview"/>-->
+
+    <!--<EditText-->
+        <!--android:id="@+id/etbatch"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_toRightOf="@+id/etview"-->
+        <!--android:layout_alignParentTop="true"-->
+        <!--android:layout_marginTop="11dp"-->
+        <!--android:layout_marginLeft="100dp"-->
+        <!--android:background="@android:color/transparent"-->
+        <!--android:fontFamily="sans-serif"-->
+        <!--android:textColor="@color/white"-->
+        <!--android:textCursorDrawable="@drawable/color_cursor"-->
+        <!--android:enabled="false"-->
+        <!--android:textStyle="bold"-->
+        <!--android:singleLine="true"-->
+        <!--android:textSize="40sp" /> &lt;!&ndash; Added by Pavithra on 02-07-2020&ndash;&gt;-->
+
+    <!--&lt;!&ndash; earlier textsize 50sp&ndash;&gt;-->
+    <!--<View-->
+        <!--android:layout_width="200dp"-->
+        <!--android:layout_height="6dp"-->
+        <!--android:layout_alignLeft="@+id/etbatch"-->
+        <!--android:layout_alignStart="@+id/etbatch"-->
+        <!--android:layout_below="@+id/etbatch"-->
+        <!--android:background="@drawable/batchline"-->
+        <!--android:id="@+id/etview1"-->
+        <!--android:layout_marginBottom="100dp"/>-->
+
+
+
+
+    <!--&lt;!&ndash;<RelativeLayout&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_width="wrap_content"&ndash;&gt;-->
+        <!--&lt;!&ndash;android:layout_height="wrap_content"&ndash;&gt;-->
+
+        <!--&lt;!&ndash;android:layout_marginTop="200dp">&ndash;&gt;-->
+
+
+    <!--<View-->
+        <!--android:layout_width="194.02dp"-->
+        <!--android:layout_height="196dp"-->
+        <!--android:background="#005068"-->
+        <!--android:layout_marginTop="121dp"-->
+
+        <!--android:layout_marginLeft="129dp"-->
+        <!--android:id="@+id/view2" />-->
+    <!--&lt;!&ndash;android:layout_marginTop="121dp"&ndash;&gt;-->
+
+    <!--<TextView-->
+        <!--android:layout_width="180.16dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:textSize="24sp"-->
+        <!--android:textStyle="bold"-->
+        <!--android:layout_marginTop="141dp"-->
+        <!--android:layout_marginLeft="144.84dp"-->
+        <!--android:gravity="center_vertical"-->
+        <!--android:textColor="@color/white"-->
+        <!--android:text="Pack Quantity"-->
+        <!--/>-->
+
+    <!--<EditText-->
+        <!--android:layout_width="161.35dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignBottom="@+id/view3"-->
+        <!--android:layout_alignEnd="@+id/view2"-->
+        <!--android:layout_alignRight="@+id/view2"-->
+        <!--android:background="@android:color/transparent"-->
+        <!--android:fontFamily="sans-serif-thin"-->
+        <!--android:text="1"-->
+        <!--android:id="@+id/packqty"-->
+        <!--android:textColor="#FFBB33"-->
+        <!--android:textCursorDrawable="@drawable/color_cursor"-->
+        <!--android:textSize="64dp"-->
+        <!--android:textStyle="bold"-->
+        <!--android:inputType="numberDecimal"/>-->
+
+    <!--<View-->
+        <!--android:layout_width="118.79dp"-->
+        <!--android:layout_height="1dp"-->
+        <!--android:layout_marginTop="271dp"-->
+        <!--android:layout_marginLeft="144.84dp"-->
+        <!--android:background="@drawable/qtyline"-->
+        <!--android:id="@+id/view3" />-->
+    <!--<ImageButton-->
+        <!--android:id="@+id/qtyadd"-->
+        <!--android:layout_width="53.33dp"-->
+        <!--android:layout_height="53.33dp"-->
+        <!--android:layout_marginLeft="342.33dp"-->
+        <!--android:layout_marginTop="126.33dp"-->
+        <!--android:background="@drawable/plusicon"-->
+        <!--/>-->
+    <!--<ImageButton-->
+        <!--android:id="@+id/qtyminus"-->
+        <!--android:layout_width="53.33dp"-->
+        <!--android:layout_height="53.33dp"-->
+        <!--android:layout_marginTop="258.33dp"-->
+        <!--android:layout_marginLeft="342.33dp"-->
+        <!--android:background="@drawable/minusicon"-->
+        <!--/>-->
+
+
+    <!--<View-->
+        <!--android:layout_width="193.95dp"-->
+        <!--android:layout_height="196dp"-->
+        <!--android:background="#005068"-->
+        <!--android:layout_marginTop="121dp"-->
+        <!--android:layout_marginLeft="473dp"-->
+        <!--android:id="@+id/view" />-->
+
+    <!--<TextView-->
+        <!--android:id="@+id/tvUnitQtyHeading"-->
+        <!--android:layout_width="180.1dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:gravity="center_vertical"-->
+        <!--android:text="Unit Quantity"-->
+        <!--android:layout_marginTop="140.44dp"-->
+        <!--android:layout_marginLeft="488.76dp"-->
+        <!--android:textColor="@color/white"-->
+        <!--android:textSize="24sp"-->
+        <!--android:textStyle="bold" />-->
+    <!--<EditText-->
+        <!--android:layout_width="161.35dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignBottom="@+id/unitline"-->
+        <!--android:layout_alignEnd="@+id/view"-->
+        <!--android:layout_alignRight="@+id/view"-->
+        <!--android:background="@android:color/transparent"-->
+        <!--android:fontFamily="sans-serif-thin"-->
+        <!--android:text="0"-->
+        <!--android:hint="Qty"-->
+        <!--android:id="@+id/unitqty"-->
+        <!--android:textColor="#FFBB33"-->
+        <!--android:textCursorDrawable="@drawable/color_cursor"-->
+        <!--android:textSize="64dp"-->
+        <!--android:textStyle="bold"-->
+        <!--android:enabled="true"-->
+        <!--android:inputType="numberDecimal"/>  &lt;!&ndash;added by Pavithra on 30-07-2020 &ndash;&gt;-->
+    <!--<View-->
+        <!--android:layout_width="118.79dp"-->
+        <!--android:layout_height="1dp"-->
+        <!--android:layout_marginTop="271dp"-->
+        <!--android:layout_marginLeft="488.83dp"-->
+        <!--android:background="@drawable/qtyline"-->
+        <!--android:id="@+id/unitline"/>-->
+    <!--<ImageButton-->
+        <!--android:id="@+id/unitqtyadd"-->
+        <!--android:layout_width="53.33dp"-->
+        <!--android:layout_height="53.33dp"-->
+        <!--android:layout_marginLeft="686.33dp"-->
+        <!--android:layout_marginTop="126.33dp"-->
+        <!--android:background="@drawable/plusicon" />-->
+    <!--<ImageButton-->
+        <!--android:id="@+id/unitqtyminus"-->
+        <!--android:layout_width="53.33dp"-->
+        <!--android:layout_height="53.33dp"-->
+        <!--android:layout_marginTop="258.33dp"-->
+        <!--android:layout_marginLeft="686.33dp"-->
+        <!--android:background="@drawable/minusicon" />-->
+
+    <!--<View-->
+        <!--android:layout_width="193.95dp"-->
+        <!--android:layout_height="196dp"-->
+        <!--android:background="#005068"-->
+        <!--android:layout_marginTop="121dp"-->
+        <!--android:layout_marginLeft="807dp"-->
+        <!--android:id="@+id/totalview" />-->
+
+    <!--<TextView-->
+        <!--android:layout_width="180.1dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:gravity="center_vertical"-->
+        <!--android:text="Total Quantity"-->
+        <!--android:layout_marginTop="140.44dp"-->
+        <!--android:layout_marginLeft="822.76dp"-->
+        <!--android:textColor="@color/white"-->
+        <!--android:textSize="24sp"-->
+        <!--android:textStyle="bold"-->
+        <!--/>-->
+
+    <!--<EditText-->
+        <!--android:layout_width="161.35dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_alignBaseline="@+id/unitqty"-->
+        <!--android:layout_alignBottom="@+id/unitqty"-->
+        <!--android:layout_alignEnd="@+id/totalview"-->
+        <!--android:layout_alignRight="@+id/totalview"-->
+        <!--android:background="@android:color/transparent"-->
+        <!--android:fontFamily="sans-serif"-->
+        <!--android:gravity="bottom"-->
+        <!--android:textColor="#FFBB33"-->
+        <!--android:textCursorDrawable="@drawable/color_cursor"-->
+        <!--android:textSize="64dp"-->
+        <!--android:id="@+id/totalqty"-->
+        <!--android:enabled="false"/>  &lt;!&ndash;Added by Pavithra on 17-07-2020 &ndash;&gt;-->
+    <!--<View-->
+        <!--android:layout_width="118.79dp"-->
+        <!--android:layout_height="1dp"-->
+        <!--android:layout_marginTop="271dp"-->
+        <!--android:layout_marginLeft="1500dp"-->
+        <!--android:background="@drawable/qtyline"-->
+        <!--android:id="@+id/view6" />-->
+
+    <!--&lt;!&ndash;</RelativeLayout>&ndash;&gt;-->
+
+    <!--<Button-->
+        <!--android:layout_width="150dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:gravity="center"-->
+        <!--android:textStyle="bold"-->
+        <!--android:fontFamily="sans-serif"-->
+        <!--android:textColor="@color/white"-->
+        <!--android:textSize="36dp"-->
+        <!--android:background="@drawable/editbutton"-->
+        <!--android:layout_marginLeft="1089dp"-->
+        <!--android:layout_marginTop="199dp"-->
+        <!--android:text="Submit"-->
+        <!--android:id="@+id/submit"-->
+        <!--/>-->
+<!--</RelativeLayout>-->

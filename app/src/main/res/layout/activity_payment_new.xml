@@ -3,6 +3,8 @@
 
 <!--Modified by Pavithra on 23-07-2020-->
 
+<!--Currently this layout not used-->
+
 <RelativeLayout android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     xmlns:tools="http://schemas.android.com/tools"

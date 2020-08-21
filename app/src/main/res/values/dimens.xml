@@ -1,5 +1,112 @@
+<!-- Modified by Pavithra on 05-08-2020-->
+<!-- Modified by Pavithra on 06-08-2020-->
 <resources>
     <dimen name="fab_margin">16dp</dimen>
-    <dimen name="textView_font">21sp</dimen>  <!-- Added by Pavithra on 05-08-2020-->
+    <dimen name="textView_font">21px</dimen>  <!-- Added by Pavithra on 05-08-2020-->
+
+    <dimen name="ll_sales_width">788dp</dimen> <!-- Added by Pavithra on 06-08-2020-->
+    <dimen name="ll_sales_height">72dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+    <dimen name="tv_itemname_lvtitle_width">175dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+    <dimen name="tv_itemname_lvtitle_height">30dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+    <dimen name="tv_rate_lvtitle_width">60dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+    <dimen name="tv_mrp_lvtitle_width">57dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+    <dimen name="tv_qty_lvtitle_width">48dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+    <dimen name="tv_total_lvtitle_width">65dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+    <dimen name="sales_lv_width">790dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+    <dimen name="ll_imgbtns_sales_width">451dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+    <dimen name="ll_imgbtns_sales_width_and_height">56dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+    <dimen name="ll_et_sales_width_and_height">219dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+    <dimen name="rlTotalBillamount_width">430dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+    <dimen name="rlTotalBillamount_height">470dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+    <dimen name="llCalcBill_tv_width">197dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+    <dimen name="llCalcBill_tv_value_width">200dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+    <dimen name="sales_layout_tv_size">24sp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+    <dimen name="ll_title_tv_topmargin">16dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+
+
+
+    <dimen name="framelayout_width_customtoolbar">128dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+    <dimen name="llImgBtnInSales_leftmargin">788dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+    <dimen name="framelayout_imgbtn_leftmargin">30dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+
+    <dimen name="imgbtn_logout_width">32dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+    <dimen name="imgbtn_logout_height">36dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+
+
+    <dimen name="imgbtn_customer_width">32dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+    <dimen name="imgbtn_customer_height">36dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+
+    <dimen name="imgbtn_sales_width">32dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+    <dimen name="imgbtn_sales_height">36dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+
+    <dimen name="imgbtn_payment_width">32dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+    <dimen name="imgbtn_payment_height">36dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+
+    <dimen name="imgbtn_salesreturn_width">32dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+    <dimen name="imgbtn_salesreturn_height">36dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+
+    <dimen name="imgbtn_retrieve_width">32dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+    <dimen name="imgbtn_retrieve_height">36dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+
+    <dimen name="imgbtn_print_width">32dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+    <dimen name="imgbtn_print_height">36dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+
+    <dimen name="imgbtn_newcustomer_width">40dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+    <dimen name="imgbtn_newcustomer_height">36dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+
+
+    <dimen name="rlTotalBillamount_ll1_leftmargin">10dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+    <dimen name="rlTotalBillamount_ll2_leftmargin">13dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+
+    <dimen name="salesarrow_leftmargin">7.88dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+    <dimen name="rightarrow_width">12.2dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+    <dimen name="rightarrow_height">20dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+
+    <dimen name="leftarrow_width">11.67dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+    <dimen name="leftarrow_height">19.8dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+
+    <!--<dimen name="llimgBtn_leftmargin">20dp</dimen>  &lt;!&ndash; Added by Pavithra on 06-08-2020&ndash;&gt; commented by Pavithra on 11-08-2020-->
+    <dimen name="llimgBtn_leftmargin">5dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+
+    <dimen name="llCalcBill_tv_value_rightpadding">0dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+    <dimen name="rightarrow_margintop">58dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+    <dimen name="leftarrow_margintop">64.1dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+    <dimen name="sales_highlighter_margintop">46dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+    <dimen name="salesreturn_highlighter_margintop">50dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+    <dimen name="rlSuggestions_width">430dp</dimen>  <!-- Added by Pavithra on 06-08-2020-->
+
+
+
+
+    <dimen name="billsummary_text_size">18sp</dimen>    <!-- Added by Pavithra on 11-08-2020-->
+    <dimen name="sales_lvheader_text_size">18sp</dimen>   <!-- Added by Pavithra on 10-08-2020-->
+    <dimen name="sales_lv_item_text_size">16px</dimen>   <!-- Added by Pavithra on 11-08-2020-->
+    <dimen name="edt_barcode_height">36dp</dimen>   <!-- Added by Pavithra on 11-08-2020-->
+
+    <dimen name="cust_info_tv_textsize">14px</dimen>   <!-- Added by Pavithra on 11-08-2020-->
+    <dimen name="cust_info_edittext_textsize">18px</dimen>   <!-- Added by Pavithra on 11-08-2020-->
+
+    <dimen name="custinfo_mobnumber_lookup_width">800px</dimen>   <!-- Added by Pavithra on 14-08-2020-->
+    <dimen name="custinfo_loyalty_lookup_width">900px</dimen>   <!-- Added by Pavithra on 20-08-2020-->
+
+    <dimen name="payment_cardlookup_layout_width">600px</dimen>   <!-- Added by Pavithra on 14-08-2020-->
+
+    <!--<dimen name="productandbatch_lvheader_text_size">18px</dimen>-->
+    <dimen name="productandbatch_lvheader_text_size">22px</dimen>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 </resources>

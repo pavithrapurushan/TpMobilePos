@@ -3,96 +3,182 @@
 <!--Modified by Pavithra on 01-07-2020-->
 <!--Modified by Pavithra on 10-07-2020-->
 <!--Modified by Pavithra on 28-07-2020-->
+<!--Modified by Pavithra on 18-08-2020-->
+<!--Modified by Pavithra on 19-08-2020-->
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
     android:orientation="vertical">
-        <LinearLayout
-            android:layout_width="1109dp"
-            android:layout_height="76dp"
-            android:orientation="horizontal"
-            android:background="@drawable/batchlst2">  <!--height edited by pavithra on 17-07-2020 -->
-            <!--android:layout_height="56dp"-->
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="5px"
+        android:gravity="center_vertical"
+        android:background="@drawable/batchlst2">  <!--height edited by pavithra on 17-07-2020 -->
+        <!--android:layout_height="56dp"-->
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="0.1"
+            android:fontFamily="sans-serif"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:layout_height="wrap_content"
+            android:id="@+id/slno" />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="0.3"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:layout_height="wrap_content"
+            android:id="@+id/name"/>
+        <!--android:layout_width="175.45dp"--> <!-- earlier-->
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="0.15"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:layout_height="wrap_content"
+            android:id="@+id/code"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="0.2"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:layout_height="wrap_content"
+            android:id="@+id/manufacturer"/>  <!--height edited by pavithra on 17-07-2020 --> <!--width edited by pavithra on 28-07-2020 -->
+        <!--android:layout_height="24dp"-->
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="0.0"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:layout_height="wrap_content"
+            android:id="@+id/pmid"
+            android:visibility="gone"/>  <!--Added by Pavithra on 01-07-2020 -->
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="0.15"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:layout_height="wrap_content"
+            android:id="@+id/mrp"/>
+        <TextView
+            android:layout_width="0dp"
+            android:layout_weight="0.1"
+            android:textStyle="bold"
+            android:textColor="#000000"
+            android:layout_height="wrap_content"
+            android:id="@+id/soh"
+            />  <!--width edited by pavithra on 28-07-2020 -->
 
-            <TextView
-                android:layout_marginLeft="30.32dp"
-                android:layout_width="29.24dp"
-                android:fontFamily="sans-serif"
-                android:textStyle="bold"
-                android:textColor="#000000"
-                android:layout_marginTop="16dp"
-                android:layout_height="23dp"
-                android:id="@+id/slno" />
-            <TextView
-                android:layout_marginLeft="30.32dp"
-                android:layout_width="275.45dp"
-                android:textStyle="bold"
-                android:textColor="#000000"
-                android:layout_marginTop="16dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/name"/>
-            <!--android:layout_width="175.45dp"--> <!-- earlier-->
-            <TextView
-                android:layout_marginLeft="85.32dp"
-                android:layout_width="145.12dp"
-                android:textStyle="bold"
-                android:textColor="#000000"
-                android:layout_marginTop="16dp"
-                android:layout_height="23dp"
-                android:id="@+id/code"/>
-            <TextView
-                android:layout_marginLeft="35.38dp"
-                android:layout_width="180dp"
-                android:textStyle="bold"
-                android:textColor="#000000"
-                android:layout_marginTop="16dp"
-                android:layout_height="wrap_content"
-                android:id="@+id/manufacturer"/>  <!--height edited by pavithra on 17-07-2020 --> <!--width edited by pavithra on 28-07-2020 -->
-            <!--android:layout_height="24dp"-->
-            <TextView
-                android:layout_marginLeft="82.12dp"
-                android:layout_width="100dp"
-                android:textStyle="bold"
-                android:textColor="#000000"
-                android:layout_marginTop="16dp"
-                android:layout_height="23dp"
-                android:id="@+id/pmid"
-                android:visibility="gone"/>  <!--Added by Pavithra on 01-07-2020 -->
-            <TextView
-                android:layout_marginLeft="10.24dp"
-                android:layout_width="100dp"
-                android:textStyle="bold"
-                android:textColor="#000000"
-                android:layout_marginTop="16dp"
-                android:layout_height="23dp"
-                android:id="@+id/mrp"/>
-            <TextView
-                android:layout_marginLeft="44.95dp"
-                android:layout_width="32.81dp"
-                android:textStyle="bold"
-                android:textColor="#000000"
-                android:layout_marginTop="16dp"
-                android:layout_height="23dp"
-                android:id="@+id/soh"
-           />  <!--width edited by pavithra on 28-07-2020 -->
-            <!--<TextView-->
-                <!--android:layout_marginLeft="44.95dp"-->
-                <!--android:layout_width="82dp"-->
-                <!--android:textStyle="bold"-->
-                <!--android:textColor="#000000"-->
-                <!--android:layout_marginTop="16dp"-->
-                <!--android:layout_height="23dp"-->
-                <!--android:id="@+id/eancode"/>-->
-            <!--<TextView-->
-                <!--android:layout_marginLeft="31dp"-->
-                <!--android:layout_width="82dp"-->
-                <!--android:textStyle="bold"-->
-                <!--android:textSize="14dp"-->
-                <!--android:textColor="#000000"-->
-                <!--android:layout_marginTop="16dp"-->
-                <!--android:layout_height="23dp"-->
-                <!--android:id="@+id/location"/>-->
-        </LinearLayout>
+    </LinearLayout>
 
 </LinearLayout>
+
+
+
+
+
+
+
+    <!--Following commented by Pavithra on 18-08-2020-->
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+
+<!--&lt;!&ndash;Modified by Pavithra on 01-07-2020&ndash;&gt;-->
+<!--&lt;!&ndash;Modified by Pavithra on 10-07-2020&ndash;&gt;-->
+<!--&lt;!&ndash;Modified by Pavithra on 28-07-2020&ndash;&gt;-->
+<!--<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:orientation="vertical">-->
+        <!--<LinearLayout-->
+            <!--android:layout_width="1109dp"-->
+            <!--android:layout_height="76dp"-->
+            <!--android:orientation="horizontal"-->
+            <!--android:background="@drawable/batchlst2">  &lt;!&ndash;height edited by pavithra on 17-07-2020 &ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_height="56dp"&ndash;&gt;-->
+
+            <!--<TextView-->
+                <!--android:layout_marginLeft="30.32dp"-->
+                <!--android:layout_width="29.24dp"-->
+                <!--android:fontFamily="sans-serif"-->
+                <!--android:textStyle="bold"-->
+                <!--android:textColor="#000000"-->
+                <!--android:layout_marginTop="16dp"-->
+                <!--android:layout_height="23dp"-->
+                <!--android:id="@+id/slno" />-->
+            <!--<TextView-->
+                <!--android:layout_marginLeft="30.32dp"-->
+                <!--android:layout_width="275.45dp"-->
+                <!--android:textStyle="bold"-->
+                <!--android:textColor="#000000"-->
+                <!--android:layout_marginTop="16dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:id="@+id/name"/>-->
+            <!--&lt;!&ndash;android:layout_width="175.45dp"&ndash;&gt; &lt;!&ndash; earlier&ndash;&gt;-->
+            <!--<TextView-->
+                <!--android:layout_marginLeft="85.32dp"-->
+                <!--android:layout_width="145.12dp"-->
+                <!--android:textStyle="bold"-->
+                <!--android:textColor="#000000"-->
+                <!--android:layout_marginTop="16dp"-->
+                <!--android:layout_height="23dp"-->
+                <!--android:id="@+id/code"/>-->
+            <!--<TextView-->
+                <!--android:layout_marginLeft="35.38dp"-->
+                <!--android:layout_width="180dp"-->
+                <!--android:textStyle="bold"-->
+                <!--android:textColor="#000000"-->
+                <!--android:layout_marginTop="16dp"-->
+                <!--android:layout_height="wrap_content"-->
+                <!--android:id="@+id/manufacturer"/>  &lt;!&ndash;height edited by pavithra on 17-07-2020 &ndash;&gt; &lt;!&ndash;width edited by pavithra on 28-07-2020 &ndash;&gt;-->
+            <!--&lt;!&ndash;android:layout_height="24dp"&ndash;&gt;-->
+            <!--<TextView-->
+                <!--android:layout_marginLeft="82.12dp"-->
+                <!--android:layout_width="100dp"-->
+                <!--android:textStyle="bold"-->
+                <!--android:textColor="#000000"-->
+                <!--android:layout_marginTop="16dp"-->
+                <!--android:layout_height="23dp"-->
+                <!--android:id="@+id/pmid"-->
+                <!--android:visibility="gone"/>  &lt;!&ndash;Added by Pavithra on 01-07-2020 &ndash;&gt;-->
+            <!--<TextView-->
+                <!--android:layout_marginLeft="10.24dp"-->
+                <!--android:layout_width="100dp"-->
+                <!--android:textStyle="bold"-->
+                <!--android:textColor="#000000"-->
+                <!--android:layout_marginTop="16dp"-->
+                <!--android:layout_height="23dp"-->
+                <!--android:id="@+id/mrp"/>-->
+            <!--<TextView-->
+                <!--android:layout_marginLeft="44.95dp"-->
+                <!--android:layout_width="32.81dp"-->
+                <!--android:textStyle="bold"-->
+                <!--android:textColor="#000000"-->
+                <!--android:layout_marginTop="16dp"-->
+                <!--android:layout_height="23dp"-->
+                <!--android:id="@+id/soh"-->
+           <!--/>  &lt;!&ndash;width edited by pavithra on 28-07-2020 &ndash;&gt;-->
+            <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_marginLeft="44.95dp"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_width="82dp"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:textStyle="bold"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:textColor="#000000"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_marginTop="16dp"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_height="23dp"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:id="@+id/eancode"/>&ndash;&gt;-->
+            <!--&lt;!&ndash;<TextView&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_marginLeft="31dp"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_width="82dp"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:textStyle="bold"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:textSize="14dp"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:textColor="#000000"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_marginTop="16dp"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:layout_height="23dp"&ndash;&gt;-->
+                <!--&lt;!&ndash;android:id="@+id/location"/>&ndash;&gt;-->
+        <!--</LinearLayout>-->
+
+<!--</LinearLayout>-->
 

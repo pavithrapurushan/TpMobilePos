@@ -15,9 +15,12 @@
             android:layout_weight="0.8" />
         <FrameLayout
             android:background="#113A4E"
-            android:layout_width="128dp"
-            android:layout_height="900dp"
+            android:layout_width="@dimen/framelayout_width_customtoolbar"
+            android:layout_height="match_parent"
             android:layout_weight="0.2" >
+
+            <!--android:background="#113A4E" original color-->
+            <!--android:layout_width="128dp"-->
 
             <TabWidget
                 android:id="@android:id/tabs"
@@ -25,41 +28,36 @@
                 android:layout_height="wrap_content"
                 android:visibility="gone" />
 
-
             <LinearLayout
-                android:layout_marginLeft="20dp"
+                android:layout_marginLeft="@dimen/llimgBtn_leftmargin"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical" >
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                android:paddingTop="5dp">
 
-
+                <!--android:layout_height="0dp"-->
+                <!--android:layout_weight="1"-->
 
                 <ImageButton
                     android:id="@+id/logout"
-                    android:layout_width="36dp"
-                    android:layout_marginTop="22dp"
-                    android:layout_gravity="center"
+                    android:layout_width="@dimen/imgbtn_logout_width"
+                    android:layout_height="@dimen/imgbtn_logout_height"
                     android:onClick="tabHandler"
                     android:background="@drawable/arrow"
-                    android:layout_height="36dp" />
+                    android:layout_weight="1.25"/>
 
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:layout_weight="1.25">
 
                     <ImageButton
                         android:id="@+id/customer"
-                        android:layout_width="40dp"
-                        android:layout_marginTop="46dp"
+                        android:layout_width="@dimen/imgbtn_customer_width"
+                        android:layout_height="@dimen/imgbtn_customer_height"
                         android:onClick="tabHandler"
-                        android:background="@drawable/customer"
-                        android:layout_height="48dp"
-                        android:layout_marginLeft="30dp"
-                        />
-
-
-                    <!--android:layout_gravity="center"-->
+                        android:background="@drawable/customer" />
 
 
                     <View
@@ -67,7 +65,6 @@
                         android:layout_height="42dp"
                         android:id="@+id/viewHighlightCustomer"
                         android:background="@color/yellow"
-                        android:layout_marginTop="46dp"
                         android:visibility="invisible"
                         android:layout_marginLeft="17.2dp" />
 
@@ -81,32 +78,28 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:layout_weight="1.25">
                     <ImageButton
                         android:id="@+id/salesbtn"
-                        android:layout_width="36dp"
-                        android:layout_marginLeft="30dp"
-                        android:layout_marginTop="42dp"
+                        android:layout_width="@dimen/imgbtn_sales_width"
+                        android:layout_height="@dimen/imgbtn_sales_height"
                         android:onClick="tabHandler"
-                        android:background="@drawable/sales"
-                        android:layout_height="42dp" />
+                        android:background="@drawable/sales" />
                     <ImageButton
                         android:id="@+id/sales"
-                        android:layout_width="12.2dp"
-                        android:layout_marginTop="58dp"
-                        android:layout_marginLeft="7.88dp"
+                        android:layout_width="@dimen/rightarrow_width"
+
                         android:background="@drawable/arrowright"
-                        android:layout_height="20dp"/>
+                        android:layout_height="@dimen/rightarrow_height"/>
 
                     <View
                         android:layout_width="5dp"
                         android:layout_height="42dp"
                         android:id="@+id/viewHighlightSales"
                         android:background="@color/yellow"
-                        android:layout_marginTop="46dp"
                         android:visibility="invisible"
-                        android:layout_marginLeft="5dp"
-                    />
+                        android:layout_marginLeft="5dp"/>
 
                     <!--android:layout_marginLeft="5dp"-->
 
@@ -117,16 +110,15 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:layout_weight="1.25">
 
                     <ImageButton
                         android:id="@+id/payment"
-                        android:layout_width="40dp"
-                        android:layout_marginTop="52dp"
+                        android:layout_width="@dimen/imgbtn_payment_width"
+                        android:layout_height="@dimen/imgbtn_payment_height"
                         android:onClick="tabHandler"
-                        android:background="@drawable/info"
-                        android:layout_height="32dp"
-                        android:layout_marginLeft="30dp"/>
+                        android:background="@drawable/info" />
 
                     <!--android:layout_gravity="center"-->
 
@@ -136,40 +128,32 @@
                         android:layout_height="42dp"
                         android:id="@+id/viewHighlightPayment"
                         android:background="@color/yellow"
-                        android:layout_marginTop="46dp"
-                        android:layout_marginLeft="17.2dp"
                         android:visibility="invisible"/>
 
                 </LinearLayout>
 
-
-
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:layout_weight="1.25">
                     <ImageButton
                         android:id="@+id/salesreturn"
-                        android:layout_width="36dp"
-                        android:layout_marginTop="50dp"
+                        android:layout_width="@dimen/imgbtn_salesreturn_width"
+                        android:layout_height="@dimen/imgbtn_salesreturn_height"
                         android:onClick="tabHandler"
-                        android:layout_marginLeft="30dp"
-                        android:background="@drawable/sales"
-                        android:layout_height="42dp" />
+                        android:background="@drawable/sales" />
                     <ImageButton
                         android:id="@+id/salesreturnbtn"
-                        android:layout_width="11.67dp"
-                        android:layout_marginTop="64.1dp"
-                        android:layout_marginLeft="7.88dp"
+                        android:layout_width="@dimen/leftarrow_width"
                         android:background="@drawable/leftarrow"
-                        android:layout_height="19.8dp"/>
+                        android:layout_height="@dimen/leftarrow_height"/>
                     <View
                         android:layout_width="5dp"
                         android:layout_height="42dp"
                         android:id="@+id/viewHighlightSalesReturn"
                         android:background="@color/yellow"
-                        android:layout_marginTop="50dp"
-                        android:layout_marginLeft="5dp"
+
                         android:visibility="invisible"/>
 
                 </LinearLayout>
@@ -177,52 +161,47 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal">
+                    android:orientation="horizontal"
+                    android:layout_weight="1.25">
 
                     <ImageButton
                         android:id="@+id/retrieve"
-                        android:layout_width="44dp"
-                        android:layout_marginTop="53dp"
+                        android:layout_width="@dimen/imgbtn_retrieve_width"
+                        android:layout_height="@dimen/imgbtn_retrieve_height"
                         android:onClick="tabHandler"
-                        android:background="@drawable/retrieve"
-                        android:layout_height="30dp"
-                        android:layout_marginLeft="30dp"/>
+                        android:background="@drawable/retrieve" />
 
                     <View
                         android:layout_width="5dp"
                         android:layout_height="42dp"
                         android:id="@+id/viewHighlightRetrieve"
                         android:background="@color/yellow"
-                        android:layout_marginTop="46dp"
-                        android:layout_marginLeft="17.2dp"
                         android:visibility="invisible"/>
 
                 </LinearLayout>
 
                 <ImageButton
                     android:id="@+id/printer"
-                    android:layout_width="40dp"
-                    android:layout_height="36dp"
-                    android:layout_marginTop="60dp"
+                    android:layout_width="@dimen/imgbtn_print_width"
+                    android:layout_height="@dimen/imgbtn_print_height"
                     android:layout_gravity="center"
-                    android:background="@drawable/printer"/>
+                    android:background="@drawable/printer"
+                    android:layout_weight="1.25"/>
 
                 <!--android:layout_marginTop="87dp earlier this was"-->
 
-
-                <LinearLayout
+            <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:layout_weight="1.25">
 
                 <ImageButton
                     android:id="@+id/imgBtnNewCustomer"
                     android:layout_width="40dp"
                     android:layout_height="36dp"
-                    android:layout_marginTop="50dp"
                     android:onClick="tabHandler"
-                    android:background="@drawable/plusicon"
-                    android:layout_marginLeft="30dp"/>
+                    android:background="@drawable/plusicon" />
 
                 <!--android:layout_marginTop="87dp"-->
 

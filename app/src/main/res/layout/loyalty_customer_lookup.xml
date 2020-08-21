@@ -1,86 +1,95 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<!--Modified by Pavithra on 20-08-2020-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="1240dp"
+    android:layout_width="@dimen/custinfo_mobnumber_lookup_width"
     android:background="#237C96"
     android:layout_height="wrap_content">
-    <TextView
-    android:id="@+id/title"
-    android:gravity="center"
-    android:textSize="36sp"
-        android:background="#113A4E"
-        android:layout_marginTop="10dp"
-    android:textColor="@color/white"
-    android:text="Loyalty Customer Lookup"
-    android:layout_width="1240dp"
-    android:layout_height="50dp" />
-    <Button
-        android:id="@+id/close_dialog"
-        android:layout_marginLeft="1200dp"
-        android:background="@drawable/closebtn"
-        android:layout_marginTop="20dp"
-        android:layout_width="30dp"
-        android:layout_height="30dp" />
+    <!--1240dp-->
+
+
+    <RelativeLayout
+        android:id="@+id/rlTitleLoyaltyCustomerLookup"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:id="@+id/title"
+            android:gravity="center"
+            android:textSize="36px"
+            android:background="#113A4E"
+            android:textColor="@color/white"
+            android:text="Loyalty Customer Lookup"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"/>
+        <Button
+            android:id="@+id/close_dialog"
+            android:background="@drawable/closebtn"
+            android:layout_width="30px"
+            android:layout_height="30px"
+            android:layout_centerVertical="true"
+            android:layout_alignRight="@+id/title"/>
+
+    </RelativeLayout>
+
     <LinearLayout
         android:id="@+id/l1"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="20dp"
-        android:layout_below="@+id/title"
+        android:layout_marginLeft="10px"
+        android:layout_marginTop="20px"
+        android:layout_marginRight="10px"
+        android:layout_below="@+id/rlTitleLoyaltyCustomerLookup"
         android:background="#113A4E"
-        android:layout_width="1210dp"
+        android:layout_width="match_parent"
         android:orientation="horizontal"
-        android:layout_height="70dp">
-    <TextView
-        android:text="Loyalty ID"
-        android:gravity="center"
-        android:layout_width="150dp"
-        android:layout_marginTop="16dp"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        android:textColor="#FFFFFF"
-        android:layout_height="wrap_content"
-        />
+        android:layout_height="76px"
+        android:gravity="center_vertical|center">
+        <TextView
+            android:text="Loyalty ID"
+            android:gravity="center"
+            android:layout_width="0dp"
+            android:layout_weight="0.2"
+            android:textSize="24px"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:layout_height="wrap_content"
+            />
 
-    <TextView
-        android:text="Loyalty Number"
-        android:gravity="left"
-        android:layout_width="230dp"
-        android:layout_marginTop="16dp"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        android:textColor="#FFFFFF"
-        android:layout_marginLeft="50dp"
-        android:layout_height="wrap_content"
-        />
-    <TextView
-        android:text="Customer Name"
-        android:gravity="left"
-        android:layout_marginTop="16dp"
-        android:layout_marginLeft="50dp"
-        android:layout_width="250dp"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        android:textColor="#FFFFFF"
-        android:layout_height="wrap_content"
-        />
-    <TextView
-        android:text="Mobile Number"
-        android:gravity="left"
-        android:layout_width="200dp"
-        android:layout_marginLeft="50dp"
-        android:layout_marginTop="16dp"
-        android:textSize="28sp"
-        android:textStyle="bold"
-        android:textColor="#FFFFFF"
-        android:layout_height="30dp"
-        />
+        <TextView
+            android:text="Loyalty Number"
+            android:gravity="left"
+            android:layout_width="0dp"
+            android:layout_weight="0.2"
+            android:textSize="24px"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:text="Customer Name"
+            android:gravity="left"
+            android:layout_width="0dp"
+            android:layout_weight="0.2"
+            android:textSize="24px"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:text="Mobile Number"
+            android:gravity="left"
+            android:layout_width="0dp"
+            android:layout_weight="0.2"
+            android:textSize="24px"
+            android:textStyle="bold"
+            android:textColor="#FFFFFF"
+            android:layout_height="wrap_content"
+            />
         <TextView
             android:text="Loyalty Type"
             android:gravity="left"
-            android:layout_width="180dp"
-            android:layout_marginLeft="50dp"
-            android:layout_marginTop="16dp"
-            android:textSize="28sp"
+            android:layout_width="0dp"
+            android:layout_weight="0.2"
+            android:textSize="24px"
             android:textStyle="bold"
             android:textColor="#FFFFFF"
             android:layout_height="wrap_content"
@@ -90,13 +99,120 @@
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/loyaltylist"
-        android:layout_width="1240dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/l1"
-        android:layout_marginBottom="30dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginTop="10dp"
+        android:layout_marginBottom="30px"
+        android:layout_marginLeft="10px"
+        android:layout_marginTop="10px"
         android:scrollbars="vertical" />
-
-
 </RelativeLayout>
+
+
+
+
+
+
+    <!--Following commented by Pavithra on 20-08-2020-->
+<!--<?xml version="1.0" encoding="utf-8"?>-->
+<!--<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"-->
+    <!--xmlns:tools="http://schemas.android.com/tools"-->
+    <!--android:layout_width="1240dp"-->
+    <!--android:background="#237C96"-->
+    <!--android:layout_height="wrap_content">-->
+    <!--<TextView-->
+    <!--android:id="@+id/title"-->
+    <!--android:gravity="center"-->
+    <!--android:textSize="36sp"-->
+        <!--android:background="#113A4E"-->
+        <!--android:layout_marginTop="10dp"-->
+    <!--android:textColor="@color/white"-->
+    <!--android:text="Loyalty Customer Lookup"-->
+    <!--android:layout_width="1240dp"-->
+    <!--android:layout_height="50dp" />-->
+    <!--<Button-->
+        <!--android:id="@+id/close_dialog"-->
+        <!--android:layout_marginLeft="1200dp"-->
+        <!--android:background="@drawable/closebtn"-->
+        <!--android:layout_marginTop="20dp"-->
+        <!--android:layout_width="30dp"-->
+        <!--android:layout_height="30dp" />-->
+    <!--<LinearLayout-->
+        <!--android:id="@+id/l1"-->
+        <!--android:layout_marginLeft="10dp"-->
+        <!--android:layout_marginTop="20dp"-->
+        <!--android:layout_below="@+id/title"-->
+        <!--android:background="#113A4E"-->
+        <!--android:layout_width="1210dp"-->
+        <!--android:orientation="horizontal"-->
+        <!--android:layout_height="70dp">-->
+    <!--<TextView-->
+        <!--android:text="Loyalty ID"-->
+        <!--android:gravity="center"-->
+        <!--android:layout_width="150dp"-->
+        <!--android:layout_marginTop="16dp"-->
+        <!--android:textSize="28sp"-->
+        <!--android:textStyle="bold"-->
+        <!--android:textColor="#FFFFFF"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--/>-->
+
+    <!--<TextView-->
+        <!--android:text="Loyalty Number"-->
+        <!--android:gravity="left"-->
+        <!--android:layout_width="230dp"-->
+        <!--android:layout_marginTop="16dp"-->
+        <!--android:textSize="28sp"-->
+        <!--android:textStyle="bold"-->
+        <!--android:textColor="#FFFFFF"-->
+        <!--android:layout_marginLeft="50dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--/>-->
+    <!--<TextView-->
+        <!--android:text="Customer Name"-->
+        <!--android:gravity="left"-->
+        <!--android:layout_marginTop="16dp"-->
+        <!--android:layout_marginLeft="50dp"-->
+        <!--android:layout_width="250dp"-->
+        <!--android:textSize="28sp"-->
+        <!--android:textStyle="bold"-->
+        <!--android:textColor="#FFFFFF"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--/>-->
+    <!--<TextView-->
+        <!--android:text="Mobile Number"-->
+        <!--android:gravity="left"-->
+        <!--android:layout_width="200dp"-->
+        <!--android:layout_marginLeft="50dp"-->
+        <!--android:layout_marginTop="16dp"-->
+        <!--android:textSize="28sp"-->
+        <!--android:textStyle="bold"-->
+        <!--android:textColor="#FFFFFF"-->
+        <!--android:layout_height="30dp"-->
+        <!--/>-->
+        <!--<TextView-->
+            <!--android:text="Loyalty Type"-->
+            <!--android:gravity="left"-->
+            <!--android:layout_width="180dp"-->
+            <!--android:layout_marginLeft="50dp"-->
+            <!--android:layout_marginTop="16dp"-->
+            <!--android:textSize="28sp"-->
+            <!--android:textStyle="bold"-->
+            <!--android:textColor="#FFFFFF"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--/>-->
+
+    <!--</LinearLayout>-->
+
+    <!--<android.support.v7.widget.RecyclerView-->
+        <!--android:id="@+id/loyaltylist"-->
+        <!--android:layout_width="1240dp"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@id/l1"-->
+        <!--android:layout_marginBottom="30dp"-->
+        <!--android:layout_marginLeft="10dp"-->
+        <!--android:layout_marginTop="10dp"-->
+        <!--android:scrollbars="vertical" />-->
+
+
+<!--</RelativeLayout>-->

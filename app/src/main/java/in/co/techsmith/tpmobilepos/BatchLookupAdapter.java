@@ -12,6 +12,7 @@ import android.service.autofill.TextValueSanitizer;
 import android.support.annotation.RequiresApi;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -59,6 +60,7 @@ import java.util.List;
 //Modified by Pavithra on 23-07-2020
 //Modified by Pavithra on 28-07-2020
 //Modified by Pavithra on 30-07-2020
+//Modified by Pavithra on 21-08-2020
 
 public class BatchLookupAdapter extends ArrayAdapter<BatchModel> implements View.OnClickListener {
 
@@ -1407,14 +1409,36 @@ public class BatchLookupAdapter extends ArrayAdapter<BatchModel> implements View
         dialog.getWindow().setBackgroundDrawableResource(R.color.colorPrimary);
         dialog. getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
 
-        int height_of_popup = 500;
-        int width_of_popup = 400;
-        dialog.getWindow().setLayout(width_of_popup, height_of_popup);
+
+        //commented by Pavithra on 21-08-2020
+//        int height_of_popup = 500;
+//        int width_of_popup = 400;
+//        dialog.getWindow().setLayout(width_of_popup, height_of_popup);
+
+
+/************************************************************************************************************/
+        //    Added by Pavithra on 21-08-2020
+        DisplayMetrics displayMetrics = new DisplayMetrics();
+//        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+        displayMetrics=  mContext.getResources().getDisplayMetrics();
+        int screen_height = displayMetrics.heightPixels;
+        int screen_width = displayMetrics.widthPixels;
+
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+        layoutParams.copyFrom(dialog.getWindow().getAttributes());
+        int dialogWindowWidth = (int) (screen_width * 0.4f);
+        int dialogWindowHeight = (int) (screen_height * 0.8f);
+        layoutParams.width = dialogWindowWidth;
+        layoutParams.height = dialogWindowHeight;
+        dialog.getWindow().setAttributes(layoutParams);
+
+/*******************************************************************************************/
         dialog.show();
 
         final TextView tvSaveStatus = (TextView) dialog.findViewById(R.id.tvSaveStatus);
 //        tvSaveStatus.setText("Successfully saved \n Token No = "+tokenNo);
         tvSaveStatus.setText(""+error_massage);
+//        tvSaveStatus.setText("dxjfhgfdhgfgh kdjfhgfngbioeuglfg iofhgnhgslfgn jkhgsgdugdfg ksufgsnglfdfj shgsgkjsfhgsnfshgsdgnfsgjhsfgfhgfsghsfgfgsnglknj kjhggjkfhgfgnjfglfgifglfgjh jhggnjfhgfnglfg jfhgfgbjkfhgfhg jfhgsgnslkjg,xcnvlg jkhgngkjfhgfhg jhgnhgsfgnhg jhggjghghjg jghgjhgfshgshglsg kjdfghnnb");
 
         Button btnOkPopup = (Button)dialog.findViewById(R.id.btnOkPopUp);
 

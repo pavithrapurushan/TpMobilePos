@@ -62,7 +62,7 @@ public class PaymentTenderListAdapter extends ArrayAdapter<String> {
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
 //        View rowView = inflater.inflate(R.layout.item_paymnt_tenderlist, parent, false);
-        View rowView = inflater.inflate(R.layout.item_payment_tenderlist_new, parent, false);
+        View rowView = inflater.inflate(R.layout.item_paymnt_tenderlist, parent, false);
 
 //        TextView tvSlNo = (TextView) rowView.findViewById(R.id.slno);
 //        TextView tvTenderType = (TextView) rowView.findViewById(R.id.tvTenderType);
