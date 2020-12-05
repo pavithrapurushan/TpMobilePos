@@ -51,7 +51,8 @@
             android:textStyle="bold"
             android:textColor="#FFFFFF"
             android:layout_height="30px"
-            android:layout_weight=".25" />
+            android:layout_weight=".25"
+            android:visibility="gone"/> <!--Added by Pavithra on 05-12-2020 -->
         <TextView
             android:text="Customer Name"
             android:gravity="center"

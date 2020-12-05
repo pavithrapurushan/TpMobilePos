@@ -60,11 +60,15 @@ import java.util.List;
 //Modified by Pavithra on 05-08-2020
 //Modified by Pavithra on 10-08-2020
 //Modified by Pavithra on 11-08-2020
+//Modified by Pavithra on 22-09-2020
+//Modified by Pavithra on 25-09-2020
+//Modified by Pavithra on 28-09-2020
 
 public class SalesActivity extends AppCompatActivity {
 
     EditText etBarcode;
     String Barcode,result,strGetPrDetails;
+    String strErrorMsg = "";
     JSONObject strGetPrDetailsObj;
     int Qty = 1;
     int Total = 0;
@@ -183,6 +187,8 @@ public class SalesActivity extends AppCompatActivity {
     double ll1_header_height;
     double ll_calcBill_width;
 
+    String item_id = "";
+
     @Override
     protected void onCreate(final Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -217,8 +223,7 @@ public class SalesActivity extends AppCompatActivity {
         setContentView(R.layout.activity_sales);  //Added by Pavithra on 29-07-2020
         tsCommonMethods = new TsCommonMethods(this);
 
-
-/**************************Added by Pavithra on 10-08-2020******************************************************************************************************/
+/**************************Added by Pavithra on 10-08-2020**********************************************************************************/
 
         ll1_header = (LinearLayout)findViewById(R.id.ll1_header);
         llLvHeading = (LinearLayout)findViewById(R.id.llLvHeading);
@@ -312,6 +317,21 @@ public class SalesActivity extends AppCompatActivity {
         SalesdetailPLObjStr = prefs.getString("SalesdetailPLObjStr", "");
         SalessummaryDetailObjStr = prefs.getString("SalessummaryDetailObjStr", "");
 
+       //Following section added by Pavithra on 22-09-2020
+        String loyalty_code = prefs.getString("LoyaltyCode", "");
+        String cust_info = prefs.getString("CustomerDetailJsonStr", "");
+        if(loyalty_code.equals("")&& cust_info.equals("")){
+            etBarcode.setEnabled(false);
+            imgBtnSearchProductFromLookup.setEnabled(false);
+
+        }else{
+            etBarcode.setEnabled(true);
+            imgBtnSearchProductFromLookup.setEnabled(true);
+        }
+
+
+//        editor.putString("LoyaltyCode", loyaltycode); editor.putString("CustomerDetailJsonStr", customerDetailJsonStr);
+
 
 
 /*******************************************Added by Pavithra on 29-07-2020 following ***********************************************/
@@ -329,7 +349,8 @@ public class SalesActivity extends AppCompatActivity {
         bill_no = prefs.getString("BillNo", "");
 
         if (bill_series.equals("") || bill_no.equals("")) {
-            new MobPosGetNextBillNumberTask().execute();
+//            new MobPosGetNextBillNumberTask().execute(); //Commenetd by Pavithra on 01-12-2020
+            new MobPOSNextBillNumberTask().execute();
         }
 
 //        adapter = new ProductListCustomAdapter(listModel, mContext, l2, billno,numofitems, itemtotal, taxtotal, billtotal, billroundoff);
@@ -379,8 +400,10 @@ public class SalesActivity extends AppCompatActivity {
                             imm.hideSoftInputFromWindow(main.getWindowToken(), 0);
                             strGetPrDetails = "";
                             //Calling AsyncTask to get Product Details
-                            GetPrDetails prDetails = new GetPrDetails();
-                            prDetails.execute();
+//                            GetPrDetails prDetails = new GetPrDetails();//commented by Pavithra on 01-12-2020
+//                            prDetails.execute();
+
+                            new MobPOSProductDetailsFromBarcoderTask().execute();
 
                             handler.postDelayed(new Runnable() {
                                 @Override
@@ -418,9 +441,6 @@ public class SalesActivity extends AppCompatActivity {
         l2.setAdapter(adapter); //Added by Pavithra on 15-07-2020 to make delete button disable
 
 
-
-
-
         DisplayMetrics displayMetrics = new DisplayMetrics();
         getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
         int screen_height = displayMetrics.heightPixels;
@@ -455,20 +475,25 @@ public class SalesActivity extends AppCompatActivity {
         paramsllCalBill.width = (int) ll_calcBill_width;
         llCalcBillAmountDisplay.setLayoutParams(paramsllCalBill);
 
-
-
-
-
-
-
-
-
-
         prefs = PreferenceManager.getDefaultSharedPreferences(SalesActivity.this);
         String bill_series = prefs.getString("BillSeries", "");
         String bill_no = prefs.getString("BillNo", "");
 
         billno.setText(String.valueOf(bill_series + "" + bill_no));
+
+        //Following section added by Pavithra on 22-09-2020
+        String loyalty_code = prefs.getString("LoyaltyCode", "");
+        String cust_info = prefs.getString("CustomerDetailJsonStr", "");
+
+        if(loyalty_code.equals("") && cust_info.equals("")) {
+            etBarcode.setEnabled(false);
+            imgBtnSearchProductFromLookup.setEnabled(false);
+            l2.setAdapter(null);   //Added by Pavithra on 28-09-2020
+
+        } else {
+            etBarcode.setEnabled(true);
+            imgBtnSearchProductFromLookup.setEnabled(true);
+        }
 
         //Added by Pavithra on 02-07-2020
 
@@ -478,36 +503,34 @@ public class SalesActivity extends AppCompatActivity {
         if (IsSaveEnabled) { //not Saved
             //Below added by Pavithra on 17-07-2020
 /**********************************************************************************************************************************************/
-            etBarcode.setEnabled(true);
-            imgBtnSearchProductFromLookup.setEnabled(true);
-            etBarcode.setAlpha(1f);
-            imgBtnSearchProductFromLookup.setAlpha(1f);
 
-//            editor.putString("BillrowListJsonStr", "");
-//            editor.putString("PaymentTotal", "");  //Added by 1165 on 30-04-2020
-//            editor.putString("ListModelJsonStr", "");  //Added by 1165 on 30-04-2020 ;task renamed to ListModelJsonStr
-//            editor.putBoolean("SaveEnabled", true);
-//
-//            editor.putString("SalesdetailPLObjStr", "");
-//            editor.putString("SalessummaryDetailObjStr", "");
-//            editor.putString("NumberOfItems", "");
+            if(loyalty_code.equals("")&& cust_info.equals("")){ //added by Pavithra on 22-09-2020
 
-            String listModelstr = prefs.getString("ListModelJsonStr", ""); //this returns empty dont know why..? have to find later
-            String billrow_list_json_str = prefs.getString("BillrowListJsonStr", "");
+            }else {
 
-            if (billrow_list_json_str.equals("")) {
-                l2.setAdapter(null);
+                etBarcode.setEnabled(true);
+                imgBtnSearchProductFromLookup.setEnabled(true);
+                etBarcode.setAlpha(1f);
+                imgBtnSearchProductFromLookup.setAlpha(1f);
+
+
+                String listModelstr = prefs.getString("ListModelJsonStr", ""); //this returns empty dont know why..? have to find later
+                String billrow_list_json_str = prefs.getString("BillrowListJsonStr", "");
+
+                if (billrow_list_json_str.equals("")) {
+                    l2.setAdapter(null);
 
 //                billno.setText(""); //Commented by Pavithra on 11-08-2020
-                numofitems.setText("0");
-                itemtotal.setText("0");
-                disctotal.setText("0");
-                taxtotal.setText("0");
-                tvtotalLinewiseDiscount.setText("0"); //Added by Pavithra on 30-07-2020
-                billdisc.setText("0");
-                billroundoff.setText("0");
-                billtotal.setText("0");
-                billtotal.setText("0");
+                    numofitems.setText("0");
+                    itemtotal.setText("0");
+                    disctotal.setText("0");
+                    taxtotal.setText("0");
+                    tvtotalLinewiseDiscount.setText("0"); //Added by Pavithra on 30-07-2020
+                    billdisc.setText("0");
+                    billroundoff.setText("0");
+                    billtotal.setText("0");
+                    billtotal.setText("0");
+                }
             }
 
  /***********************************************************************************************************************************/
@@ -587,8 +610,11 @@ public class SalesActivity extends AppCompatActivity {
                             RelativeLayout mainsearch = (RelativeLayout) dialog.findViewById(R.id.mainsearch);
                             productlist.clear();
                             productlistview.setAdapter(null);
-                            GetProductLookup getProductLookup = new GetProductLookup();
-                            getProductLookup.execute();
+//                            GetProductLookup getProductLookup = new GetProductLookup(); //Commented by Pavithra on 04-12-2020
+//                            getProductLookup.execute();
+
+                            new MobPOSProductLookUpTask().execute();//Added by Pavithra on 04-12-2020
+
                             InputMethodManager imm = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                             imm.hideSoftInputFromWindow(mainsearch.getWindowToken(), 0);
                         }else{
@@ -638,8 +664,11 @@ public class SalesActivity extends AppCompatActivity {
         editor.commit();
     }
 
-    //AsyncTask to load the products from API
-    private class GetPrDetails extends AsyncTask<String, String, String> {
+
+
+
+
+    private class MobPOSProductDetailsFromBarcoderTask extends AsyncTask<String, String, String> {
 
         ProgressDialog progressDialog = new ProgressDialog(SalesActivity.this);
 
@@ -652,36 +681,62 @@ public class SalesActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
+            strErrorMsg = "";
+
+            Barcodescan barcodescan =  new Barcodescan();
+            barcodescan.StoreId = 4;
+            barcodescan.SubStoreId = 4;
+            barcodescan.BarCode = Long.parseLong(Barcode);
+            BarcodescanPL barcodescanPL = new BarcodescanPL();
+            barcodescanPL.BarCodeScan = barcodescan;
+
+            gson = new Gson();
+            String barcodescanJsonStr = gson.toJson(barcodescanPL);
+
+
+
+
             try {
-                URL url = new URL(AppConfig.app_url + "GetPrDetailsFromBarcode?Barcode=" + Barcode);
+//                http://tsmith.co.in/MobPOS2/api/ProductDetailsFromBarcode
+                URL url = new URL(AppConfig.app_url + "ProductDetailsFromBarcode");
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
                 connection.setReadTimeout(15000);
                 connection.setConnectTimeout(30000);
 //                connection.setConnectTimeout(5000);
                 connection.setRequestProperty("Content-Type", "application/json");
-                connection.setRequestProperty("auth_key", "BFD2E5AC-101F-47ED-AB49-C2D18EE5EA97");
+                connection.setRequestProperty("auth_key", "6E5C3126-B09C-4236-8E57-73C11BB64106");
+                connection.setRequestProperty("user_key", "");
+                connection.setRequestProperty("input", barcodescanJsonStr);
                 connection.connect();
-                try {
-                    InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
-                    BufferedReader reader = new BufferedReader(streamReader);
-                    StringBuilder sb = new StringBuilder();
-                    String inputLine = "";
 
-                    while ((inputLine = reader.readLine()) != null) {
-                        sb.append(inputLine);
-                        break;
+                int responsecode = connection.getResponseCode();   //added by Pavithra on 25-09-2020
+                if(responsecode == 200) {
+                    try {
+                        InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
+                        BufferedReader reader = new BufferedReader(streamReader);
+                        StringBuilder sb = new StringBuilder();
+                        String inputLine = "";
+
+                        while ((inputLine = reader.readLine()) != null) {
+                            sb.append(inputLine);
+                            break;
+                        }
+
+                        reader.close();
+                        strGetPrDetails = sb.toString();
+
+                    } finally {
+                        connection.disconnect();
                     }
-
-                    reader.close();
-                    strGetPrDetails = sb.toString();
-
-                } finally {
-                    connection.disconnect();
+                }else{
+                    strErrorMsg = connection.getResponseMessage();
+                    strGetPrDetails="httperror";
                 }
 
             } catch (Exception e) {
                 Log.e("ERROR", e.getMessage(), e);
+                strErrorMsg = e.getMessage();
                 return null;
             }
             return strGetPrDetails;
@@ -695,8 +750,16 @@ public class SalesActivity extends AppCompatActivity {
                 if (progressDialog.isShowing())
                     progressDialog.dismiss();
 
+                if (strGetPrDetails.equals("httperror")) {
+//                    tsMessages(strErrorMsg);
+                    tsErrorMessage("Http error occured\n\n" + strErrorMsg);
+                    Toast.makeText(SalesActivity.this, "" + strErrorMsg, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
                 if (strGetPrDetails == null || strGetPrDetails.equals("")) {  //this checking added by 1165 on 22-05-2020
                     Toast.makeText(SalesActivity.this, "No result from web from getPrDetail", Toast.LENGTH_SHORT).show();
+                    tsErrorMessage(""+strErrorMsg);
 
                 } else {
                     ProductDetailsResponse detailsPL;
@@ -757,13 +820,22 @@ public class SalesActivity extends AppCompatActivity {
                             if (listModel.size() == 0) {
                                 isRepeatItem = false;
                                 String batch_id = listProductDetail.get(0).BatchId;
+                                item_id = listProductDetail.get(0).ItemId; //Added by Pavithra on 05-12-2020
+
                                 if (batch_id.equals("null") || batch_id == null) {
-                                    new MobPosGetDefaultBatchAPITask().execute();
+//                                    new MobPosGetDefaultBatchAPITask().execute(); //Commenetd by Pavithra on 05-12-2020
+
+                                    new MobPOSDefaultBatchLookUpTask().execute();
                                 }
 
+
                                 discount_percentage = "0";
-                                CalculateRow rowDetails = new CalculateRow();
-                                rowDetails.execute();
+
+//                                CalculateRow rowDetails = new CalculateRow();
+//                                rowDetails.execute();
+
+                               new  MobPOSCalculateRowTask().execute();
+
                             } else {  //if list not equals empty
                                 //Check the added item D already exist in the list
 
@@ -784,8 +856,10 @@ public class SalesActivity extends AppCompatActivity {
 
                                 }
                                 //if yes call rowtoal with qty 1 else rowtotal with inew qty
-                                CalculateRow rowDetails = new CalculateRow();
-                                rowDetails.execute();
+//                                CalculateRow rowDetails = new CalculateRow();
+//                                rowDetails.execute();
+
+                                new  MobPOSCalculateRowTask().execute();
 
                             }
 
@@ -810,6 +884,8 @@ public class SalesActivity extends AppCompatActivity {
 
         posDisc = position;
 
+//        listModel DiscPer
+
         final Dialog dialog = new Dialog(SalesActivity.this);
         dialog.setContentView(R.layout.discount_enquire_popup);
         final String title = "Add Discount";
@@ -830,6 +906,9 @@ public class SalesActivity extends AppCompatActivity {
         dialog.show();
 
         final EditText etDiscountAdded = (EditText)dialog.findViewById(R.id.etAddDisc);
+        etDiscountAdded.setText(listModel.get(posDisc).DiscPer);  //Added by Pavithra on 14-09-2020
+
+        etDiscountAdded.setSelection(etDiscountAdded.getText().length()); //Added by Pavithra on 22-09-2020
 
 //        final TextView tvSaveStatus = (TextView) dialog.findViewById(R.id.tvSaveStatus);
 ////        tvSaveStatus.setText("Successfully saved \n Token No = "+tokenNo);
@@ -857,7 +936,8 @@ public class SalesActivity extends AppCompatActivity {
                     }else {
                         isRepeatItem = true;
                         isDiscountAdded = true;
-                        new CalculateRow().execute();     //Added  by Pavithra on 29-07-2020
+//                        new CalculateRow().execute();     //Added  by Pavithra on 29-07-2020
+                        new  MobPOSCalculateRowTask().execute();
                         dialog.dismiss();
                     }
                 }catch (Exception ex){
@@ -1285,7 +1365,106 @@ public class SalesActivity extends AppCompatActivity {
 
     }
 
+    //Added by Pavithra on 05-12-2020
 
+    private class MobPOSDefaultBatchLookUpTask extends AsyncTask<String,String,String>{
+
+        @Override
+        protected String doInBackground(String... strings) {
+            mobPOSDefaultBatchLookUp();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            if (strFromGetDefaultBatch.equals("httperror")) {
+//                    tsMessages(strErrorMsg);
+                tsErrorMessage("Http error occured\n\n"+strErrorMsg);
+                Toast.makeText(SalesActivity.this, "" + strErrorMsg, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+
+            if (strFromGetDefaultBatch == null || strFromGetDefaultBatch.equals("")) {
+                Toast.makeText(SalesActivity.this, "No result from web  from default batch", Toast.LENGTH_SHORT).show();
+                tsErrorMessage(""+strErrorMsg);
+            } else {
+                batchDetailsResponsePL = new BatchDetailsResponsePL();
+                gson = new Gson();
+                batchDetailsResponsePL = gson.fromJson(strFromGetDefaultBatch, BatchDetailsResponsePL.class);
+                try {
+                    listModel.get(0).BatchId = batchDetailsResponsePL.Batch.get(0).BatchId;
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+
+    }
+
+    private void mobPOSDefaultBatchLookUp(){
+
+
+        BatchRequest batch = new BatchRequest();
+        batch.StoreId = "4";
+        batch.SubStoreId = "4";
+        batch.ItemId = item_id ;
+
+        BatchRequestPL batchRequestPL = new BatchRequestPL();
+        batchRequestPL.Batch = batch;
+
+        gson = new Gson();
+        String batchRequestPLJsonStr = gson.toJson(batchRequestPL);
+
+        strErrorMsg ="";
+        strFromGetDefaultBatch = "";
+        try {
+//            URL url = new URL(AppConfig.app_url+"GetDefaultBatch?filter=1405"); //give product id as filter
+            URL url = new URL(AppConfig.app_url+"DefaultBatch");
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setReadTimeout(15000);
+            connection.setConnectTimeout(30000);
+            // connection.setRequestProperty("device_id",deviceid);
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setRequestProperty("auth_key", "6E5C3126-B09C-4236-8E57-73C11BB64106");
+            connection.setRequestProperty("user_key", "");
+            connection.setRequestProperty("input", batchRequestPLJsonStr);
+
+//            input:{"Batch": {"StoreId": "4","SubStoreId": "4","ItemId": "5917"}}
+            connection.connect();
+
+            int responsecode = connection.getResponseCode();   //added by Pavithra on 25-09-2020
+            if(responsecode == 200) {
+                try {
+                    InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
+                    BufferedReader reader = new BufferedReader(streamReader);
+                    StringBuilder sb = new StringBuilder();
+                    String inputLine = "";
+
+                    while ((inputLine = reader.readLine()) != null) {
+                        sb.append(inputLine);
+                        break;
+                    }
+                    reader.close();
+                    String result = sb.toString();
+                    strFromGetDefaultBatch = result;
+
+                } finally {
+                    connection.disconnect();
+                }
+            }else{
+                strErrorMsg = connection.getResponseMessage();
+                strFromGetDefaultBatch = "httperror";
+            }
+        } catch (Exception e) {
+            Log.e("ERROR", e.getMessage(), e);
+            strErrorMsg = e.getMessage();
+        }
+
+    }
 
     private class MobPosGetDefaultBatchAPITask extends AsyncTask<String,String,String> {
 
@@ -1298,8 +1477,18 @@ public class SalesActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+
+            if (strFromGetDefaultBatch.equals("httperror")) {
+//                    tsMessages(strErrorMsg);
+                tsErrorMessage("Http error occured\n\n"+strErrorMsg);
+                Toast.makeText(SalesActivity.this, "" + strErrorMsg, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+
             if (strFromGetDefaultBatch == null || strFromGetDefaultBatch.equals("")) {
                 Toast.makeText(SalesActivity.this, "No result from web  from default batch", Toast.LENGTH_SHORT).show();
+                tsErrorMessage(""+strErrorMsg);
             } else {
                 batchDetailsResponsePL = new BatchDetailsResponsePL();
                 gson = new Gson();
@@ -1314,6 +1503,8 @@ public class SalesActivity extends AppCompatActivity {
     }
 
     private void mobPosGetDefaultBatch(){
+        strErrorMsg ="";
+        strFromGetDefaultBatch = "";
         try {
             URL url = new URL(AppConfig.app_url+"GetDefaultBatch?filter=1405"); //give product id as filter
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -1325,246 +1516,607 @@ public class SalesActivity extends AppCompatActivity {
             connection.setRequestProperty("auth_key", "BFD2E5AC-101F-47ED-AB49-C2D18EE5EA97");
             connection.setRequestProperty("user_key", "");
             connection.connect();
-            try {
-                InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
-                BufferedReader reader = new BufferedReader(streamReader);
-                StringBuilder sb = new StringBuilder();
-                String inputLine = "";
 
-                while ((inputLine = reader.readLine()) != null) {
-                    sb.append(inputLine);
-                    break;
+            int responsecode = connection.getResponseCode();   //added by Pavithra on 25-09-2020
+            if(responsecode == 200) {
+                try {
+                    InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
+                    BufferedReader reader = new BufferedReader(streamReader);
+                    StringBuilder sb = new StringBuilder();
+                    String inputLine = "";
+
+                    while ((inputLine = reader.readLine()) != null) {
+                        sb.append(inputLine);
+                        break;
+                    }
+                    reader.close();
+                    String result = sb.toString();
+                    strFromGetDefaultBatch = result;
+
+                } finally {
+                    connection.disconnect();
                 }
-                reader.close();
-                String result = sb.toString();
-                strFromGetDefaultBatch = result;
-
-            } finally {
-                connection.disconnect();
+            }else{
+                strErrorMsg = connection.getResponseMessage();
+                strFromGetDefaultBatch = "httperror";
             }
         } catch (Exception e) {
             Log.e("ERROR", e.getMessage(), e);
+            strErrorMsg = e.getMessage();
         }
 
     }
+
+    //following commented by Paviothra on 01-12-2020
         //AsyncTask to get the Row Total
-    private class CalculateRow extends AsyncTask<String,String,String> {
-
-            @Override
-            protected void onPreExecute() {
-                super.onPreExecute();
-                pDialog = new ProgressDialog(SalesActivity.this);
-                pDialog.setMessage("Calculating Total..Please wait..!!");
-                pDialog.setCancelable(false);
-                pDialog.show();
-            }
-
-            @Override
-            protected String doInBackground(String... strings) {
-                strFromCalcRow = "";
-                try {
-                    URL url = new URL(AppConfig.app_url + "CalculateRowAPI"); //Added by Pavithra on 30-05-2020
-                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                    connection.setRequestMethod("GET");
-                    connection.setReadTimeout(15000);
-                    connection.setConnectTimeout(30000);
-
-
-                    //Commented by Pavithra on 29-07-2020
+//    private class CalculateRow extends AsyncTask<String,String,String> {
+//
+//            @Override
+//            protected void onPreExecute() {
+//                super.onPreExecute();
+//                pDialog = new ProgressDialog(SalesActivity.this);
+//                pDialog.setMessage("Calculating Total..Please wait..!!");
+//                pDialog.setCancelable(false);
+//                pDialog.show();
+//            }
+//
+//            @Override
+//            protected String doInBackground(String... strings) {
+//                strFromCalcRow = "";
+//                strErrorMsg ="";
+//                try {
+//                    URL url = new URL(AppConfig.app_url + "CalculateRowAPI"); //Added by Pavithra on 30-05-2020
+//                    HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//                    connection.setRequestMethod("GET");
+//                    connection.setReadTimeout(15000);
+//                    connection.setConnectTimeout(30000);
+//
+//
+//                    //Commented by Pavithra on 29-07-2020
+////                    CalcRow c = new CalcRow();
+////                    Billrow billdetail = new Billrow();
+////
+////
+////                    billdetail.ItemId = listProductDetail.get(0).ItemId;
+////                    billdetail.ItemName = listProductDetail.get(0).ItemName;
+////                    billdetail.ItemCode = listProductDetail.get(0).ItemCode;
+////                    billdetail.BatchId = listProductDetail.get(0).BatchId;
+////                    billdetail.BatchCode = listProductDetail.get(0).BatchCode;
+////                    billdetail.TaxId = listProductDetail.get(0).TaxId;
+////                    billdetail.HSNCode = "";
+////                    billdetail.ExpiryDate = listProductDetail.get(0).BatchExpiry;
+////
+////                    if(isRepeatItem){
+////                        Log.d("Value OF P = ",""+p);
+////                        //new condition added by Pavithra on 29-07-2020
+////                        if(isDiscountAdded){
+////                            billdetail.QtyInPacks = listModel.get(p).etQty;
+////                        }else{
+////                            billdetail.QtyInPacks = String.valueOf(new_qty);
+////                        }
+//////                        billdetail.QtyInPacks = String.valueOf(new_qty);
+////                        billdetail.SlNo = String.valueOf(listModel.size()- p);
+////                        billdetail.DiscPer = discount_percentage;
+////                    }else {
+////                        billdetail.QtyInPacks = "1";
+////                        billdetail.SlNo = String.valueOf(listModel.size() + 1);
+////                        billdetail.DiscPer = "0";
+////                    }
+////
+////                    billdetail.QtyInUnits = "0";
+////                    billdetail.UPerPack = listProductDetail.get(0).UPerPack;
+////                    billdetail.Mrp = listProductDetail.get(0).MRP;
+////                    billdetail.Rate = listProductDetail.get(0).PackRate;
+////                    billdetail.BillingRate = "";
+////                    billdetail.FreeFlag = "0";
+////                    billdetail.CustType = "LOCAL";
+////                    billdetail.Amount = "0";
+//////                    billdetail.DiscPer = "0";   //Commented by Pavithra on 29-07-2020
+//////                    billdetail.DiscPer = discount_percentage;
+//////                    billdetail.DiscPer = "10";
+////                    billdetail.DiscPerAmt = "0";
+////                    billdetail.TaxableAmt = "0";
+////                    billdetail.TaxPer = listProductDetail.get(0).TaxRate;
+////
+////                    billdetail.TaxType = "INCL";
+////                    billdetail.TaxAmount = "0";
+////                    billdetail.LineROff = "0";
+////                    billdetail.RowTotal = "0";
+////                    c.BillRow = billdetail;
+//
+//                    //Added by pavithra on 29-07-2020
+//
 //                    CalcRow c = new CalcRow();
 //                    Billrow billdetail = new Billrow();
 //
+//                    //foloowing conditions if --else added by Pavithra on 29-07-2020
 //
-//                    billdetail.ItemId = listProductDetail.get(0).ItemId;
-//                    billdetail.ItemName = listProductDetail.get(0).ItemName;
-//                    billdetail.ItemCode = listProductDetail.get(0).ItemCode;
-//                    billdetail.BatchId = listProductDetail.get(0).BatchId;
-//                    billdetail.BatchCode = listProductDetail.get(0).BatchCode;
-//                    billdetail.TaxId = listProductDetail.get(0).TaxId;
-//                    billdetail.HSNCode = "";
-//                    billdetail.ExpiryDate = listProductDetail.get(0).BatchExpiry;
+//                    if(isDiscountAdded){
 //
-//                    if(isRepeatItem){
-//                        Log.d("Value OF P = ",""+p);
-//                        //new condition added by Pavithra on 29-07-2020
-//                        if(isDiscountAdded){
-//                            billdetail.QtyInPacks = listModel.get(p).etQty;
-//                        }else{
-//                            billdetail.QtyInPacks = String.valueOf(new_qty);
-//                        }
+//                        billdetail.ItemId = listModel.get(posDisc).ItemId;
+//                        billdetail.ItemName = listModel.get(posDisc).tvItemName;
+//                        billdetail.ItemCode = listModel.get(posDisc).ItemCode;
+//                        billdetail.BatchId = listModel.get(posDisc).BatchId;
+//                        billdetail.BatchCode = listModel.get(posDisc).BatchCode;
+//                        billdetail.TaxId = listModel.get(posDisc).TaxId;
+//                        billdetail.HSNCode = "";
+//                        billdetail.ExpiryDate = listModel.get(posDisc).BatchExpiry;
+//                        billdetail.QtyInUnits = "0";  //Added by Pavithra on 31-07-2020
+//
+//
+//                        if(isRepeatItem){
+//                            Log.d("Value OF P = ",""+p);
+//                            //new condition added by Pavithra on 29-07-2020
+//                            if(isDiscountAdded){
+////                                billdetail.QtyInPacks = listModel.get(p).etQty; //Commented by Pavithra on 31-07-2020
+//                                billdetail.QtyInUnits = listModel.get(p).etQty;   //added by Pavithra on 31-07-2020
+//                                billdetail.QtyInPacks = "0";                      //added by Pavithra on 31-07-2020
+////                                Double qtyPacks =  Double.valueOf(listModel.get(p).etQty)/Double.valueOf( listModel.get(p).tvUOM); //added by Pavithra on 31-07-2020
+////                                billdetail.QtyInPacks = String.valueOf(qtyPacks);   //added by Pavithra on 31-07-2020
+//                            }else{
+//                                billdetail.QtyInPacks = String.valueOf(new_qty);
+//                            }
 ////                        billdetail.QtyInPacks = String.valueOf(new_qty);
-//                        billdetail.SlNo = String.valueOf(listModel.size()- p);
-//                        billdetail.DiscPer = discount_percentage;
-//                    }else {
-//                        billdetail.QtyInPacks = "1";
-//                        billdetail.SlNo = String.valueOf(listModel.size() + 1);
-//                        billdetail.DiscPer = "0";
+//                            billdetail.SlNo = String.valueOf(listModel.size()- p);
+//                            billdetail.DiscPer = discount_percentage;
+//                        }else {
+//                            billdetail.QtyInPacks = "1";
+//                            billdetail.SlNo = String.valueOf(listModel.size() + 1);
+//                            billdetail.DiscPer = "0";
+//                        }
+//
+////                        billdetail.QtyInUnits = "0"; //Masked by Pavithra on 31-07-2020
+//                        billdetail.UPerPack = listModel.get(posDisc).tvUOM; //may need some corrections here
+//                        billdetail.Mrp = listModel.get(posDisc).MRP;
+//                        billdetail.Rate = listModel.get(posDisc).PackRate;
+//                        billdetail.BillingRate = "";
+//                        billdetail.FreeFlag = "0";
+//                        billdetail.CustType = "LOCAL";
+//                        billdetail.Amount = "0";
+//                        billdetail.DiscPerAmt = "0";
+//                        billdetail.TaxableAmt = "0";
+//                        billdetail.TaxPer = listModel.get(posDisc).TaxRate;
+//
+//                        billdetail.TaxType = "INCL";
+//                        billdetail.TaxAmount = "0";
+//                        billdetail.LineROff = "0";
+//                        billdetail.RowTotal = "0";
+//
+//                    }else{
+//
+//                        billdetail.ItemId = listProductDetail.get(0).ItemId;
+//                        billdetail.ItemName = listProductDetail.get(0).ItemName;
+//                        billdetail.ItemCode = listProductDetail.get(0).ItemCode;
+//                        billdetail.BatchId = listProductDetail.get(0).BatchId;
+//                        billdetail.BatchCode = listProductDetail.get(0).BatchCode;
+//                        billdetail.TaxId = listProductDetail.get(0).TaxId;
+//                        billdetail.HSNCode = "";
+//                        billdetail.ExpiryDate = listProductDetail.get(0).BatchExpiry;
+//
+//                        if(isRepeatItem){
+//                            Log.d("Value OF P = ",""+p);
+//                            //new condition added by Pavithra on 29-07-2020
+//                            if(isDiscountAdded){
+//                                billdetail.QtyInPacks = listModel.get(p).etQty;
+//                            }else{
+//                                billdetail.QtyInPacks = String.valueOf(new_qty);
+//                            }
+////                        billdetail.QtyInPacks = String.valueOf(new_qty);
+//                            billdetail.SlNo = String.valueOf(listModel.size()- p);
+//                            billdetail.DiscPer = discount_percentage;
+//                        }else {
+//                            billdetail.QtyInPacks = "1";
+//                            billdetail.SlNo = String.valueOf(listModel.size() + 1);
+//                            billdetail.DiscPer = "0";
+//                        }
+//
+//                        billdetail.QtyInUnits = "0";
+//                        billdetail.UPerPack = listProductDetail.get(0).UPerPack;
+//                        billdetail.Mrp = listProductDetail.get(0).MRP;
+//                        billdetail.Rate = listProductDetail.get(0).PackRate;
+//                        billdetail.BillingRate = "";
+//                        billdetail.FreeFlag = "0";
+//                        billdetail.CustType = "LOCAL";
+//                        billdetail.Amount = "0";
+//                        billdetail.DiscPerAmt = "0";
+//                        billdetail.TaxableAmt = "0";
+//                        billdetail.TaxPer = listProductDetail.get(0).TaxRate;
+//
+//                        billdetail.TaxType = "INCL";
+//                        billdetail.TaxAmount = "0";
+//                        billdetail.LineROff = "0";
+//                        billdetail.RowTotal = "0";
 //                    }
 //
-//                    billdetail.QtyInUnits = "0";
-//                    billdetail.UPerPack = listProductDetail.get(0).UPerPack;
-//                    billdetail.Mrp = listProductDetail.get(0).MRP;
-//                    billdetail.Rate = listProductDetail.get(0).PackRate;
-//                    billdetail.BillingRate = "";
-//                    billdetail.FreeFlag = "0";
-//                    billdetail.CustType = "LOCAL";
-//                    billdetail.Amount = "0";
-////                    billdetail.DiscPer = "0";   //Commented by Pavithra on 29-07-2020
-////                    billdetail.DiscPer = discount_percentage;
-////                    billdetail.DiscPer = "10";
-//                    billdetail.DiscPerAmt = "0";
-//                    billdetail.TaxableAmt = "0";
-//                    billdetail.TaxPer = listProductDetail.get(0).TaxRate;
-//
-//                    billdetail.TaxType = "INCL";
-//                    billdetail.TaxAmount = "0";
-//                    billdetail.LineROff = "0";
-//                    billdetail.RowTotal = "0";
 //                    c.BillRow = billdetail;
+//
+//                    Customer customer = new Customer();
+//                    customer.CustId = prefs.getString("CustomerId", "");
+//                    customer.CustName = prefs.getString("CustomerName", "");
+//
+//                    billing_date = prefs.getString("BillingDate", "");
+//                    customer.BillDate = billing_date; //Added by Pavithra on 08-07-2020
+//                    customer.CustType = "LOCAL";//For the time being need further interface
+//                    customer.StoreId = "5"; //almost constant
+//                    List<Customer> listCustomer = new ArrayList<>();
+//                    listCustomer.add(customer);
+//
+//                    CustDetail custDetailObj = new CustDetail();
+//                    custDetailObj.Customer = listCustomer;
+//                    gson = new Gson();
+//                    String requestjsonCustDetail = gson.toJson(custDetailObj);
+//
+//                    gson = new Gson();
+//                    String requestjson = gson.toJson(c);
+//
+//                    connection.setRequestProperty("Content-Type", "application/json");
+//                    connection.setRequestProperty("auth_key", "BFD2E5AC-101F-47ED-AB49-C2D18EE5EA97");
+//                    connection.setRequestProperty("bill_detail", requestjson);
+////                    connection.setRequestProperty("cust_detail", "{\"Customer\": {\"CustId\": \"823\",\"CustName\": \"XXX\",\"BillDate\": \"26/07/2019\",\"CustType\": \"LOCAL\",\"StoreId\": \"5\"}}");
+//                    connection.setRequestProperty("cust_detail", requestjsonCustDetail);
+//                    connection.connect();
+//
+//                    int responsecode = connection.getResponseCode();   //added by Pavithra on 25-09-2020
+//                    if(responsecode == 200) {
+//                        try {
+//                            InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
+//                            BufferedReader reader = new BufferedReader(streamReader);
+//                            StringBuilder sb = new StringBuilder();
+//                            String inputLine = "";
+//                            while ((inputLine = reader.readLine()) != null) {
+//                                sb.append(inputLine);
+//                                break;
+//                            }
+//
+//                            reader.close();
+//                            result = sb.toString();
+//                            strFromCalcRow = result; //Added by pavithra on 16-05-2020
+//
+//                        } finally {
+//                            connection.disconnect();
+//                        }
+//                    }else{
+//                        strErrorMsg = connection.getResponseMessage();
+//                        strFromCalcRow="httperror";
+//                    }
+//
+//                } catch (Exception e) {
+//                    Log.e("ERROR", e.getMessage(), e);
+//                    strErrorMsg = e.getMessage();
+//                    return null;
+//                }
+//                return strFromCalcRow;  //Added by pavithra on 16-05-2020
+//            }
+//
+//            @Override
+//            protected void onPostExecute(String str) {
+//                super.onPostExecute(str);
+//
+//                if (pDialog.isShowing())
+//                    pDialog.dismiss();
+//
+//
+//                if (strFromCalcRow.equals("httperror")) {
+////                    tsMessages(strErrorMsg);
+//                    tsErrorMessage("Http error occured\n\n" + strErrorMsg);
+//                    Toast.makeText(SalesActivity.this, "" + strErrorMsg, Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//
+//
+//                CalcRowResponse calcRowResponseObj;
+//                gson1 = new Gson();
+//                if (strFromCalcRow != null && !strFromCalcRow.equals("")) {  //Commented and added by pavithra on 16-06-2020
+//                    calcRowResponseObj = gson1.fromJson(strFromCalcRow, CalcRowResponse.class);
+//                    try {
+//                        if (calcRowResponseObj.ErrorStatus == 0) {
+//                            List<Billrow> BillRow = calcRowResponseObj.BillRow;  // new item (Contains latest item and details only
+//
+//                            prefs = PreferenceManager.getDefaultSharedPreferences(SalesActivity.this);
+//                            String billRowStrTemp = prefs.getString("BillrowListJsonStr", "");
+//                            gson = new Gson();
+//
+//                            if (!billRowStrTemp.equals("")) {
+//                                billrowList = gson.fromJson(billRowStrTemp, new TypeToken<List<Billrow>>() {  // previously added items list
+//                                }.getType());
+//
+//                                boolean flag = false;
+//                                //Added by 1165 on 07-04-2020
+//
+//                                for (int i = 0; i < billrowList.size(); i++) {
+//                                    if (BillRow.get(0).ItemCode.equals(billrowList.get(i).ItemCode)) { //Checking for same item in the old list
+//
+//                                        billrowList.set(i, BillRow.get(0));  // if same item found update thet row of arraylist only
+//
+//                                        flag = true;
+//                                    }
+//                                }
+//
+//                                if(!flag){
+//                                    billrowList.addAll(BillRow);  // if no same item found appending  the full new list(Containing the latest element only) to the old one
+//                                }
+//
+//                            } else { //else condition added by 1165 on 08-04-2020
+//
+//                                try {
+//                                    billrowList.addAll(BillRow); //Commented by 1165 on 30-04-2020
+//                                } catch (Exception ex) {
+//                                    Log.e("Test", "" + ex);
+//                                }
+//                            }
+//
+//                            prefs = PreferenceManager.getDefaultSharedPreferences(SalesActivity.this);
+//
+//                            gson = new Gson();
+//                            billrowListJsonStr = gson.toJson(billrowList);
+//
+//                            SharedPreferences.Editor editor = prefs.edit();
+//                            editor.putString("BillrowListJsonStr", billrowListJsonStr);
+//                            editor.commit();
+//
+//
+//                            if(isRepeatItem){
+//
+//                            }else {
+//                                listModel.add(0, new Model(listProductDetail.get(0).ItemId, "" + listProductDetail.get(0).ItemCode, "" + listProductDetail.get(0).MRP,
+//                                        "" + listProductDetail.get(0).PackName, "" + listProductDetail.get(0).UnitName, "" + listProductDetail.get(0).Company, "" + listProductDetail.get(0).TaxRate,
+//                                        "" + listProductDetail.get(0).TaxId, "" + listProductDetail.get(0).BatchCode, "" + listProductDetail.get(0).BatchId
+//                                        , "" + listProductDetail.get(0).BatchExpiry, "" + listProductDetail.get(0).PackRate, "" + listProductDetail.get(0).BatchMRP
+//                                        , "" + listProductDetail.get(0).SOHInUnits, "" + listProductDetail.get(0).SOHInPacks, "" + listProductDetail.get(0).ItemName, "" + listProductDetail.get(0).UnitRate,
+//                                        "" + listProductDetail.get(0).UPerPack, "1"));
+//                            }
+//
+//                            for (y = 0; y < BillRow.size(); y++) {
+//                                tot = BillRow.get(y).RowTotal;
+//                                disc = BillRow.get(y).DiscPer;
+//                                String discperamount = BillRow.get(y).DiscPerAmt;
+//                                //copying tot and disc to listmodel because adpter passes listmodel
+//
+//                                if(isRepeatItem){
+//                                    //This if condition added by Pavithra on 29-07-2020
+//                                    if(isDiscountAdded){
+//                                        listModel.get(posDisc).tvTotal = tot;
+//                                        listModel.get(posDisc).tvDisc = disc;
+//                                        listModel.get(posDisc).DiscPer = disc;   //Added by Pavithra on 30-07-2020
+//                                        listModel.get(posDisc).DiscPerAmt = discperamount;   //Added by Pavithra on 30-07-2020
+//                                    }else{
+//                                        listModel.get(p).tvTotal = tot;
+//                                        listModel.get(p).tvDisc = disc;
+//                                        listModel.get(p).DiscPer = disc;  //Added by Pavithra on 30-07-2020
+//                                        listModel.get(p).DiscPerAmt = discperamount;  //Added by Pavithra on 30-07-2020
+//                                    }
+//
+//                                }else {
+//                                    listModel.get(0).tvTotal = tot;
+//                                    listModel.get(0).tvDisc = disc;
+//                                    listModel.get(0).DiscPer = disc;  //Added by Pavithra on 30-07-2020
+//                                    listModel.get(0).DiscPerAmt = discperamount;  //Added by Pavithra on 30-07-2020
+//                                }
+//                                l2.setAdapter(adapter);
+//
+//                                editor.putString("Total", tot);
+//                                adapter.notifyDataSetChanged();
+//                                num = l2.getAdapter().getCount();
+//
+//
+//                                adapter.notifyDataSetChanged();
+//                                listModelJsonStr = gson.toJson(listModel);
+//                                editor = sp.edit();
+//                                editor.putString("ListModelJsonStr", listModelJsonStr);
+//                                editor.putString("Total", tot); //check this line is neccessary or not
+//                                editor.commit();
+//                                saveData(); //redundant saving of list
+//
+//
+//                                salesdetailObjGlobal = new Salesdetail();
+//                                salesdetailObjGlobal.BillRow = billrowList; //Commented by 1165 on 05-03-2020
+//
+//                                Gson gson = new Gson();
+//                                String salesdetailPLObjStr = gson.toJson(salesdetailObjGlobal);
+//
+//                                editor = prefs.edit();
+//                                editor.putString("SalesdetailPLObjStr", salesdetailPLObjStr);
+//                                editor.commit();
+//
+////                                new MobPosCalculateBillAmountTask().execute();
+//
+//                                //need further code for more than one product
+//                            }
+//                        } else {
+//                            Toast.makeText(SalesActivity.this, "" + calcRowResponseObj.Message, Toast.LENGTH_SHORT).show();
+//                            tsErrorMessage(calcRowResponseObj.Message); //Added by Pavithra on 29-07-2020
+//                        }
+//                    } catch (Exception e) {
+//                        Toast.makeText(SalesActivity.this, "" + e, Toast.LENGTH_SHORT).show();
+//                    }
+//
+//                } else {
+//                    Toast.makeText(SalesActivity.this, "No result from web CalcRow", Toast.LENGTH_SHORT).show();
+//                    tsErrorMessage("" + strErrorMsg);
+//                }
+//            }
+//    }
 
-                    //Added by pavithra on 29-07-2020
 
-                    CalcRow c = new CalcRow();
-                    Billrow billdetail = new Billrow();
+    private class MobPOSCalculateRowTask extends AsyncTask<String,String,String> {
 
-                    //foloowing conditions if --else added by Pavithra on 29-07-2020
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+            pDialog = new ProgressDialog(SalesActivity.this);
+            pDialog.setMessage("Calculating Total..Please wait..!!");
+            pDialog.setCancelable(false);
+            pDialog.show();
+        }
 
-                    if(isDiscountAdded){
-
-                        billdetail.ItemId = listModel.get(posDisc).ItemId;
-                        billdetail.ItemName = listModel.get(posDisc).tvItemName;
-                        billdetail.ItemCode = listModel.get(posDisc).ItemCode;
-                        billdetail.BatchId = listModel.get(posDisc).BatchId;
-                        billdetail.BatchCode = listModel.get(posDisc).BatchCode;
-                        billdetail.TaxId = listModel.get(posDisc).TaxId;
-                        billdetail.HSNCode = "";
-                        billdetail.ExpiryDate = listModel.get(posDisc).BatchExpiry;
-                        billdetail.QtyInUnits = "0";  //Added by Pavithra on 31-07-2020
+        @Override
+        protected String doInBackground(String... strings) {
+            strFromCalcRow = "";
+            strErrorMsg ="";
 
 
-                        if(isRepeatItem){
-                            Log.d("Value OF P = ",""+p);
-                            //new condition added by Pavithra on 29-07-2020
-                            if(isDiscountAdded){
+
+            try {
+                URL url = new URL(AppConfig.app_url + "CalculateRow"); //Added by Pavithra on 30-05-2020
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                connection.setReadTimeout(15000);
+                connection.setConnectTimeout(30000);
+                connection.setRequestProperty("Content-Type", "application/json");
+                connection.setRequestProperty("auth_key", "6E5C3126-B09C-4236-8E57-73C11BB64106");
+                connection.setRequestProperty("user_key", "");
+
+//                connection.setRequestProperty("bill_detail", "");
+//                connection.setRequestProperty("cust_detail", "");
+
+
+                CalcRow c = new CalcRow();
+                Billrow billdetail = new Billrow();
+
+                //following conditions if -- else added by Pavithra on 29-07-2020
+
+                if(isDiscountAdded){
+
+                    billdetail.ItemId = listModel.get(posDisc).ItemId;
+                    billdetail.ItemName = listModel.get(posDisc).tvItemName;
+                    billdetail.ItemCode = listModel.get(posDisc).ItemCode;
+                    billdetail.BatchId = listModel.get(posDisc).BatchId;
+                    billdetail.BatchCode = listModel.get(posDisc).BatchCode;
+                    billdetail.TaxId = listModel.get(posDisc).TaxId;
+//                    billdetail.HSNCode = "";
+//                    billdetail.ExpiryDate = listModel.get(posDisc).BatchExpiry;
+                    billdetail.QtyInUnits = "0";  //Added by Pavithra on 31-07-2020
+
+
+                    if(isRepeatItem){
+                        Log.d("Value OF P = ",""+p);
+                        //new condition added by Pavithra on 29-07-2020
+                        if(isDiscountAdded){
 //                                billdetail.QtyInPacks = listModel.get(p).etQty; //Commented by Pavithra on 31-07-2020
-                                billdetail.QtyInUnits = listModel.get(p).etQty;   //added by Pavithra on 31-07-2020
-                                billdetail.QtyInPacks = "0";                      //added by Pavithra on 31-07-2020
+                            billdetail.QtyInUnits = listModel.get(p).etQty;   //added by Pavithra on 31-07-2020
+                            billdetail.QtyInPacks = "0";                      //added by Pavithra on 31-07-2020
 //                                Double qtyPacks =  Double.valueOf(listModel.get(p).etQty)/Double.valueOf( listModel.get(p).tvUOM); //added by Pavithra on 31-07-2020
 //                                billdetail.QtyInPacks = String.valueOf(qtyPacks);   //added by Pavithra on 31-07-2020
-                            }else{
-                                billdetail.QtyInPacks = String.valueOf(new_qty);
-                            }
-//                        billdetail.QtyInPacks = String.valueOf(new_qty);
-                            billdetail.SlNo = String.valueOf(listModel.size()- p);
-                            billdetail.DiscPer = discount_percentage;
-                        }else {
-                            billdetail.QtyInPacks = "1";
-                            billdetail.SlNo = String.valueOf(listModel.size() + 1);
-                            billdetail.DiscPer = "0";
+                        }else{
+                            billdetail.QtyInPacks = String.valueOf(new_qty);
                         }
-
-//                        billdetail.QtyInUnits = "0"; //Masked by Pavithra on 31-07-2020
-                        billdetail.UPerPack = listModel.get(posDisc).tvUOM; //may need some corrections here
-                        billdetail.Mrp = listModel.get(posDisc).MRP;
-                        billdetail.Rate = listModel.get(posDisc).PackRate;
-                        billdetail.BillingRate = "";
-                        billdetail.FreeFlag = "0";
-                        billdetail.CustType = "LOCAL";
-                        billdetail.Amount = "0";
-                        billdetail.DiscPerAmt = "0";
-                        billdetail.TaxableAmt = "0";
-                        billdetail.TaxPer = listModel.get(posDisc).TaxRate;
-
-                        billdetail.TaxType = "INCL";
-                        billdetail.TaxAmount = "0";
-                        billdetail.LineROff = "0";
-                        billdetail.RowTotal = "0";
-
-                    }else{
-
-                        billdetail.ItemId = listProductDetail.get(0).ItemId;
-                        billdetail.ItemName = listProductDetail.get(0).ItemName;
-                        billdetail.ItemCode = listProductDetail.get(0).ItemCode;
-                        billdetail.BatchId = listProductDetail.get(0).BatchId;
-                        billdetail.BatchCode = listProductDetail.get(0).BatchCode;
-                        billdetail.TaxId = listProductDetail.get(0).TaxId;
-                        billdetail.HSNCode = "";
-                        billdetail.ExpiryDate = listProductDetail.get(0).BatchExpiry;
-
-                        if(isRepeatItem){
-                            Log.d("Value OF P = ",""+p);
-                            //new condition added by Pavithra on 29-07-2020
-                            if(isDiscountAdded){
-                                billdetail.QtyInPacks = listModel.get(p).etQty;
-                            }else{
-                                billdetail.QtyInPacks = String.valueOf(new_qty);
-                            }
 //                        billdetail.QtyInPacks = String.valueOf(new_qty);
-                            billdetail.SlNo = String.valueOf(listModel.size()- p);
-                            billdetail.DiscPer = discount_percentage;
-                        }else {
-                            billdetail.QtyInPacks = "1";
-                            billdetail.SlNo = String.valueOf(listModel.size() + 1);
-                            billdetail.DiscPer = "0";
-                        }
-
-                        billdetail.QtyInUnits = "0";
-                        billdetail.UPerPack = listProductDetail.get(0).UPerPack;
-                        billdetail.Mrp = listProductDetail.get(0).MRP;
-                        billdetail.Rate = listProductDetail.get(0).PackRate;
-                        billdetail.BillingRate = "";
-                        billdetail.FreeFlag = "0";
-                        billdetail.CustType = "LOCAL";
-                        billdetail.Amount = "0";
-                        billdetail.DiscPerAmt = "0";
-                        billdetail.TaxableAmt = "0";
-                        billdetail.TaxPer = listProductDetail.get(0).TaxRate;
-
-                        billdetail.TaxType = "INCL";
-                        billdetail.TaxAmount = "0";
-                        billdetail.LineROff = "0";
-                        billdetail.RowTotal = "0";
-
+                        billdetail.SlNo = String.valueOf(listModel.size()- p);
+                        billdetail.DiscPer = discount_percentage;
+                    }else {
+                        billdetail.QtyInPacks = "1";
+                        billdetail.SlNo = String.valueOf(listModel.size() + 1);
+                        billdetail.DiscPer = "0";
                     }
 
+//                        billdetail.QtyInUnits = "0"; //Masked by Pavithra on 31-07-2020
+                    billdetail.UPerPack = listModel.get(posDisc).tvUOM; //may need some corrections here
+                    billdetail.Mrp = listModel.get(posDisc).MRP;
+                    billdetail.Rate = listModel.get(posDisc).PackRate;
+                    billdetail.BillingRate = "";
+                    billdetail.FreeFlag = "0";
+                    billdetail.CustType = "LOCAL";
+                    billdetail.Amount = "0";
+                    billdetail.DiscPerAmt = "0";
+                    billdetail.TaxableAmt = "0";
+                    billdetail.TaxPer = listModel.get(posDisc).TaxRate;
+
+                    billdetail.TaxType = "INCL";
+//                    billdetail.TaxAmount = "0";
+//                    billdetail.LineROff = "0";
+                    billdetail.RowTotal = "0";
+
+                }else{
+
+                    billdetail.ItemId = listProductDetail.get(0).ItemId;
+                    billdetail.ItemName = listProductDetail.get(0).ItemName;
+                    billdetail.ItemCode = listProductDetail.get(0).ItemCode;
+                    billdetail.BatchId = listProductDetail.get(0).BatchId;
+                    billdetail.BatchCode = listProductDetail.get(0).BatchCode;
+                    billdetail.TaxId = listProductDetail.get(0).TaxId;
+//                    billdetail.HSNCode = "";
+//                    billdetail.ExpiryDate = listProductDetail.get(0).BatchExpiry;
+
+                    if(isRepeatItem){
+                        Log.d("Value OF P = ",""+p);
+                        //new condition added by Pavithra on 29-07-2020
+                        if(isDiscountAdded){
+                            billdetail.QtyInPacks = listModel.get(p).etQty;
+                        }else{
+                            billdetail.QtyInPacks = String.valueOf(new_qty);
+                        }
+//                        billdetail.QtyInPacks = String.valueOf(new_qty);
+                        billdetail.SlNo = String.valueOf(listModel.size()- p);
+                        billdetail.DiscPer = discount_percentage;
+                    }else {
+                        billdetail.QtyInPacks = "1";
+                        billdetail.SlNo = String.valueOf(listModel.size() + 1);
+                        billdetail.DiscPer = "0";
+                    }
+
+                    billdetail.QtyInUnits = "0";
+                    billdetail.UPerPack = listProductDetail.get(0).UPerPack;
+                    billdetail.Mrp = listProductDetail.get(0).MRP;
+                    billdetail.Rate = listProductDetail.get(0).PackRate;
+                    billdetail.BillingRate = "";
+                    billdetail.FreeFlag = "0";
+                    billdetail.CustType = "LOCAL";
+                    billdetail.Amount = "0";
+                    billdetail.DiscPerAmt = "0";
+                    billdetail.TaxableAmt = "0";
+                    billdetail.TaxPer = listProductDetail.get(0).TaxRate;
+
+                    billdetail.TaxType = "INCL";
+//                    billdetail.TaxAmount = "0";
+//                    billdetail.LineROff = "0";
+                    billdetail.RowTotal = "0";
+                }
+
+                billdetail.StoreId = "4";
+                billdetail.SubStoreId = "4";
+                billing_date = prefs.getString("BillingDate", "");
+                billdetail.BillDate = billing_date;
+                c.BillRow = billdetail;
+
+//                cust_detail:{"Customer": {"CustId": "829","CustName": "XXX","BillDate": "26/07/2019","CustType": "LOCAL","StoreId": "5"}}
+
+                Customer customer = new Customer();
+                customer.CustId = prefs.getString("CustomerId", "");
+                customer.CustName = prefs.getString("CustomerName", "");
+
+                billing_date = prefs.getString("BillingDate", "");
+                customer.BillDate = billing_date; //Added by Pavithra on 08-07-2020
+                customer.CustType = "LOCAL";//For the time being need further interface
+                customer.StoreId = "4"; //almost constant
+
+                CustomerPL customerPL = new CustomerPL();
+                customerPL.Customer  = customer;
+
+                gson = new Gson();
+                String customerPLJsonstr = gson.toJson(customerPL);
 
 
+                List<Customer> listCustomer = new ArrayList<>();
+                listCustomer.add(customer);
 
+                CustDetail custDetailObj = new CustDetail();
+                custDetailObj.Customer = listCustomer;
+                gson = new Gson();
+                String requestjsonCustDetail = gson.toJson(custDetailObj);
 
-                    c.BillRow = billdetail;
+                gson = new Gson();
+                String requestjson = gson.toJson(c);
 
-
-
-
-
-
-
-                    Customer customer = new Customer();
-                    customer.CustId = prefs.getString("CustomerId", "");
-                    customer.CustName = prefs.getString("CustomerName", "");
-
-                    billing_date = prefs.getString("BillingDate", "");
-                    customer.BillDate = billing_date; //Added by Pavithra on 08-07-2020
-                    customer.CustType = "LOCAL";//For the time being need further interface
-                    customer.StoreId = "5"; //almost constant
-                    List<Customer> listCustomer = new ArrayList<>();
-                    listCustomer.add(customer);
-
-                    CustDetail custDetailObj = new CustDetail();
-                    custDetailObj.Customer = listCustomer;
-                    gson = new Gson();
-                    String requestjsonCustDetail = gson.toJson(custDetailObj);
-
-                    gson = new Gson();
-                    String requestjson = gson.toJson(c);
-
-                    connection.setRequestProperty("Content-Type", "application/json");
-                    connection.setRequestProperty("auth_key", "BFD2E5AC-101F-47ED-AB49-C2D18EE5EA97");
-                    connection.setRequestProperty("bill_detail", requestjson);
+//                connection.setRequestProperty("Content-Type", "application/json");
+//                connection.setRequestProperty("auth_key", "BFD2E5AC-101F-47ED-AB49-C2D18EE5EA97");
+                connection.setRequestProperty("bill_detail", requestjson);
 //                    connection.setRequestProperty("cust_detail", "{\"Customer\": {\"CustId\": \"823\",\"CustName\": \"XXX\",\"BillDate\": \"26/07/2019\",\"CustType\": \"LOCAL\",\"StoreId\": \"5\"}}");
-                    connection.setRequestProperty("cust_detail", requestjsonCustDetail);
-                    connection.connect();
+//                connection.setRequestProperty("cust_detail", requestjsonCustDetail);
+                connection.setRequestProperty("cust_detail", customerPLJsonstr);
+                connection.connect();
 
+                int responsecode = connection.getResponseCode();   //added by Pavithra on 25-09-2020
+                if(responsecode == 200) {
                     try {
                         InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
                         BufferedReader reader = new BufferedReader(streamReader);
@@ -1582,221 +2134,393 @@ public class SalesActivity extends AppCompatActivity {
                     } finally {
                         connection.disconnect();
                     }
-
-                } catch (Exception e) {
-                    Log.e("ERROR", e.getMessage(), e);
-                    return null;
+                }else{
+                    strErrorMsg = connection.getResponseMessage();
+                    strFromCalcRow="httperror";
                 }
-//                return result;  //Commented by pavithra on 16-05-2020
-                return strFromCalcRow;  //Added by pavithra on 16-05-2020
+
+            } catch (Exception e) {
+                Log.e("ERROR", e.getMessage(), e);
+                strErrorMsg = e.getMessage();
+                return null;
+            }
+            return strFromCalcRow;  //Added by pavithra on 16-05-2020
+        }
+
+        @Override
+        protected void onPostExecute(String str) {
+            super.onPostExecute(str);
+
+            if (pDialog.isShowing())
+                pDialog.dismiss();
+
+
+            if (strFromCalcRow.equals("httperror")) {
+//                    tsMessages(strErrorMsg);
+                tsErrorMessage("Http error occured\n\n" + strErrorMsg);
+                Toast.makeText(SalesActivity.this, "" + strErrorMsg, Toast.LENGTH_SHORT).show();
+                return;
             }
 
-            @Override
-            protected void onPostExecute(String str) {
-                super.onPostExecute(str);
 
-                if (pDialog.isShowing())
-                    pDialog.dismiss();
-                CalcRowResponse calcRowResponseObj;
-                gson1 = new Gson();
-                if (strFromCalcRow != null && !strFromCalcRow.equals("")) {  //Commented and added by pavithra on 16-06-2020
-                    calcRowResponseObj = gson1.fromJson(strFromCalcRow, CalcRowResponse.class);
-                    try {
-                        if (calcRowResponseObj.ErrorStatus == 0) {
-                            List<Billrow> BillRow = calcRowResponseObj.BillRow;  // new item (Contains latest item and details only
+            CalcRowResponse calcRowResponseObj;
+            gson1 = new Gson();
+            if (strFromCalcRow != null && !strFromCalcRow.equals("")) {  //Commented and added by pavithra on 16-06-2020
+                calcRowResponseObj = gson1.fromJson(strFromCalcRow, CalcRowResponse.class);
+                try {
+                    if (calcRowResponseObj.ErrorStatus == 0) {
+                        List<Billrow> BillRow = calcRowResponseObj.BillRow;  // new item (Contains latest item and details only
 
-                            prefs = PreferenceManager.getDefaultSharedPreferences(SalesActivity.this);
-                            String billRowStrTemp = prefs.getString("BillrowListJsonStr", "");
-                            gson = new Gson();
+                        prefs = PreferenceManager.getDefaultSharedPreferences(SalesActivity.this);
+                        String billRowStrTemp = prefs.getString("BillrowListJsonStr", "");
+                        gson = new Gson();
 
-                            if (!billRowStrTemp.equals("")) {
-                                billrowList = gson.fromJson(billRowStrTemp, new TypeToken<List<Billrow>>() {  // previously added items list
-                                }.getType());
+                        if (!billRowStrTemp.equals("")) {
+                            billrowList = gson.fromJson(billRowStrTemp, new TypeToken<List<Billrow>>() {  // previously added items list
+                            }.getType());
 
-                                boolean flag = false;
-                                //Added by 1165 on 07-04-2020
+                            boolean flag = false;
+                            //Added by 1165 on 07-04-2020
 
-                                for (int i = 0; i < billrowList.size(); i++) {
-                                    if (BillRow.get(0).ItemCode.equals(billrowList.get(i).ItemCode)) { //Checking for same item in the old list
+                            for (int i = 0; i < billrowList.size(); i++) {
+                                if (BillRow.get(0).ItemCode.equals(billrowList.get(i).ItemCode)) { //Checking for same item in the old list
 
-                                        billrowList.set(i, BillRow.get(0));  // if same item found update thet row of arraylist only
+                                    billrowList.set(i, BillRow.get(0));  // if same item found update thet row of arraylist only
 
-                                        flag = true;
-                                    }
-                                }
-
-                                if(!flag){
-                                    billrowList.addAll(BillRow);  // if no same item found appending  the full new list(Containing the latest element only) to the old one
-                                }
-
-                            } else { //else condition added by 1165 on 08-04-2020
-
-                                try {
-                                    billrowList.addAll(BillRow); //Commented by 1165 on 30-04-2020
-                                } catch (Exception ex) {
-                                    Log.e("Test", "" + ex);
+                                    flag = true;
                                 }
                             }
 
-                            prefs = PreferenceManager.getDefaultSharedPreferences(SalesActivity.this);
+                            if(!flag){
+                                billrowList.addAll(BillRow);  // if no same item found appending  the full new list(Containing the latest element only) to the old one
+                            }
 
-                            gson = new Gson();
-                            billrowListJsonStr = gson.toJson(billrowList);
+                        } else { //else condition added by 1165 on 08-04-2020
 
-                            SharedPreferences.Editor editor = prefs.edit();
-                            editor.putString("BillrowListJsonStr", billrowListJsonStr);
-                            editor.commit();
+                            try {
+                                billrowList.addAll(BillRow); //Commented by 1165 on 30-04-2020
+                            } catch (Exception ex) {
+                                Log.e("Test", "" + ex);
+                            }
+                        }
 
+                        prefs = PreferenceManager.getDefaultSharedPreferences(SalesActivity.this);
+
+                        gson = new Gson();
+                        billrowListJsonStr = gson.toJson(billrowList);
+
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putString("BillrowListJsonStr", billrowListJsonStr);
+                        editor.commit();
+
+
+                        if(isRepeatItem){
+
+                        }else {
+                            listModel.add(0, new Model(listProductDetail.get(0).ItemId, "" + listProductDetail.get(0).ItemCode, "" + listProductDetail.get(0).MRP,
+                                    "" + listProductDetail.get(0).PackName, "" + listProductDetail.get(0).UnitName, "" + listProductDetail.get(0).Company, "" + listProductDetail.get(0).TaxRate,
+                                    "" + listProductDetail.get(0).TaxId, "" + listProductDetail.get(0).BatchCode, "" + listProductDetail.get(0).BatchId
+                                    , "" + listProductDetail.get(0).BatchExpiry, "" + listProductDetail.get(0).PackRate, "" + listProductDetail.get(0).BatchMRP
+                                    , "" + listProductDetail.get(0).SOHInUnits, "" + listProductDetail.get(0).SOHInPacks, "" + listProductDetail.get(0).ItemName, "" + listProductDetail.get(0).UnitRate,
+                                    "" + listProductDetail.get(0).UPerPack, "1"));
+                        }
+
+                        for (y = 0; y < BillRow.size(); y++) {
+                            tot = BillRow.get(y).RowTotal;
+                            disc = BillRow.get(y).DiscPer;
+                            String discperamount = BillRow.get(y).DiscPerAmt;
+                            //copying tot and disc to listmodel because adpter passes listmodel
 
                             if(isRepeatItem){
+                                //This if condition added by Pavithra on 29-07-2020
+                                if(isDiscountAdded){
+                                    listModel.get(posDisc).tvTotal = tot;
+                                    listModel.get(posDisc).tvDisc = disc;
+                                    listModel.get(posDisc).DiscPer = disc;   //Added by Pavithra on 30-07-2020
+                                    listModel.get(posDisc).DiscPerAmt = discperamount;   //Added by Pavithra on 30-07-2020
+                                }else{
+                                    listModel.get(p).tvTotal = tot;
+                                    listModel.get(p).tvDisc = disc;
+                                    listModel.get(p).DiscPer = disc;  //Added by Pavithra on 30-07-2020
+                                    listModel.get(p).DiscPerAmt = discperamount;  //Added by Pavithra on 30-07-2020
+                                }
 
                             }else {
-                                listModel.add(0, new Model(listProductDetail.get(0).ItemId, "" + listProductDetail.get(0).ItemCode, "" + listProductDetail.get(0).MRP,
-                                        "" + listProductDetail.get(0).PackName, "" + listProductDetail.get(0).UnitName, "" + listProductDetail.get(0).Company, "" + listProductDetail.get(0).TaxRate,
-                                        "" + listProductDetail.get(0).TaxId, "" + listProductDetail.get(0).BatchCode, "" + listProductDetail.get(0).BatchId
-                                        , "" + listProductDetail.get(0).BatchExpiry, "" + listProductDetail.get(0).PackRate, "" + listProductDetail.get(0).BatchMRP
-                                        , "" + listProductDetail.get(0).SOHInUnits, "" + listProductDetail.get(0).SOHInPacks, "" + listProductDetail.get(0).ItemName, "" + listProductDetail.get(0).UnitRate,
-                                        "" + listProductDetail.get(0).UPerPack, "1"));
+                                listModel.get(0).tvTotal = tot;
+                                listModel.get(0).tvDisc = disc;
+                                listModel.get(0).DiscPer = disc;  //Added by Pavithra on 30-07-2020
+                                listModel.get(0).DiscPerAmt = discperamount;  //Added by Pavithra on 30-07-2020
                             }
+                            l2.setAdapter(adapter);
 
-                            for (y = 0; y < BillRow.size(); y++) {
-                                tot = BillRow.get(y).RowTotal;
-                                disc = BillRow.get(y).DiscPer;
-                                String discperamount = BillRow.get(y).DiscPerAmt;
-                                //copying tot and disc to listmodel because adpter passes listmodel
-
-                                if(isRepeatItem){
-                                    //This if condition added by Pavithra on 29-07-2020
-                                    if(isDiscountAdded){
-                                        listModel.get(posDisc).tvTotal = tot;
-                                        listModel.get(posDisc).tvDisc = disc;
-                                        listModel.get(posDisc).DiscPer = disc;   //Added by Pavithra on 30-07-2020
-                                        listModel.get(posDisc).DiscPerAmt = discperamount;   //Added by Pavithra on 30-07-2020
-                                    }else{
-                                        listModel.get(p).tvTotal = tot;
-                                        listModel.get(p).tvDisc = disc;
-                                        listModel.get(p).DiscPer = disc;  //Added by Pavithra on 30-07-2020
-                                        listModel.get(p).DiscPerAmt = discperamount;  //Added by Pavithra on 30-07-2020
-                                    }
-
-                                }else {
-                                    listModel.get(0).tvTotal = tot;
-                                    listModel.get(0).tvDisc = disc;
-                                    listModel.get(0).DiscPer = disc;  //Added by Pavithra on 30-07-2020
-                                    listModel.get(0).DiscPerAmt = discperamount;  //Added by Pavithra on 30-07-2020
-                                }
-                                l2.setAdapter(adapter);
-
-                                editor.putString("Total", tot);
-                                adapter.notifyDataSetChanged();
-                                num = l2.getAdapter().getCount();
+                            editor.putString("Total", tot);
+                            adapter.notifyDataSetChanged();
+                            num = l2.getAdapter().getCount();
 
 
-                                adapter.notifyDataSetChanged();
-                                listModelJsonStr = gson.toJson(listModel);
-                                editor = sp.edit();
-                                editor.putString("ListModelJsonStr", listModelJsonStr);
-                                editor.putString("Total", tot); //check this line is neccessary or not
-                                editor.commit();
-                                saveData(); //redundant saving of list
+                            adapter.notifyDataSetChanged();
+                            listModelJsonStr = gson.toJson(listModel);
+                            editor = sp.edit();
+                            editor.putString("ListModelJsonStr", listModelJsonStr);
+                            editor.putString("Total", tot); //check this line is neccessary or not
+                            editor.commit();
+                            saveData(); //redundant saving of list
 
 
-                                salesdetailObjGlobal = new Salesdetail();
-                                salesdetailObjGlobal.BillRow = billrowList; //Commented by 1165 on 05-03-2020
+                            salesdetailObjGlobal = new Salesdetail();
+                            salesdetailObjGlobal.BillRow = billrowList; //Commented by 1165 on 02-12-2020
 
-                                Gson gson = new Gson();
-                                String salesdetailPLObjStr = gson.toJson(salesdetailObjGlobal);
+                            Gson gson = new Gson();
+                            String salesdetailPLObjStr = gson.toJson(salesdetailObjGlobal);
 
-                                editor = prefs.edit();
-                                editor.putString("SalesdetailPLObjStr", salesdetailPLObjStr);
-                                editor.commit();
+                            editor = prefs.edit();
+                            editor.putString("SalesdetailPLObjStr", salesdetailPLObjStr);
+                            editor.commit();
 
-                                new MobPosCalculateBillAmountTask().execute();
+//                                new MobPosCalculateBillAmountTask().execute(); //Commented by Pavithra 02-12-2020
+                                new MobPOSCalculateBillAmountTask().execute(); //Added by Pavithra 03-12-2020
 
-                                //need further code for more than one product
-                            }
-                        } else {
-                            Toast.makeText(SalesActivity.this, "" + calcRowResponseObj.Message, Toast.LENGTH_SHORT).show();
-                            tsErrorMessage(calcRowResponseObj.Message); //Added by Pavithra on 29-07-2020
+                            //need further code for more than one product
+
                         }
-                    } catch (Exception e) {
-                        Toast.makeText(SalesActivity.this, "" + e, Toast.LENGTH_SHORT).show();
+                    } else {
+                        Toast.makeText(SalesActivity.this, "" + calcRowResponseObj.Message, Toast.LENGTH_SHORT).show();
+                        tsErrorMessage(calcRowResponseObj.Message); //Added by Pavithra on 29-07-2020
                     }
-
-                } else {
-                    Toast.makeText(SalesActivity.this, "No result from web CalcRow", Toast.LENGTH_SHORT).show();
+                } catch (Exception e) {
+                    Toast.makeText(SalesActivity.this, "" + e, Toast.LENGTH_SHORT).show();
                 }
+
+            } else {
+                Toast.makeText(SalesActivity.this, "No result from web CalcRow", Toast.LENGTH_SHORT).show();
+                tsErrorMessage("" + strErrorMsg);
             }
+        }
     }
 
-    private class MobPosGetNextBillNumberTask extends AsyncTask<String,String,String> {
+    private class MobPOSNextBillNumberTask extends AsyncTask<String,String,String>{
+
 
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
-//
             pDialog = new ProgressDialog(SalesActivity.this);
             pDialog.setMessage("Loading...");
             pDialog.setCancelable(false);
             pDialog.show();
         }
 
+
         @Override
-         protected String doInBackground(String... strings) {
-             mobPosGetNextBillNumber();
-             return null;
-         }
+        protected String doInBackground(String... strings) {
+            getNextBillNumber();
+            return null;
+        }
 
-         @Override
-         protected void onPostExecute(String s) {
-             super.onPostExecute(s);
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
 
-             if (pDialog.isShowing())
-                 pDialog.dismiss();
+            if (pDialog.isShowing())
+                pDialog.dismiss();
 
-             gson1 = new Gson();
-             if (strNextBillNoResponse != null && !strNextBillNoResponse.equals("")) {
-                 nextBillNoResponsePLObj = new NextBillNoResponsePL();
-                 nextBillNoResponsePLObj = gson1.fromJson(strNextBillNoResponse, NextBillNoResponsePL.class);
+            if (strNextBillNoResponse.equals("httperror")) {
+//                    tsMessages(strErrorMsg);
+                tsErrorMessage("Http error occured\n\n"+strErrorMsg);
+                Toast.makeText(SalesActivity.this, "" + strErrorMsg, Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-
-                 try {
-                     if (nextBillNoResponsePLObj.ErrorStatus == 0) {
-
-                         prefs = PreferenceManager.getDefaultSharedPreferences(SalesActivity.this);
-                         SharedPreferences.Editor editor = prefs.edit();
-
-                         editor.putString("BillSeries",nextBillNoResponsePLObj.NextBillNo.get(0).BillSeries);
-                         editor.putString("BillNo",nextBillNoResponsePLObj.NextBillNo.get(0).BillNo);
-                         editor.commit();
-
-                         bill_series = nextBillNoResponsePLObj.NextBillNo.get(0).BillSeries;
-                         bill_no = nextBillNoResponsePLObj.NextBillNo.get(0).BillNo;
-
-                         //Added by Pavithra on 15-07-2020
-                         billno.setText(String.valueOf(bill_series + "" + bill_no));
+            gson1 = new Gson();
+            if (strNextBillNoResponse != null && !strNextBillNoResponse.equals("")) {
+                nextBillNoResponsePLObj = new NextBillNoResponsePL();
+                nextBillNoResponsePLObj = gson1.fromJson(strNextBillNoResponse, NextBillNoResponsePL.class);
 
 
-//                         new MobPosCalculateBillAmountTask().execute();
+                try {
+                    if (nextBillNoResponsePLObj.ErrorStatus == 0) {
 
-                     } else {
-                         Toast.makeText(SalesActivity.this, "" + nextBillNoResponsePLObj.Message, Toast.LENGTH_SHORT).show();
-                         tsErrorMessage(nextBillNoResponsePLObj.Message); //Added by Pavithra on 29-07-2020
-                     }
-                 } catch (Exception ex) {
-                     Toast.makeText(SalesActivity.this, "" + ex, Toast.LENGTH_SHORT).show();
-                 }
-             } else {
-                 Toast.makeText(SalesActivity.this, "No result from web from next bill", Toast.LENGTH_SHORT).show();
-             }
-         }
+                        prefs = PreferenceManager.getDefaultSharedPreferences(SalesActivity.this);
+                        SharedPreferences.Editor editor = prefs.edit();
+
+                        editor.putString("BillSeries",nextBillNoResponsePLObj.NextBillNo.get(0).BillSeries);
+                        editor.putString("BillNo",nextBillNoResponsePLObj.NextBillNo.get(0).BillNo);
+                        editor.commit();
+
+                        bill_series = nextBillNoResponsePLObj.NextBillNo.get(0).BillSeries;
+                        bill_no = nextBillNoResponsePLObj.NextBillNo.get(0).BillNo;
+
+                        //Added by Pavithra on 15-07-2020
+                        billno.setText(String.valueOf(bill_series + "" + bill_no));
+
+                    } else {
+                        Toast.makeText(SalesActivity.this, "" + nextBillNoResponsePLObj.Message, Toast.LENGTH_SHORT).show();
+                        tsErrorMessage(nextBillNoResponsePLObj.Message); //Added by Pavithra on 29-07-2020
+                    }
+                } catch (Exception ex) {
+                    Toast.makeText(SalesActivity.this, "" + ex, Toast.LENGTH_SHORT).show();
+                }
+
+            } else {
+                Toast.makeText(SalesActivity.this, "No result from web from next bill", Toast.LENGTH_SHORT).show();
+                tsErrorMessage(""+strErrorMsg);
+            }
+        }
     }
+
+    private void getNextBillNumber(){
+
+        strErrorMsg = "";
+        strNextBillNoResponse = "";
+
+//        SalesBill salesBill =  new SalesBill();
+//        salesBill.StoreId = "4";
+//        salesBill.SubStoreId = "4";
+//        salesBill.BillDate = "18/11/2020";
+//        salesBill.DocBillType = "R";
+//        salesBill.BillType = "LOCAL";
+
+        SalesBillRequest salesBill =  new SalesBillRequest();
+        salesBill.StoreId = "4";
+        salesBill.SubStoreId = "4";
+        salesBill.BillDate = "18/11/2020";
+        salesBill.DocBillType = "R";
+        salesBill.BillType = "LOCAL";
+
+        SalesbillPL salesbillPL = new SalesbillPL();
+        salesbillPL.SalesBill = salesBill;
+
+        gson = new Gson();
+        String saleBillJsnStr = gson.toJson(salesbillPL);
+        try {
+            URL url = new URL(AppConfig.app_url + "NextBillNumber"); //Modified by Pavithra on 30-05-2020
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setReadTimeout(15000);
+            connection.setConnectTimeout(30000);
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setRequestProperty("auth_key", "6E5C3126-B09C-4236-8E57-73C11BB64106");
+            connection.setRequestProperty("user_key", "");
+            connection.setRequestProperty("input", saleBillJsnStr);
+            connection.setRequestProperty("bill_type", "SALES");
+            connection.connect();
+
+//            input:{"SalesBill" : {"StoreId": "4", "SubStoreId": "4","BillDate": "16/09/2020", "DocBillType":          "R","BillType": "LOCAL"}}
+//            5)bill_type :SALES( SALES - SALES, SalesReturn -SR)
+
+
+
+            int responsecode = connection.getResponseCode();   //Added by Pavithra on 25-09-2020
+
+            if (responsecode == 200) {
+                try {
+                    InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
+                    BufferedReader reader = new BufferedReader(streamReader);
+                    StringBuilder sb = new StringBuilder();
+                    String inputLine = "";
+                    while ((inputLine = reader.readLine()) != null) {
+                        sb.append(inputLine);
+                        break;
+                    }
+                    reader.close();
+                    result = sb.toString();
+                    strNextBillNoResponse = result;
+                } finally {
+                    connection.disconnect();
+                }
+            } else {
+                strErrorMsg = connection.getResponseMessage();
+                strNextBillNoResponse = "httperror";
+            }
+        } catch (Exception e) {
+            Log.e("ERROR", e.getMessage(), e);
+            strErrorMsg = e.getMessage();
+        }
+
+
+    }
+
+
+
+//    private class MobPosGetNextBillNumberTask extends AsyncTask<String,String,String> {
+//
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+////
+//            pDialog = new ProgressDialog(SalesActivity.this);
+//            pDialog.setMessage("Loading...");
+//            pDialog.setCancelable(false);
+//            pDialog.show();
+//        }
+//
+//        @Override
+//         protected String doInBackground(String... strings) {
+//             mobPosGetNextBillNumber();
+//             return null;
+//         }
+//
+//         @Override
+//         protected void onPostExecute(String s) {
+//             super.onPostExecute(s);
+//
+//             if (pDialog.isShowing())
+//                 pDialog.dismiss();
+//
+//             if (strNextBillNoResponse.equals("httperror")) {
+////                    tsMessages(strErrorMsg);
+//                 tsErrorMessage("Http error occured\n\n"+strErrorMsg);
+//                 Toast.makeText(SalesActivity.this, "" + strErrorMsg, Toast.LENGTH_SHORT).show();
+//                 return;
+//             }
+//
+//             gson1 = new Gson();
+//             if (strNextBillNoResponse != null && !strNextBillNoResponse.equals("")) {
+//                 nextBillNoResponsePLObj = new NextBillNoResponsePL();
+//                 nextBillNoResponsePLObj = gson1.fromJson(strNextBillNoResponse, NextBillNoResponsePL.class);
+//
+//
+//                 try {
+//                     if (nextBillNoResponsePLObj.ErrorStatus == 0) {
+//
+//                         prefs = PreferenceManager.getDefaultSharedPreferences(SalesActivity.this);
+//                         SharedPreferences.Editor editor = prefs.edit();
+//
+//                         editor.putString("BillSeries",nextBillNoResponsePLObj.NextBillNo.get(0).BillSeries);
+//                         editor.putString("BillNo",nextBillNoResponsePLObj.NextBillNo.get(0).BillNo);
+//                         editor.commit();
+//
+//                         bill_series = nextBillNoResponsePLObj.NextBillNo.get(0).BillSeries;
+//                         bill_no = nextBillNoResponsePLObj.NextBillNo.get(0).BillNo;
+//
+//                         //Added by Pavithra on 15-07-2020
+//                         billno.setText(String.valueOf(bill_series + "" + bill_no));
+//
+//
+////                         new MobPosCalculateBillAmountTask().execute();
+//
+//                     } else {
+//                         Toast.makeText(SalesActivity.this, "" + nextBillNoResponsePLObj.Message, Toast.LENGTH_SHORT).show();
+//                         tsErrorMessage(nextBillNoResponsePLObj.Message); //Added by Pavithra on 29-07-2020
+//                     }
+//                 } catch (Exception ex) {
+//                     Toast.makeText(SalesActivity.this, "" + ex, Toast.LENGTH_SHORT).show();
+//                 }
+//
+//             } else {
+//                 Toast.makeText(SalesActivity.this, "No result from web from next bill", Toast.LENGTH_SHORT).show();
+//                 tsErrorMessage(""+strErrorMsg);
+//             }
+//         }
+//    }
 
     private void mobPosGetNextBillNumber() {
 
+        strErrorMsg = "";
+        strNextBillNoResponse = "";
         try {
 //            URL url = new URL("http://tsmith.co.in/MobPOS/api/GetNextBillNumber?YearSerialNo=2015&BillType=SALES");
-            URL url = new URL(AppConfig.app_url+"GetNextBillNumber?YearSerialNo=2015&BillType=SALES"); //Modified by Pavithra on 30-05-2020
+            URL url = new URL(AppConfig.app_url + "GetNextBillNumber?YearSerialNo=2015&BillType=SALES"); //Modified by Pavithra on 30-05-2020
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.setReadTimeout(15000);
@@ -1805,28 +2529,39 @@ public class SalesActivity extends AppCompatActivity {
             connection.setRequestProperty("auth_key", "BFD2E5AC-101F-47ED-AB49-C2D18EE5EA97");
             connection.setRequestProperty("user_key", "");
             connection.connect();
-            try {
-                InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
-                BufferedReader reader = new BufferedReader(streamReader);
-                StringBuilder sb = new StringBuilder();
-                String inputLine = "";
-                while ((inputLine = reader.readLine()) != null) {
-                    sb.append(inputLine);
-                    break;
+
+            int responsecode = connection.getResponseCode();   //added by Pavithra on 25-09-2020
+            if (responsecode == 200) {
+                try {
+                    InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
+                    BufferedReader reader = new BufferedReader(streamReader);
+                    StringBuilder sb = new StringBuilder();
+                    String inputLine = "";
+                    while ((inputLine = reader.readLine()) != null) {
+                        sb.append(inputLine);
+                        break;
+                    }
+                    reader.close();
+                    result = sb.toString();
+                    strNextBillNoResponse = result;
+                } finally {
+                    connection.disconnect();
                 }
-                reader.close();
-                result = sb.toString();
-                strNextBillNoResponse = result;
-            } finally {
-                connection.disconnect();
+            } else {
+                strErrorMsg = connection.getResponseMessage();
+                strNextBillNoResponse = "httperror";
             }
         } catch (Exception e) {
             Log.e("ERROR", e.getMessage(), e);
+            strErrorMsg = e.getMessage();
         }
 
     }
-//        Added by 1165 on 15-01-2020
-    private class  MobPosCalculateBillAmountTask extends AsyncTask<String,String,String> {
+
+
+
+    //Added by Pavithra on  02-12-2020
+   private class  MobPOSCalculateBillAmountTask extends AsyncTask<String,String,String> {
 
     @Override
     protected String doInBackground(String... strings) {
@@ -1838,13 +2573,21 @@ public class SalesActivity extends AppCompatActivity {
     protected void onPostExecute(String s) {
         super.onPostExecute(s);
 
+        if (strBillAmountResponse.equals("httperror")) {
+//                    tsMessages(strErrorMsg);
+            tsErrorMessage("Http error occured\n\n" + strErrorMsg);
+            Toast.makeText(SalesActivity.this, "" + strErrorMsg, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+
         if (strBillAmountResponse != null && !strBillAmountResponse.equals("")) {   //Added by Pavithra on 29-07-2020
 
             BillAmountResponse billAmountResponse;
             gson1 = new Gson();
             billAmountResponse = gson1.fromJson(strBillAmountResponse, BillAmountResponse.class);
 
-            if(billAmountResponse.ErrorStatus == 0) {    //Added by Pavithra on 29-07-2020
+            if (billAmountResponse.ErrorStatus == 0) {    //Added by Pavithra on 29-07-2020
 
 
                 billno.setText(String.valueOf(bill_series + "" + bill_no));
@@ -1897,23 +2640,16 @@ public class SalesActivity extends AppCompatActivity {
 
                     //following commented by Pavithra on 04-08-2020
                     salessummaryDetailObj.Customer = loyaltycustomerDetailsResponseObj.LoyaltyCustomerDetail.get(0).Customer;
-                    salessummaryDetailObj.LoyaltyId =  loyaltycustomerDetailsResponseObj.LoyaltyCustomerDetail.get(0).LoyaltyId;
-                    salessummaryDetailObj.LoyaltyCode =  loyaltycustomerDetailsResponseObj.LoyaltyCustomerDetail.get(0).LoyaltyNo;
-                    salessummaryDetailObj.LoyaltyCardType =  loyaltycustomerDetailsResponseObj.LoyaltyCustomerDetail.get(0).CardType;
+                    salessummaryDetailObj.LoyaltyId = loyaltycustomerDetailsResponseObj.LoyaltyCustomerDetail.get(0).LoyaltyId;
+                    salessummaryDetailObj.LoyaltyCode = loyaltycustomerDetailsResponseObj.LoyaltyCustomerDetail.get(0).LoyaltyNo;
+                    salessummaryDetailObj.LoyaltyCardType = loyaltycustomerDetailsResponseObj.LoyaltyCustomerDetail.get(0).CardType;
 
-//                    salessummaryDetailObj.Customer = loyaltyCustomerObj.Name;
-//                    salessummaryDetailObj.LoyaltyId = loyaltyCustomerObj.LoyaltyId;
-////                    salessummaryDetailObj.LoyaltyCode = loyalty_code;                 //commented by Pavithra on 04-08-2020
-//                    salessummaryDetailObj.LoyaltyCode = loyaltyCustomerObj.LoyaltyNo;                //Edited by Pavithra on 04-08-2020
-//                    salessummaryDetailObj.LoyaltyCardType = loyaltyCustomerObj.Type;    //Added by Pavithra on 03-08-2020
+
                 }
                 salessummaryDetailObj.CustType = billAmountResponse.SalesSummary.CustType;
-//                salessummaryDetailObj.LoyaltyCardType = "";  //Commented by Pavithra on 03-08-2020
                 salessummaryDetailObj.StoreId = billAmountResponse.SalesSummary.StoreId;
                 salessummaryDetailObj.SubStore = "1";
 
-//        salessummaryDetailObj.Counter = "1";  //C vommented by Pavithra 23-07-2020
-//        salessummaryDetailObj.Shift = "1";    //Commented by Pavithra 23-07-2020
                 salessummaryDetailObj.Counter = String.valueOf(prefs.getInt("CounterId", 1));
                 salessummaryDetailObj.Shift = String.valueOf(prefs.getInt("ShiftId", 1));
                 salessummaryDetailObj.B2BB2CType = "B2C";
@@ -1935,30 +2671,39 @@ public class SalesActivity extends AppCompatActivity {
                 editor.putString("SalessummaryDetailObjStr", salessummaryDetailObjStr);
                 editor.putString("NumberOfItems", String.valueOf(num));
                 editor.commit();
-            }else{
+            } else {
                 tsErrorMessage(billAmountResponse.Message);
             }
-        }else{
+        } else {
             Toast.makeText(SalesActivity.this, "No result from web", Toast.LENGTH_SHORT).show();
+            tsErrorMessage("" + strErrorMsg);
         }
     }
 
    }
-    private void mobPosCalculateBillAmount() {
+
+   //Added by Pavithra on 02-12-2020
+
+        private void mobPosCalculateBillAmount() {
+
+        strErrorMsg = "";
+        strBillAmountResponse="";
 
         try {
-            URL url = new URL(AppConfig.app_url+"GetCalculateBillAmount");     //Modified by Pavithra on 30-05-2020
+
+//            URL url = new URL(AppConfig.app_url+"GetCalculateBillAmount");     //Modified by Pavithra on 30-05-2020
+            URL url = new URL(AppConfig.app_url+"CalculateBillAmount");     //Modified by Pavithra on 30-05-2020
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("GET");
             connection.setReadTimeout(15000); //15 s
             connection.setConnectTimeout(30000); // 30 s
 
-            CalcBillAmount calcBillAmount = new CalcBillAmount();
+            CalculateBillPL calculateBillPL = new CalculateBillPL();
             Salesbill salesbill = new Salesbill();
             Salesdetail salesdetail = new Salesdetail();
-
-
-            CustomerPL customerPL = new CustomerPL();
+//            salesdetail.BillRow = billrowList;
+//            CustomerPL customerPL = new CustomerPL();
+            Customer customer = new Customer();
             prefs = PreferenceManager.getDefaultSharedPreferences(this);
             loyalty_code = prefs.getString("LoyaltyCode", "");
             billing_date = prefs.getString("BillingDate", "");
@@ -1973,11 +2718,11 @@ public class SalesActivity extends AppCompatActivity {
                     customerDetailObj = gson.fromJson(customerDetailJsonStr, CustomerDetail.class);
                 }
 
-                customerPL = new CustomerPL();
-                customerPL.BillDate = billing_date;
-                customerPL.CustId = customerDetailObj.CustId;
-                customerPL.CustName = customerDetailObj.Customer;
-                customerPL.CustType = "LOCAL"; //always local
+                customer = new Customer();
+                customer.BillDate = billing_date;
+                customer.CustId = customerDetailObj.CustId;
+                customer.CustName = customerDetailObj.Customer;
+                customer.CustType = "LOCAL"; //always local
 
             }else {
 
@@ -2013,12 +2758,12 @@ public class SalesActivity extends AppCompatActivity {
 //                customerPL.CustName = loyaltyCustomerObj.Name;
 //                customerPL.CustType = "LOCAL"; //always local
 
-                customerPL = new CustomerPL();
+                customer = new Customer();
 //                customerPL.BillDate = "02-05-2015"; //MAsked by Pavithra on 08-07-2020
-                customerPL.BillDate = billing_date; //Added by Pavithra on 08-07-2020
-                customerPL.CustId = loyaltycustomerDetailsResponseObj.LoyaltyCustomerDetail.get(0).LoyaltyId;
-                customerPL.CustName =  loyaltycustomerDetailsResponseObj.LoyaltyCustomerDetail.get(0).Customer;
-                customerPL.CustType = "LOCAL"; //always local
+                customer.BillDate = billing_date; //Added by Pavithra on 08-07-2020
+                customer.CustId = loyaltycustomerDetailsResponseObj.LoyaltyCustomerDetail.get(0).LoyaltyId;
+                customer.CustName =  loyaltycustomerDetailsResponseObj.LoyaltyCustomerDetail.get(0).Customer;
+                customer.CustType = "LOCAL"; //always local
             }
             //Check for LoyaltyCustomerDetailJsonStr too
 
@@ -2049,44 +2794,376 @@ public class SalesActivity extends AppCompatActivity {
 
 
             salesbill.SalesDetail = salesdetailObjGlobal;
-            salesbill.Customer = customerPL;
+            salesbill.Customer = customer;
 
-            calcBillAmount.SalesBill = salesbill;
+            calculateBillPL.SalesBill = salesbill;
 
             gson = new Gson();
-            String requestjson = gson.toJson(calcBillAmount);
+            String requestjson = gson.toJson(calculateBillPL);
 
             connection.setRequestProperty("Content-Type", "application/json");
-            connection.setRequestProperty("auth_key", "BFD2E5AC-101F-47ED-AB49-C2D18EE5EA97");
+            connection.setRequestProperty("auth_key", "6E5C3126-B09C-4236-8E57-73C11BB64106");
             connection.setRequestProperty("user_key", "");
             connection.setRequestProperty("bill_detail", requestjson);
             connection.connect();
 
-            try {
-                InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
-                BufferedReader reader = new BufferedReader(streamReader);
-                StringBuilder sb = new StringBuilder();
-                String inputLine = "";
-                while ((inputLine = reader.readLine()) != null) {
-                    sb.append(inputLine);
-                    break;
-                }
-                reader.close();
-                result = sb.toString();
-                strBillAmountResponse = result;
+            int responsecode = connection.getResponseCode();   //added by Pavithra on 25-09-2020
+            if (responsecode == 200) {
 
-            } finally {
-                connection.disconnect();
+                try {
+                    InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
+                    BufferedReader reader = new BufferedReader(streamReader);
+                    StringBuilder sb = new StringBuilder();
+                    String inputLine = "";
+                    while ((inputLine = reader.readLine()) != null) {
+                        sb.append(inputLine);
+                        break;
+                    }
+                    reader.close();
+                    result = sb.toString();
+                    strBillAmountResponse = result;
+
+                } finally {
+                    connection.disconnect();
+                }
+            }else{
+                strErrorMsg = connection.getResponseMessage();
+                strBillAmountResponse="httperror";
             }
         } catch (Exception e) {
             Log.e("ERROR", e.getMessage(), e);
+            strErrorMsg = e.getMessage();
         }
     }
 
 
 
-    //AsyncTask to get ProductLookup
-    public class GetProductLookup extends AsyncTask<String, String, String> {
+//    private void mobPosGetNextBillNumber() {
+//
+//        strErrorMsg = "";
+//        strNextBillNoResponse = "";
+//        try {
+////            URL url = new URL("http://tsmith.co.in/MobPOS/api/GetNextBillNumber?YearSerialNo=2015&BillType=SALES");
+//            URL url = new URL(AppConfig.app_url + "GetNextBillNumber?YearSerialNo=2015&BillType=SALES"); //Modified by Pavithra on 30-05-2020
+//            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//            connection.setRequestMethod("GET");
+//            connection.setReadTimeout(15000);
+//            connection.setConnectTimeout(30000);
+//            connection.setRequestProperty("Content-Type", "application/json");
+//            connection.setRequestProperty("auth_key", "BFD2E5AC-101F-47ED-AB49-C2D18EE5EA97");
+//            connection.setRequestProperty("user_key", "");
+//            connection.connect();
+//
+//            int responsecode = connection.getResponseCode();   //added by Pavithra on 25-09-2020
+//            if (responsecode == 200) {
+//                try {
+//                    InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
+//                    BufferedReader reader = new BufferedReader(streamReader);
+//                    StringBuilder sb = new StringBuilder();
+//                    String inputLine = "";
+//                    while ((inputLine = reader.readLine()) != null) {
+//                        sb.append(inputLine);
+//                        break;
+//                    }
+//                    reader.close();
+//                    result = sb.toString();
+//                    strNextBillNoResponse = result;
+//                } finally {
+//                    connection.disconnect();
+//                }
+//            } else {
+//                strErrorMsg = connection.getResponseMessage();
+//                strNextBillNoResponse = "httperror";
+//            }
+//        } catch (Exception e) {
+//            Log.e("ERROR", e.getMessage(), e);
+//            strErrorMsg = e.getMessage();
+//        }
+//
+//    }
+//        Added by 1165 on 15-01-2020
+//    private class  MobPosCalculateBillAmountTask extends AsyncTask<String,String,String> {
+//
+//    @Override
+//    protected String doInBackground(String... strings) {
+//        mobPosCalculateBillAmount();
+//        return null;
+//    }
+//
+//    @Override
+//    protected void onPostExecute(String s) {
+//        super.onPostExecute(s);
+//
+//        if (strBillAmountResponse.equals("httperror")) {
+////                    tsMessages(strErrorMsg);
+//            tsErrorMessage("Http error occured\n\n" + strErrorMsg);
+//            Toast.makeText(SalesActivity.this, "" + strErrorMsg, Toast.LENGTH_SHORT).show();
+//            return;
+//        }
+//
+//
+//        if (strBillAmountResponse != null && !strBillAmountResponse.equals("")) {   //Added by Pavithra on 29-07-2020
+//
+//            BillAmountResponse billAmountResponse;
+//            gson1 = new Gson();
+//            billAmountResponse = gson1.fromJson(strBillAmountResponse, BillAmountResponse.class);
+//
+//            if (billAmountResponse.ErrorStatus == 0) {    //Added by Pavithra on 29-07-2020
+//
+//
+//                billno.setText(String.valueOf(bill_series + "" + bill_no));
+//                num = l2.getAdapter().getCount();
+//                numofitems.setText(String.valueOf(num));
+//                itemtotal.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.TotalAmount)));
+//                disctotal.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.DiscountAmt)));
+//                taxtotal.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.TotalLinewiseTax)));
+//                tvtotalLinewiseDiscount.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.TotalLinewiseDisc))); //added by Pavithra on 30-07-2020
+//                billdisc.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.TotalDiscount)));
+//                billroundoff.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.RoundOff)));
+//                billtotal.setText(String.format("%.2f", Double.valueOf(billAmountResponse.SalesSummary.NetAmount)));
+//
+//                //To pass to Payementactivity
+//                SalessummaryDetail salessummaryDetailObj = new SalessummaryDetail();
+//                salessummaryDetailObj.BillSeries = bill_series;
+//                salessummaryDetailObj.BillNo = bill_no;
+//
+////              salessummaryDetailObj.BillDate = billAmountResponse.SalesSummary.BillDate;  //Masked by APvithra on 13-07-2020
+//                prefs = PreferenceManager.getDefaultSharedPreferences(SalesActivity.this);
+//                salessummaryDetailObj.BillDate = prefs.getString("BillingDate", "");
+//
+//                SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+//
+//                Date date_temp = null;
+//                try {
+//                    date_temp = sdf.parse(salessummaryDetailObj.BillDate);
+//                } catch (ParseException e) {
+//                    e.printStackTrace();
+//                }
+//
+//                Calendar cal = Calendar.getInstance();
+//                cal.setTime(date_temp);
+//                int month = cal.get(Calendar.MONTH);
+//                int day = cal.get(Calendar.DAY_OF_MONTH);
+//                int year = cal.get(Calendar.YEAR);
+//
+//                Log.d("SA From CalcBillAmt", "Month = " + month + " Day = " + day + "Year = " + year);
+//
+//                if (loyalty_code.equals("")) {
+//                    salessummaryDetailObj.Customer = customerDetailObj.Customer;
+//                    if (customerDetailObj.CustId != null) {
+//                        salessummaryDetailObj.CustId = Integer.parseInt(customerDetailObj.CustId);
+//                    }
+//
+//                    salessummaryDetailObj.LoyaltyId = "0";
+//                    salessummaryDetailObj.LoyaltyCode = "";
+//                } else {
+//
+//
+//                    //following commented by Pavithra on 04-08-2020
+//                    salessummaryDetailObj.Customer = loyaltycustomerDetailsResponseObj.LoyaltyCustomerDetail.get(0).Customer;
+//                    salessummaryDetailObj.LoyaltyId = loyaltycustomerDetailsResponseObj.LoyaltyCustomerDetail.get(0).LoyaltyId;
+//                    salessummaryDetailObj.LoyaltyCode = loyaltycustomerDetailsResponseObj.LoyaltyCustomerDetail.get(0).LoyaltyNo;
+//                    salessummaryDetailObj.LoyaltyCardType = loyaltycustomerDetailsResponseObj.LoyaltyCustomerDetail.get(0).CardType;
+//
+////                    salessummaryDetailObj.Customer = loyaltyCustomerObj.Name;
+////                    salessummaryDetailObj.LoyaltyId = loyaltyCustomerObj.LoyaltyId;
+//////                    salessummaryDetailObj.LoyaltyCode = loyalty_code;                 //commented by Pavithra on 04-08-2020
+////                    salessummaryDetailObj.LoyaltyCode = loyaltyCustomerObj.LoyaltyNo;                //Edited by Pavithra on 04-08-2020
+////                    salessummaryDetailObj.LoyaltyCardType = loyaltyCustomerObj.Type;    //Added by Pavithra on 03-08-2020
+//                }
+//                salessummaryDetailObj.CustType = billAmountResponse.SalesSummary.CustType;
+////                salessummaryDetailObj.LoyaltyCardType = "";  //Commented by Pavithra on 03-08-2020
+//                salessummaryDetailObj.StoreId = billAmountResponse.SalesSummary.StoreId;
+//                salessummaryDetailObj.SubStore = "1";
+//
+////        salessummaryDetailObj.Counter = "1";  //C vommented by Pavithra 23-07-2020
+////        salessummaryDetailObj.Shift = "1";    //Commented by Pavithra 23-07-2020
+//                salessummaryDetailObj.Counter = String.valueOf(prefs.getInt("CounterId", 1));
+//                salessummaryDetailObj.Shift = String.valueOf(prefs.getInt("ShiftId", 1));
+//                salessummaryDetailObj.B2BB2CType = "B2C";
+//                salessummaryDetailObj.TotalAmount = billAmountResponse.SalesSummary.TotalAmount;
+//                salessummaryDetailObj.TotalLinewiseTax = billAmountResponse.SalesSummary.TotalLinewiseTax;
+//                salessummaryDetailObj.TaxAmount = billAmountResponse.SalesSummary.TotalLinewiseTax;//Edited by Pavithra on 22-07-2020
+//                salessummaryDetailObj.DiscountPer = billAmountResponse.SalesSummary.DiscountPer; //Bill discount per
+//                salessummaryDetailObj.DiscountAmt = billAmountResponse.SalesSummary.DiscountAmt; //Bill discount amt
+//                salessummaryDetailObj.SchemeDiscount = billAmountResponse.SalesSummary.SchemeDiscount;
+//                salessummaryDetailObj.CardDiscount = billAmountResponse.SalesSummary.CardDiscount;
+//                salessummaryDetailObj.Addtions = billAmountResponse.SalesSummary.Addtions;
+//                salessummaryDetailObj.RoundOff = billAmountResponse.SalesSummary.RoundOff;
+//                salessummaryDetailObj.NetAmount = billAmountResponse.SalesSummary.NetAmount;
+//
+//                Gson gson = new Gson();
+//                String salessummaryDetailObjStr = gson.toJson(salessummaryDetailObj);
+//
+//                SharedPreferences.Editor editor = prefs.edit();
+//                editor.putString("SalessummaryDetailObjStr", salessummaryDetailObjStr);
+//                editor.putString("NumberOfItems", String.valueOf(num));
+//                editor.commit();
+//            } else {
+//                tsErrorMessage(billAmountResponse.Message);
+//            }
+//        } else {
+//            Toast.makeText(SalesActivity.this, "No result from web", Toast.LENGTH_SHORT).show();
+//            tsErrorMessage("" + strErrorMsg);
+//        }
+//    }
+//
+//   }
+
+//    private void mobPosCalculateBillAmount() {
+//
+//
+//        strErrorMsg = "";
+//        strBillAmountResponse="";
+//
+//        try {
+//            URL url = new URL(AppConfig.app_url+"GetCalculateBillAmount");     //Modified by Pavithra on 30-05-2020
+//            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//            connection.setRequestMethod("GET");
+//            connection.setReadTimeout(15000); //15 s
+//            connection.setConnectTimeout(30000); // 30 s
+//
+//            CalcBillAmount calcBillAmount = new CalcBillAmount();
+//            Salesbill salesbill = new Salesbill();
+//            Salesdetail salesdetail = new Salesdetail();
+//
+//
+//            CustomerPL customerPL = new CustomerPL();
+//            prefs = PreferenceManager.getDefaultSharedPreferences(this);
+//            loyalty_code = prefs.getString("LoyaltyCode", "");
+//            billing_date = prefs.getString("BillingDate", "");
+//
+//            if(loyalty_code.equals("") || loyalty_code == null){
+//                String customerDetailJsonStr = prefs.getString("CustomerDetailJsonStr", "");
+//
+//                customerDetailObj = new CustomerDetail();;
+//                if(!customerDetailJsonStr.equals("")) {
+//                    Gson gson = new Gson();
+//                    customerDetailObj = new CustomerDetail();
+//                    customerDetailObj = gson.fromJson(customerDetailJsonStr, CustomerDetail.class);
+//                }
+//
+//                customerPL = new CustomerPL();
+//                customerPL.BillDate = billing_date;
+//                customerPL.CustId = customerDetailObj.CustId;
+//                customerPL.CustName = customerDetailObj.Customer;
+//                customerPL.CustType = "LOCAL"; //always local
+//
+//            }else {
+//
+//
+//                //Commented by Pavithra on 04-08-2020
+////                String loyaltyCustJsonStr = prefs.getString("LoyaltyCustomerDetailJsonStr", "");
+////
+////                customerDetailObj = new CustomerDetail();
+////                ;
+////                if (!loyaltyCustJsonStr.equals("")) {
+////                    Gson gson = new Gson();
+////                    loyaltyCustomerObj = new LoyaltyCustomer();
+////                    loyaltyCustomerObj = gson.fromJson(loyaltyCustJsonStr, LoyaltyCustomer.class);
+////                }
+//
+////                Added by Pavithra on 04-08-2020
+//                String loyaltyCustDetailRespnseJsonStr = prefs.getString("LoyaltyCustDetailsResponseJsnStr", "");
+//
+//                customerDetailObj = new CustomerDetail();
+//                ;
+//                if (!loyaltyCustDetailRespnseJsonStr.equals("")) {
+//                    Gson gson = new Gson();
+//                    loyaltycustomerDetailsResponseObj = new LoyaltycustomerDetailsResponse();
+//                    loyaltycustomerDetailsResponseObj = gson.fromJson(loyaltyCustDetailRespnseJsonStr, LoyaltycustomerDetailsResponse.class);
+//                }
+//
+//
+////Commented by Pavithra on 04-08-2020
+////                customerPL = new CustomerPL();
+//////                customerPL.BillDate = "02-05-2015"; //MAsked by Pavithra on 08-07-2020
+////                customerPL.BillDate = billing_date; //Added by Pavithra on 08-07-2020
+////                customerPL.CustId = loyaltyCustomerObj.LoyaltyId;
+////                customerPL.CustName = loyaltyCustomerObj.Name;
+////                customerPL.CustType = "LOCAL"; //always local
+//
+//                customerPL = new CustomerPL();
+////                customerPL.BillDate = "02-05-2015"; //MAsked by Pavithra on 08-07-2020
+//                customerPL.BillDate = billing_date; //Added by Pavithra on 08-07-2020
+//                customerPL.CustId = loyaltycustomerDetailsResponseObj.LoyaltyCustomerDetail.get(0).LoyaltyId;
+//                customerPL.CustName =  loyaltycustomerDetailsResponseObj.LoyaltyCustomerDetail.get(0).Customer;
+//                customerPL.CustType = "LOCAL"; //always local
+//            }
+//            //Check for LoyaltyCustomerDetailJsonStr too
+//
+////            CustomerPL customerPL = new CustomerPL();
+////            customerPL.BillDate = "02-05-2015";
+////            customerPL.CustId = "823";
+////            customerPL.CustName = "XXX";
+////            customerPL.CustType = "LOCAL"; //always local
+//
+//            salesbill.BillSeries = bill_series;
+//            salesbill.BillNo = bill_no;
+//
+////            salesbill.BillDate = "01-10-2015"; //Masked by APvithra on 08-07-2020
+//            salesbill.BillDate = billing_date;
+//            salesbill.CustType = "LOCAL";
+//            salesbill.StoreId = "3";
+//            salesbill.TotalAmount = "0";
+//            salesbill.TotalLinewiseTax = "0";
+//            salesbill.DiscountPer = "0";
+////            salesbill.DiscountPer = "10";
+//            salesbill.DiscountAmt = "0";
+//            salesbill.SchemeDiscount = "0";
+//            salesbill.CardDiscount = "0";
+//            salesbill.TotalDiscount = "0";
+//            salesbill.Addtions = "0";
+//            salesbill.RoundOff = "0";
+//            salesbill.NetAmount = "0";
+//
+//
+//            salesbill.SalesDetail = salesdetailObjGlobal;
+//            salesbill.Customer = customerPL;
+//
+//            calcBillAmount.SalesBill = salesbill;
+//
+//            gson = new Gson();
+//            String requestjson = gson.toJson(calcBillAmount);
+//
+//            connection.setRequestProperty("Content-Type", "application/json");
+//            connection.setRequestProperty("auth_key", "BFD2E5AC-101F-47ED-AB49-C2D18EE5EA97");
+//            connection.setRequestProperty("user_key", "");
+//            connection.setRequestProperty("bill_detail", requestjson);
+//            connection.connect();
+//
+//            int responsecode = connection.getResponseCode();   //added by Pavithra on 25-09-2020
+//            if (responsecode == 200) {
+//
+//                try {
+//                    InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
+//                    BufferedReader reader = new BufferedReader(streamReader);
+//                    StringBuilder sb = new StringBuilder();
+//                    String inputLine = "";
+//                    while ((inputLine = reader.readLine()) != null) {
+//                        sb.append(inputLine);
+//                        break;
+//                    }
+//                    reader.close();
+//                    result = sb.toString();
+//                    strBillAmountResponse = result;
+//
+//                } finally {
+//                    connection.disconnect();
+//                }
+//            }else{
+//                strErrorMsg = connection.getResponseMessage();
+//                strBillAmountResponse="httperror";
+//            }
+//        } catch (Exception e) {
+//            Log.e("ERROR", e.getMessage(), e);
+//            strErrorMsg = e.getMessage();
+//        }
+//    }
+
+
+    //Added by Pavithra on 04-12-2020
+   private class MobPOSProductLookUpTask extends AsyncTask<String,String,String>{
 
         @Override
         protected void onPreExecute() {
@@ -2099,15 +3176,85 @@ public class SalesActivity extends AppCompatActivity {
 
         @Override
         protected String doInBackground(String... strings) {
-            try {
-                URL url = new URL(AppConfig.app_url+"GetProductLookUp?filter="+searchproduct); //Modified by  Pavithra on 30-05-2020
-                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
-                connection.setRequestMethod("GET");
-                connection.setReadTimeout(15000);
-                connection.setConnectTimeout(30000);
-                connection.setRequestProperty("Content-Type", "application/json");
-                connection.setRequestProperty("auth_key", "BFD2E5AC-101F-47ED-AB49-C2D18EE5EA97");
-                connection.connect();
+            mobPOSProductLookUp();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            if (pDialog.isShowing())
+                pDialog.dismiss();
+
+            if (strGetProductLookup.equals("httperror")) {
+//                    tsMessages(strErrorMsg);
+                tsErrorMessage("Http error occured\n\n"+strErrorMsg);
+                Toast.makeText(SalesActivity.this, "" + strErrorMsg, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+            if (strGetProductLookup != null && !strGetProductLookup.equals("")) {
+                Prlookup = new Productlookup();
+                ProductLookupResponse prResponse = new ProductLookupResponse();
+                gson = new Gson();
+                prResponse = gson.fromJson(result, ProductLookupResponse.class);
+//                List<Product> product = prResponse.Productlookup.Product; //commented by Pavithra on 04-12-2020
+                List<ProductRQPL> product = prResponse.Productlookup.Product; //Added by PAvithra on 04-12-2020
+                try {
+                    if (prResponse.Productlookup.ErrorStatus == 0) {
+                        for (int i = 0; i < product.size(); i++) {
+//                            Product pr = product.get(i); //commented by Pavithra on 04-12-2020
+                            ProductRQPL pr = product.get(i);  //Added by PAvithra on 04-12-2020
+                            slno++;
+                            productlist.add(new ProductModel("" + slno, "" + pr.product, "" + pr.Code, "" + pr.Manfr, "" + pr.MRP, "" + pr.SOH, "" + pr.pmID));
+                            productlistview.setAdapter(productLookupAdapter);
+                        }
+
+                    } else {
+                        Toast.makeText(SalesActivity.this, "" + prResponse.Productlookup.Message, Toast.LENGTH_SHORT).show();
+                        tsErrorMessage(prResponse.Productlookup.Message); //Added by Pavithra on 29-07-2020
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            } else {
+                Toast.makeText(SalesActivity.this, "No result from getProductLookup API", Toast.LENGTH_SHORT).show();
+                tsErrorMessage(""+strErrorMsg);
+            }
+        }
+    }
+
+    //Added by Pavithra on 04-12-2020
+    private void mobPOSProductLookUp(){
+
+        strErrorMsg = "";
+        strGetProductLookup = "";
+
+        Productlookup productlookup = new Productlookup();
+        productlookup.StoreId = 4;
+        productlookup.SubStoreId = 4;
+        productlookup.ProductNameFilter = searchproduct;
+        ProductlookupPL productlookupPL = new ProductlookupPL();
+        productlookupPL.ProductLookup = productlookup;
+
+        gson = new Gson();
+        String productLookupJsonStr = gson.toJson(productlookupPL);
+
+        try {
+//            URL url = new URL(AppConfig.app_url+"GetProductLookUp?filter="+searchproduct); //Modified by  Pavithra on 30-05-2020
+            URL url = new URL(AppConfig.app_url+"ProductLookUp"); //Modified by  Pavithra on 30-05-2020
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod("GET");
+            connection.setReadTimeout(15000);
+            connection.setConnectTimeout(30000);
+            connection.setRequestProperty("Content-Type", "application/json");
+            connection.setRequestProperty("auth_key", "6E5C3126-B09C-4236-8E57-73C11BB64106");
+            connection.setRequestProperty("user_key", "");
+            connection.setRequestProperty("input", productLookupJsonStr);
+            connection.connect();
+            int responsecode = connection.getResponseCode();   //added by Pavithra on 25-09-2020
+            if(responsecode == 200) {
                 try {
                     InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
                     BufferedReader reader = new BufferedReader(streamReader);
@@ -2124,44 +3271,116 @@ public class SalesActivity extends AppCompatActivity {
                 } finally {
                     connection.disconnect();
                 }
-
-            } catch (Exception e) {
-                Log.e("ERROR", e.getMessage(), e);
-                return null;
+            }else{
+                strErrorMsg = connection.getResponseMessage();
+                strGetProductLookup="httperror";
             }
-            return result;
+
+        } catch (Exception e) {
+            Log.e("ERROR", e.getMessage(), e);
+            strErrorMsg = e.getMessage();
         }
 
-        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
-        @Override
-        protected void onPostExecute(String str) {
-            super.onPostExecute(str);
-            if (pDialog.isShowing())
-                pDialog.dismiss();
-            if (strGetProductLookup != null && !strGetProductLookup.equals("")) {
-                Prlookup = new Productlookup();
-                ProductLookupResponse prResponse = new ProductLookupResponse();
-                gson = new Gson();
-                prResponse = gson.fromJson(result, ProductLookupResponse.class);
-                List<Product> product = prResponse.Productlookup.Product;
-                try {
-                    if (prResponse.Productlookup.ErrorStatus == 0) {
-                        for (int i = 0; i < product.size(); i++) {
-                            Product pr = product.get(i);
-                            slno++;
-                            productlist.add(new ProductModel("" + slno, "" + pr.product, "" + pr.Code, "" + pr.Manfr, "" + pr.MRP, "" + pr.SOH, "" + pr.pmID));
-                            productlistview.setAdapter(productLookupAdapter);
-                        }
-                    } else {
-                        Toast.makeText(SalesActivity.this, "" + prResponse.Productlookup.Message, Toast.LENGTH_SHORT).show();
-                        tsErrorMessage(prResponse.Productlookup.Message); //Added by Pavithra on 29-07-2020
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            } else {
-                Toast.makeText(SalesActivity.this, "No result from getProductLookup API", Toast.LENGTH_SHORT).show();
-            }
-        }
     }
+
+
+    //AsyncTask to get ProductLookup
+//    public class GetProductLookup extends AsyncTask<String, String, String> {
+//
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//            pDialog = new ProgressDialog(SalesActivity.this);
+//            pDialog.setMessage("Loading Products...Please wait.!!");
+//            pDialog.setCancelable(false);
+//            pDialog.show();
+//        }
+//
+//        @Override
+//        protected String doInBackground(String... strings) {
+//
+//            strErrorMsg = "";
+//            strGetProductLookup="";
+//            try {
+//                URL url = new URL(AppConfig.app_url+"GetProductLookUp?filter="+searchproduct); //Modified by  Pavithra on 30-05-2020
+//                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//                connection.setRequestMethod("GET");
+//                connection.setReadTimeout(15000);
+//                connection.setConnectTimeout(30000);
+//                connection.setRequestProperty("Content-Type", "application/json");
+//                connection.setRequestProperty("auth_key", "BFD2E5AC-101F-47ED-AB49-C2D18EE5EA97");
+//                connection.connect();
+//                int responsecode = connection.getResponseCode();   //added by Pavithra on 25-09-2020
+//                if(responsecode == 200) {
+//                    try {
+//                        InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
+//                        BufferedReader reader = new BufferedReader(streamReader);
+//                        StringBuilder sb = new StringBuilder();
+//                        String inputLine = "";
+//                        while ((inputLine = reader.readLine()) != null) {
+//                            sb.append(inputLine);
+//                            break;
+//                        }
+//                        reader.close();
+//                        result = sb.toString();
+//                        strGetProductLookup = result;
+//
+//                    } finally {
+//                        connection.disconnect();
+//                    }
+//                }else{
+//                    strErrorMsg = connection.getResponseMessage();
+//                    strGetProductLookup="httperror";
+//                }
+//
+//            } catch (Exception e) {
+//                Log.e("ERROR", e.getMessage(), e);
+//                strErrorMsg = e.getMessage();
+//                return null;
+//            }
+//            return result;
+//        }
+//
+//        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+//        @Override
+//        protected void onPostExecute(String str) {
+//            super.onPostExecute(str);
+//            if (pDialog.isShowing())
+//                pDialog.dismiss();
+//
+//            if (strGetProductLookup.equals("httperror")) {
+////                    tsMessages(strErrorMsg);
+//                tsErrorMessage("Http error occured\n\n"+strErrorMsg);
+//                Toast.makeText(SalesActivity.this, "" + strErrorMsg, Toast.LENGTH_SHORT).show();
+//                return;
+//            }
+//
+//            if (strGetProductLookup != null && !strGetProductLookup.equals("")) {
+//                Prlookup = new Productlookup();
+//                ProductLookupResponse prResponse = new ProductLookupResponse();
+//                gson = new Gson();
+//                prResponse = gson.fromJson(result, ProductLookupResponse.class);
+//                List<Product> product = prResponse.Productlookup.Product;
+//                try {
+//                    if (prResponse.Productlookup.ErrorStatus == 0) {
+//                        for (int i = 0; i < product.size(); i++) {
+//                            Product pr = product.get(i);
+//                            slno++;
+//                            productlist.add(new ProductModel("" + slno, "" + pr.product, "" + pr.Code, "" + pr.Manfr, "" + pr.MRP, "" + pr.SOH, "" + pr.pmID));
+////                            productlistview.setAdapter(productLookupAdapter);
+//                        }
+//
+//                    } else {
+//                        Toast.makeText(SalesActivity.this, "" + prResponse.Productlookup.Message, Toast.LENGTH_SHORT).show();
+//                        tsErrorMessage(prResponse.Productlookup.Message); //Added by Pavithra on 29-07-2020
+//                    }
+//                } catch (Exception e) {
+//                    e.printStackTrace();
+//                }
+//            } else {
+//                Toast.makeText(SalesActivity.this, "No result from getProductLookup API", Toast.LENGTH_SHORT).show();
+//                tsErrorMessage(""+strErrorMsg);
+//            }
+//        }
+//    }
 }

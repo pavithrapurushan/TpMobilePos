@@ -99,5 +99,21 @@
             android:textColor="@color/yellow"
             android:layout_marginTop="5dp"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="URL  "
+            android:textSize="30px"
+            android:textColor="@color/white"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tvUrlValue"
+            android:text=""
+            android:textSize="30px"
+            android:textColor="@color/yellow"
+            android:layout_marginTop="5dp"/>
+
     </LinearLayout>
 </RelativeLayout>

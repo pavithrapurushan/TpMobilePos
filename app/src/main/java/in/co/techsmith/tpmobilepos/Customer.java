@@ -13,4 +13,5 @@ public class Customer {
     public String Mobile ;
     public String Address ;
     public String FromWhere;
+    public String SubStoreId; //Added by Pavithra on 28-11-2020
 }

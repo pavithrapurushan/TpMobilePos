@@ -140,7 +140,8 @@ public class PaymentTenderListAdapter extends ArrayAdapter<String> {
 
         if (paymentdetailObj.PayType.equals("1")) {  //edited by Pavithra on 22-07-2020
             tvTenderDetail.setText("Cash");
-            imgBtnTenderType.setBackgroundResource(R.drawable.ic_dollar_icn);
+//            imgBtnTenderType.setBackgroundResource(R.drawable.ic_dollar_icn);
+            imgBtnTenderType.setBackgroundResource(R.drawable.ic_rupee_indian);
 //        } else if (paymentdetailObj.PayType.equals("2")) {
         } else if (paymentdetailObj.TenderName.equals("Card")) {
              tvTenderDetail.setText(paymentdetailObj.CardName);

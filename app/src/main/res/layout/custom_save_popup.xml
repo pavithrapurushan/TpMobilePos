@@ -36,6 +36,7 @@
             android:layout_gravity="center"
             android:gravity="center"
             android:layout_marginBottom="5px"/>
+
         <Button
             android:id="@+id/btnOkPopUp"
             android:layout_width="100px"
@@ -53,6 +54,8 @@
     </LinearLayout>
 
 </RelativeLayout>
+
+
 
 
 

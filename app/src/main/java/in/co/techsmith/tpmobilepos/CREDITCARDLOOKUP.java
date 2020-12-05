@@ -6,9 +6,10 @@ import java.util.List;
 public class CREDITCARDLOOKUP  {
     public CREDITCARDLOOKUP()
     {
-        Card= new ArrayList<CARD>();
+        CARD = new ArrayList<CARD>();
     }
-    public List<CARD> Card;
+//    public List<CARD> Card;
+    public List<CARD> CARD;
     public int ErrorStatus;
     public String Message;
 }

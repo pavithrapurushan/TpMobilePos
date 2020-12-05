@@ -25,10 +25,9 @@ import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import com.google.gson.Gson;
-
 import java.io.BufferedReader;
+import java.io.DataOutputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -41,6 +40,8 @@ import java.util.Calendar;
 //Modified by Pavithra on 23-07-2020
 //Modified by Pavithra on 29-07-2020
 //Modified by Pavithra on 31-07-2020
+//Modified by Pavithra on 25-09-2020
+//Modified by Pavithra on 30-09-2020
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -49,6 +50,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText etPassword;
 
     String strFromValidateUser = "";
+    String strErrorMsg = "";
 
     String user_name = "";
     String password = "";
@@ -65,6 +67,7 @@ public class LoginActivity extends AppCompatActivity {
 
     TextView tvBiilingDate;  //Added by Pavithra on 05-08-2020
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -72,7 +75,9 @@ public class LoginActivity extends AppCompatActivity {
         try {
             this.getSupportActionBar().hide();
         } catch (NullPointerException e) {
+            Log.d("LA", "" + e);
         }
+
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_PAN);
         getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
@@ -93,9 +98,11 @@ public class LoginActivity extends AppCompatActivity {
 //        String DeviceUniqueId = strUUID.substring(0,15).toUpperCase();
 
         tsCommonMethods = new TsCommonMethods(LoginActivity.this);
+        tsCommonMethods.allowPermissionsDynamically(); //Added by Pavithra on 14-09-2020
         Device_id = tsCommonMethods.GetDeviceUniqueId();
-        Toast.makeText(this, "" + tsCommonMethods.GetDeviceUniqueId(), Toast.LENGTH_SHORT).show();
-        Log.d("LA", "DeviceId = " + tsCommonMethods.GetDeviceUniqueId());
+
+//        Toast.makeText(this, "" + tsCommonMethods.GetDeviceUniqueId(), Toast.LENGTH_SHORT).show();
+//        Log.d("LA", "DeviceId = " + tsCommonMethods.GetDev    iceUniqueId());
 
         etBillingDate = (EditText) findViewById(R.id.etBillingDate);
         etUserName = (EditText) findViewById(R.id.etUsername);
@@ -128,6 +135,9 @@ public class LoginActivity extends AppCompatActivity {
         if (user_name.equals("") || password.equals("") || bill_date.equals("")) {
             Toast.makeText(this, "Fields cannot be empty", Toast.LENGTH_SHORT).show();
         } else {
+            if (Device_id.equalsIgnoreCase("") || Device_id == null) {
+                Device_id = tsCommonMethods.GetDeviceUniqueId();
+            }
             new MobPOSValidateUserAPITask().execute();
         }
     }
@@ -141,6 +151,7 @@ public class LoginActivity extends AppCompatActivity {
     private class MobPOSValidateUserAPITask extends AsyncTask<String,String,String> {
 
         ProgressDialog progressDialog = new ProgressDialog(LoginActivity.this);
+
         @Override
         protected void onPreExecute() {
             super.onPreExecute();
@@ -161,8 +172,16 @@ public class LoginActivity extends AppCompatActivity {
             if(progressDialog.isShowing())
                 progressDialog.dismiss();
 
+            if (strFromValidateUser.equals("httperror")) {
+//                    tsMessages(strErrorMsg);
+                tsErrorMessage("Http error occured\n\n"+strErrorMsg);
+                Toast.makeText(LoginActivity.this, "" + strErrorMsg, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             if (strFromValidateUser.equals("") || strFromValidateUser == null) {
                 Toast.makeText(LoginActivity.this, "No result  from web", Toast.LENGTH_SHORT).show();
+                tsErrorMessage(""+strErrorMsg);
             } else {
                 Gson gson = new Gson();
                 ValidateUserResponse validateUserrObj = gson.fromJson(strFromValidateUser, ValidateUserResponse.class);
@@ -202,16 +221,18 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void mobPOSValidateUser() {
+    private void  mobPOSValidateUser() {
 
         try {
+            strErrorMsg = "";    //added by Pavithra on 25-09-2020
+            strFromValidateUser = "";    //added by Pavithra on 25-09-2020
             //Added by Pavithra on 23-07-2020
             User usrObj = new User();
-            usrObj.UserId = user_name;
-            usrObj.Password = password;
-            usrObj.BillDate = bill_date;
-//            usrObj.DeviceId = tsCommonMethods.GetDeviceUniqueId();
-            usrObj.DeviceId = Device_id;
+//            usrObj.UserId = user_name;
+//            usrObj.Password = password;
+//            usrObj.BillDate = bill_date;
+//            usrObj.DeviceId = Device_id;
+
             UserPL userPLObj = new UserPL();
             userPLObj.User = usrObj;
 
@@ -219,13 +240,36 @@ public class LoginActivity extends AppCompatActivity {
             String userObjJsonstr = gson.toJson(userPLObj);
 
 
-            URL url = new URL(AppConfig.app_url + "ValidateUser"); //give product id as filter
+            Login loginObj = new Login();
+            loginObj.StoreCode = "OP02";
+            loginObj.SubStoreCode = "MAIN";
+            loginObj.UserId = user_name;
+            loginObj.Password = password;
+            loginObj.Date = bill_date;
+            loginObj.DeviceId = Device_id;
+            loginObj.Session = "ABC";
+
+            LoginRequest loginRequest = new LoginRequest();
+            loginRequest.Login = loginObj;
+
+            gson = new Gson();
+            String loginRequestJsonStr = gson.toJson(loginRequest);
+
+//            URL url = new URL(AppConfig.app_url + "ValidateUser"); //give product id as filter
+//            URL url = new URL(AppConfig.app_url + "UserValidation"); //give product id as filter
+            URL url = new URL("http://tsmith.co.in/MobPOS2/api/UserValidation"); //give product id as filter
+
+//            http://tsmith.co.in/MobPOS2/api/UserValidation
+//            Api Url : http://tsmith.co.in/MobPOS2/api/UserValidation //Added by Pavithra on 23-11-2020
+
+
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
             connection.setRequestMethod("POST");
             connection.setReadTimeout(15000);
             connection.setConnectTimeout(30000);
             connection.setRequestProperty("Content-Type", "application/json");
-            connection.setRequestProperty("auth_key", "BFD2E5AC-101F-47ED-AB49-C2D18EE5EA97");
+            connection.setRequestProperty("auth_key", "6E5C3126-B09C-4236-8E57-73C11BB64106"); //Modified by PAvithra on 23-11-2020
+//            connection.setRequestProperty("auth_key", "BFD2E5AC-101F-47ED-AB49-C2D18EE5EA97");
             connection.setRequestProperty("user_key", "");
 
             //Following 3 lines commented by Pavithra on 23-07-2020
@@ -236,29 +280,46 @@ public class LoginActivity extends AppCompatActivity {
             //Added by Pavithra on 23-07-2020
 
 //            {"User":{"BillDate":"23/07/2020","DeviceId":"1EAF283696504E7","Password":"abcd","UserId":"Admin"}}
-            connection.setRequestProperty("xml_str", userObjJsonstr);
-
+//            connection.setRequestProperty("xml_str", userObjJsonstr);  //Commented by Pavithra on 30-09-2020
             connection.connect();
-            try {
-                InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
-                BufferedReader reader = new BufferedReader(streamReader);
-                StringBuilder sb = new StringBuilder();
-                String inputLine = "";
 
-                while ((inputLine = reader.readLine()) != null) {
-                    sb.append(inputLine);
-                    break;
-                }
-                reader.close();
-                String result = sb.toString();
-                strFromValidateUser = result;
+//            {"Login":{"Date":"18/11/2020","DeviceId":"DB524156498D4B5","Password":"tspltpad","Session":"ABC","StoreCode":"OP02","SubStoreCode":"MAIN","UserId":"Admin"}}
+
+            //following added by 30-09-2020
+            DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
+//            wr.writeBytes(userObjJsonstr); //Commented by Pavithra on 23-11-2020
+            wr.writeBytes(loginRequestJsonStr); //Added by Pavithra on 23-11-2020
+            wr.flush();
+            wr.close();
+
+            int responsecode = connection.getResponseCode();   //added by Pavithra on 25-09-2020
+            if(responsecode == 200) {
+                try {
+                    InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
+                    BufferedReader reader = new BufferedReader(streamReader);
+                    StringBuilder sb = new StringBuilder();
+                    String inputLine = "";
+
+                    while ((inputLine = reader.readLine()) != null) {
+                        sb.append(inputLine);
+                        break;
+                    }
+
+                    reader.close();
+                    String result = sb.toString();
+                    strFromValidateUser = result;
 
 //                {"UserId":"Admin","UserName":"Admin","Id":1,"ErrorStatus":0,"Message":"Validation is Successfull"}
-            } finally {
-                connection.disconnect();
+                } finally {
+                    connection.disconnect();
+                }
+            }else{
+                strErrorMsg = connection.getResponseMessage();
+                strFromValidateUser="httperror";
             }
         } catch (Exception e) {
             Log.e("ERROR", e.getMessage(), e);
+            strErrorMsg = e.getMessage();
         }
     }
 

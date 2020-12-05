@@ -5,6 +5,6 @@ public class CalcBillAmount {
     public CalcBillAmount() {
     }
 
-    public Salesbill SalesBill;
+//    public Salesbill SalesBill; //commented by Pavithra on 01-12-2020
 
 }

@@ -36,7 +36,6 @@ public class customtoolbar extends TabActivity {
     View viewHighlightRetrieve;
     View viewHighlightNewCustomer;
 
-
     FrameLayout frameLayoutTabs;
     FrameLayout frameLayoutContnts;
 
@@ -204,15 +203,14 @@ public class customtoolbar extends TabActivity {
         tabHost.addTab(spec8);
 
 
-        //added by 1165 on 29-05-2020
+        //Added by 1165 on 29-05-2020
         tabHost.setOnTabChangedListener(new TabHost.OnTabChangeListener() {
             @Override
             public void onTabChanged(String tabId) {
 
                 int i = tabHost.getCurrentTab();
                 if (i == 4) {
-
-                    Toast.makeText(customtoolbar.this, ""+i, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(customtoolbar.this, ""+i, Toast.LENGTH_SHORT).show();  //commented by Pavithra on 28-09-2020
 
 //                    SalessummaryDetailObjStr = prefs.getString("SalessummaryDetailObjStr", "");
 ////                    NumberOfItemsStr = prefs.getString("NumberOfItems", "");
@@ -225,22 +223,19 @@ public class customtoolbar extends TabActivity {
 //
 ////                    obj.billtotal =
 //                    obj.billtotal.setText("100");
-                    Toast.makeText(customtoolbar.this, "Tab changed", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(customtoolbar.this, "Tab changed", Toast.LENGTH_SHORT).show();
 
                     // displayPlayer1ListView();
-
                 } else if (i == 1) {
 //                    displayPlayer1NewListView();
-                    Toast.makeText(customtoolbar.this, ""+i, Toast.LENGTH_SHORT).show();
-
+//                    Toast.makeText(customtoolbar.this, ""+i, Toast.LENGTH_SHORT).show();
                 } else if (i == 2) {
 //                    displayPlayer1NewListView();
-                    Toast.makeText(customtoolbar.this, ""+i, Toast.LENGTH_SHORT).show();
-
+//                    Toast.makeText(customtoolbar.this, ""+i, Toast.LENGTH_SHORT).show();
                 } else if (i == 3) {
 //                    displayPlayer1NewListView();
 
-                    Toast.makeText(customtoolbar.this, ""+i, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(customtoolbar.this, ""+i, Toast.LENGTH_SHORT).show();
                 }
             }
         });
@@ -388,13 +383,6 @@ public class customtoolbar extends TabActivity {
             viewHighlightRetrieve.setVisibility(View.INVISIBLE);
             viewHighlightNewCustomer.setVisibility(View.INVISIBLE);
 
-//            Intent intnt=  new Intent(customtoolbar.this,PaymentActivity.class);
-//            startActivity(intnt);
-
-
-
-
-
         }
         else if (target.getId() == R.id.salesreturn) {
 
@@ -412,16 +400,14 @@ public class customtoolbar extends TabActivity {
             viewHighlightRetrieve.setVisibility(View.INVISIBLE);
             viewHighlightNewCustomer.setVisibility(View.INVISIBLE);
 
-
             payment.setAlpha(0.30f);
             sales.setAlpha(0.30f);
             logout.setAlpha(0.30f);
             retrieve.setAlpha(0.30f);
             print.setAlpha(0.30f);
-
         }
-        else if (target.getId() == R.id.retrieve) {
 
+        else if (target.getId() == R.id.retrieve) {
 
             tabHost.setCurrentTab(6);
 

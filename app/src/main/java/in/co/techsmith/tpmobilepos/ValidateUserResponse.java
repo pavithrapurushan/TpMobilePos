@@ -8,6 +8,13 @@ public class ValidateUserResponse {
     public int Id ;
 
     public String DeviceId;
+    public String Session ;
+
+    public int StoreId ;
+    public int SubStoreId ;
+    public String DocDate ;
+    //
+
     public int CounterId ;
     public int ShiftId ;
     public int SessionId ;

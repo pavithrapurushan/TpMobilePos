@@ -2,6 +2,7 @@
 
 <!--Modified by Pavithra on 02-07-2020-->
 <!--Modified by Pavithra on 18-08-2020-->
+<!--Modified by Pavithra  on 18-09-2020-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -122,11 +123,14 @@
 
         <!--edited by Pavithra on 20-08-2020-->
         <ListView
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="450px"
             android:id="@+id/batch_listview"
             android:layout_marginLeft="128px"
-            android:layout_marginRight="128px"></ListView>
+            android:layout_marginRight="128px"
+            android:divider="@android:color/transparent"
+            ></ListView> <!--Modified by Pavithra  on 18-09-2020-->
+<!--        android:layout_width="wrap_content"-->
     </LinearLayout>
 </RelativeLayout>
 

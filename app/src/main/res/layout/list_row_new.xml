@@ -75,6 +75,7 @@
         android:inputType="numberDecimal"
         android:layout_weight="1">
     </TextView>
+
     <TextView
         android:id="@+id/tvTotal"
         android:layout_width="0dp"

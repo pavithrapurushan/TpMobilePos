@@ -2,6 +2,7 @@
 
 <!--Created by Pavithra on 10-08-2020-->
 <!--Created by Pavithra on 19-08-2020-->
+<!--Modified by Pavithra on 15-09-2020-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -74,11 +75,12 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Total"
+                    android:text="Net Amt"
                     android:textColor="@color/white"
                     android:textSize="@dimen/sales_lvheader_text_size"
                     android:layout_weight="2.5"
                     android:gravity="center"/>
+<!--                android:text="Total"-->
 
             </LinearLayout>
 
@@ -292,10 +294,12 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
-                            android:text="Total Amount:"
+                            android:text="Gross Amount:"
                             android:gravity="right"
                             android:textSize="@dimen/billsummary_text_size"
                             android:textColor="#FFFFFF"/>
+
+<!--                        android:text="Total Amount:"-->
 
                         <TextView
                             android:id="@+id/itemtotal"
@@ -431,10 +435,12 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_weight="0.5"
-                            android:text="Net Amount:"
+                            android:text="Bill Amount:"
                             android:gravity="right"
                             android:textSize="@dimen/billsummary_text_size"
                             android:textColor="#FFFFFF"/>
+
+<!--                        android:text="Net Amount:"-->
 
                         <TextView
                             android:id="@+id/billtotal"

@@ -2,7 +2,8 @@ package in.co.techsmith.tpmobilepos;
 
 class LoyaltyCustomer {
 
-    public String LoyaltyId;;
+//    public String LoyaltyId;;//commented by Pavithra on 27-11-2020
+    public String ID;; //Added by Pavithra on 27-11-2020
     public String LoyaltyNo;  // LoyaltyNo = loyaltycode
     public String Name;
     public String AlternateCard;

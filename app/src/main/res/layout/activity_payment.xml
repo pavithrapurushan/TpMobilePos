@@ -3,6 +3,7 @@
 <!--Created by Pavithra on 13-08-2020-->
 <!--Modified by Pavithra on 14-08-2020-->
 <!--Modified by Pavithra on 20-08-2020-->
+<!--Modified by Pavithra on 17-09-2020-->
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
@@ -17,7 +18,40 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="#113A4E"
-            android:orientation="horizontal">
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            android:paddingLeft="10px">
+
+             <TextView
+                    android:id="@+id/payment_window"
+                    android:layout_width="385dp"
+                    android:textSize="36px"
+                    android:fontFamily="roboto"
+                    android:textColor="#FFFFFF"
+                    android:text="Payment Window"
+                    android:layout_height="wrap_content" />
+
+                <TextView
+                    android:id="@+id/tvStoreIdPayWindow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="StoreId : "
+                    android:textColor="#FFFFFF"
+                    android:textSize="30px"
+                    android:layout_marginLeft="200px"/>
+
+                <TextView
+                    android:id="@+id/tvShiftIdPayWindow"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="ShiftId : "
+                    android:textColor="#FFFFFF"
+                    android:textSize="30px"
+                    android:layout_marginLeft="100px"/>
+
+
+
+
         </LinearLayout>
 
         <LinearLayout
@@ -42,9 +76,10 @@
                     android:layout_height="42px"
                     android:layout_weight="1"
                     android:layout_gravity="center_horizontal"
-                    android:background="@drawable/cash"
+                    android:background="@drawable/ic_rupee_indian_white"
                     android:layout_marginTop="5px"
                     android:layout_marginBottom="10px"/>
+<!--                android:background="@drawable/ic_rupee_indian_white"-->
 
                 <ImageButton
                     android:id="@+id/card"
@@ -525,7 +560,7 @@
                         android:textColor="#FFBB33"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="3"
+                        android:text="0"
                         android:gravity="center"
                         android:layout_marginTop="10px"/>
 
@@ -549,7 +584,7 @@
                         android:textColor="#FFBB33"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="212.00"
+                        android:text="00.00"
                         android:gravity="right"
                         android:layout_marginTop="10px"/>
                 </LinearLayout>
@@ -571,7 +606,7 @@
                         android:textColor="#00FF00"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="220.00"
+                        android:text="00.00"
                         android:gravity="right"
                         android:layout_marginTop="10px"/>
                 </LinearLayout>
@@ -595,7 +630,7 @@
                         android:textColor="#FF073A"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="8000.00"
+                        android:text="00.00"
                         android:paddingRight="15px"
                         android:layout_marginTop="10px"/>
 

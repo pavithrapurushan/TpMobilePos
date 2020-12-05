@@ -32,9 +32,14 @@ import com.google.gson.Gson;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.BufferedOutputStream;
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.ProtocolException;
 import java.net.SocketTimeoutException;
@@ -49,6 +54,11 @@ import java.util.List;
 //Modified by Pavithra on 29-07-2020
 //Modified by Pavithra on 03-08-2020
 //Modified by Pavithra on 13-08-2020
+//Modified by Pavithra on 17-09-2020
+//Modified by Pavithra on 22-09-2020
+//Modified by Pavithra on 25-09-2020
+//Modified by Pavithra on 28-09-2020
+//Modified by Pavithra on 30-09-2020
 
 public class PaymentActivityNew extends AppCompatActivity {
 
@@ -102,6 +112,7 @@ public class PaymentActivityNew extends AppCompatActivity {
     PaymentTenderListAdapter paymentTenderListAdapter;
 
     String strNextBillNoResponse = "";
+    String strErrorMsg = "";
     NextBillNoResponsePL nextBillNoResponsePLObj ;
 
     boolean isDeletd = false;
@@ -273,8 +284,8 @@ public class PaymentActivityNew extends AppCompatActivity {
         String store_id = "3";
         String textStore = "<font color=#ffffff>StoreId : </font> <font color=#ffcc00>"+ store_id +"</font>";
         String textShift = "<font color=#ffffff>ShiftId : </font> <font color=#ffcc00>"+ shiftId +"</font>";
-//        tvStoreId.setText(Html.fromHtml(textStore));
-//        tvShiftId.setText(Html.fromHtml(textShift));
+        tvStoreId.setText(Html.fromHtml(textStore));
+        tvShiftId.setText(Html.fromHtml(textShift));
 /****************************************************************************************************************************/
 
 
@@ -291,6 +302,48 @@ public class PaymentActivityNew extends AppCompatActivity {
 
         paymentdetailsList = new ArrayList<>(); //Added by 1165 on 08-02-2020
         paymentdetailsListForAPISave = new ArrayList<>(); //Added by 1165 on 08-02-2020
+
+
+
+        //Following section added by Pavithra on 22-09-2020
+        String loyalty_code = prefs.getString("LoyaltyCode", "");
+        String cust_info = prefs.getString("CustomerDetailJsonStr", "");
+        if(loyalty_code.equals("")&& cust_info.equals("")){
+            cashamount.setEnabled(false);
+            cardamount.setEnabled(false);
+            walletamount.setEnabled(false);
+            edtcardname.setEnabled(false);
+            edtWallet.setEnabled(false);
+            etAUCode.setEnabled(false);
+            etAUCodeWallet.setEnabled(false);
+            cashsubmitbtn.setEnabled(false);
+            cardsubmitbtn.setEnabled(false);
+            walltsubmitbtn.setEnabled(false);
+            cardsearchbtn.setEnabled(false);
+            walletsearchbtn.setEnabled(false);
+            imgBtnAutofillCashAmt.setEnabled(false);
+            imgBtnAutofillCardAmt.setEnabled(false);
+            imgBtnAutofillWalletAmt.setEnabled(false);
+            btnSaveBill.setEnabled(false);
+        }else{
+            cashamount.setEnabled(true);
+            cardamount.setEnabled(true);
+            walletamount.setEnabled(true);
+            edtcardname.setEnabled(true);
+            edtWallet.setEnabled(true);
+            etAUCode.setEnabled(true);
+            etAUCodeWallet.setEnabled(true);
+            cashsubmitbtn.setEnabled(true);
+            cardsubmitbtn.setEnabled(true);
+            walltsubmitbtn.setEnabled(true);
+            cardsearchbtn.setEnabled(true);
+            walletsearchbtn.setEnabled(true);
+            imgBtnAutofillCashAmt.setEnabled(true);
+            imgBtnAutofillCardAmt.setEnabled(true);
+            imgBtnAutofillWalletAmt.setEnabled(true);
+            btnSaveBill.setEnabled(true);
+        }
+
 
 
         IsSaveEnabled = prefs.getBoolean("SaveEnabled", false);
@@ -659,7 +712,7 @@ public class PaymentActivityNew extends AppCompatActivity {
                     public void onClick(View view) {
 //                        cardsubmitbtn.setBackgroundColor(getResources().getColor(R.color.colorAccent));
 
-                        if (cardamount.getText().toString().equals("")||etAUCode.getText().toString().equals("")) {
+                        if (cardamount.getText().toString().equals("")||etAUCode.getText().toString().equals("")|| edtcardname.getText().toString().equals("")) { //modified by Pavithra on 18-09-2020
                             Toast.makeText(PaymentActivityNew.this, "Fields cannot be empty", Toast.LENGTH_SHORT).show();
                         } else {
 
@@ -848,7 +901,7 @@ public class PaymentActivityNew extends AppCompatActivity {
 
 //                        walltsubmitbtn.setBackgroundColor(getResources().getColor(R.color.colorAccent));
 
-                        if (walletamount.getText().toString().equals("")||etAUCodeWallet.getText().toString().equals("")) {
+                        if (walletamount.getText().toString().equals("")||etAUCodeWallet.getText().toString().equals("")||etWalletname.getText().toString().equals("")) {
                             Toast.makeText(PaymentActivityNew.this, "Fields cannot be empty", Toast.LENGTH_SHORT).show();
                         } else {
 
@@ -1030,13 +1083,15 @@ public class PaymentActivityNew extends AppCompatActivity {
         cardsearchbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new CreditcardSearchAsyncTask().execute();
+//                new CreditcardSearchAsyncTask().execute(); //commenetd by Pavithra on 05-12-2020
+                new MobPOSCreditCardLookUpTask().execute(); //Added by Pavithra on 05-12-2020
             }
         });
         walletsearchbtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new WalletSearchAsyncTask().execute();
+//                new WalletSearchAsyncTask().execute();
+                new MobPOSWalletLookUpTask().execute();
             }
         });
 
@@ -1424,6 +1479,14 @@ public class PaymentActivityNew extends AppCompatActivity {
             if (pDialog.isShowing())
                 pDialog.dismiss();
 
+
+            if (strNextBillNoResponse.equals("httperror")) {
+//                    tsMessages(strErrorMsg);
+                tsErrorMessage("Http error occured\n\n"+strErrorMsg);
+                Toast.makeText(PaymentActivityNew.this, "" + strErrorMsg, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             Gson gson1 = new Gson();
             if (strNextBillNoResponse != null && !strNextBillNoResponse.equals("")) {
                 nextBillNoResponsePLObj = new NextBillNoResponsePL();
@@ -1450,12 +1513,15 @@ public class PaymentActivityNew extends AppCompatActivity {
                 }
             } else {
                 Toast.makeText(PaymentActivityNew.this, "No result from web", Toast.LENGTH_SHORT).show();
+                tsErrorMessage(""+strErrorMsg);
             }
         }
     }
 
     private void mobPosGetNextBillNumber() {
 
+        strErrorMsg = "";
+        strNextBillNoResponse="";
         try {
             URL url = new URL(AppConfig.app_url + "GetNextBillNumber?YearSerialNo=2015&BillType=SALES"); //Modified by 1165 on 30-05-2020
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -1466,24 +1532,32 @@ public class PaymentActivityNew extends AppCompatActivity {
             connection.setRequestProperty("auth_key", "BFD2E5AC-101F-47ED-AB49-C2D18EE5EA97");
             connection.setRequestProperty("user_key", "");
             connection.connect();
-            try {
-                InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
-                BufferedReader reader = new BufferedReader(streamReader);
-                StringBuilder sb = new StringBuilder();
-                String inputLine = "";
-                while ((inputLine = reader.readLine()) != null) {
-                    sb.append(inputLine);
-                    break;
+
+            int responsecode = connection.getResponseCode();
+            if(responsecode == 200) {
+                try {
+                    InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
+                    BufferedReader reader = new BufferedReader(streamReader);
+                    StringBuilder sb = new StringBuilder();
+                    String inputLine = "";
+                    while ((inputLine = reader.readLine()) != null) {
+                        sb.append(inputLine);
+                        break;
+                    }
+                    reader.close();
+                    result = sb.toString();
+                    strNextBillNoResponse = result;
+                } finally {
+                    connection.disconnect();
                 }
-                reader.close();
-                result = sb.toString();
-                strNextBillNoResponse = result;
-            } finally {
-                connection.disconnect();
+            }else{
+                strErrorMsg = connection.getResponseMessage();
+                strNextBillNoResponse="httperror";
             }
 
         } catch (Exception e) {
             Log.e("ERROR", e.getMessage(), e);
+            strErrorMsg =  e.getMessage();
         }
     }
 
@@ -1517,6 +1591,48 @@ public class PaymentActivityNew extends AppCompatActivity {
             SalessummaryDetailObjStr = prefs.getString("SalessummaryDetailObjStr", "");
             Log.d("OnResume SalesDetail", SalesdetailPLObjStr);
 
+
+
+            //Following section added by Pavithra on 22-09-2020
+            String loyalty_code = prefs.getString("LoyaltyCode", "");
+            String cust_info = prefs.getString("CustomerDetailJsonStr", "");
+            if(loyalty_code.equals("")&& cust_info.equals("")){
+                cashamount.setEnabled(false);
+                cardamount.setEnabled(false);
+                walletamount.setEnabled(false);
+                edtcardname.setEnabled(false);
+                edtWallet.setEnabled(false);
+                etAUCode.setEnabled(false);
+                etAUCodeWallet.setEnabled(false);
+                cashsubmitbtn.setEnabled(false);
+                cardsubmitbtn.setEnabled(false);
+                walltsubmitbtn.setEnabled(false);
+                cardsearchbtn.setEnabled(false);
+                walletsearchbtn.setEnabled(false);
+                imgBtnAutofillCashAmt.setEnabled(false);
+                imgBtnAutofillCardAmt.setEnabled(false);
+                imgBtnAutofillWalletAmt.setEnabled(false);
+                btnSaveBill.setEnabled(false);
+                lvTenderList.setAdapter(null); //Added by Pavithra on 28-09-2020
+            }else{
+                cashamount.setEnabled(true);
+                cardamount.setEnabled(true);
+                walletamount.setEnabled(true);
+                edtcardname.setEnabled(true);
+                edtWallet.setEnabled(true);
+                etAUCode.setEnabled(true);
+                etAUCodeWallet.setEnabled(true);
+                cashsubmitbtn.setEnabled(true);
+                cardsubmitbtn.setEnabled(true);
+                walltsubmitbtn.setEnabled(true);
+                cardsearchbtn.setEnabled(true);
+                walletsearchbtn.setEnabled(true);
+                imgBtnAutofillCashAmt.setEnabled(true);
+                imgBtnAutofillCardAmt.setEnabled(true);
+                imgBtnAutofillWalletAmt.setEnabled(true);
+                btnSaveBill.setEnabled(true);
+            }
+
 //        Toast.makeText(this, "New PaymentActivity", Toast.LENGTH_SHORT).show();
 
             if (SalesdetailPLObjStr.equals("") || SalessummaryDetailObjStr.equals("")) {
@@ -1525,31 +1641,36 @@ public class PaymentActivityNew extends AppCompatActivity {
 
                 IsSaveEnabled = prefs.getBoolean("SaveEnabled", false);
                 if (IsSaveEnabled) {
-                    btnSaveBill.setEnabled(true);
-                    btnSaveBill.setAlpha(1f);
+                    if(loyalty_code.equals("")&& cust_info.equals("")){ //added by Pavithra on 22-09-2020
 
-                    items.setText("");
-                    billtotal.setText("");
-                    paymenttotal.setText("");
-                    balance.setText("");
-                    lvTenderList.setAdapter(null);
+                    }else {
 
-                    btnSaveBill.setEnabled(true);
-                    etAUCode.setEnabled(true);
-                    etAUCodeWallet.setEnabled(true);
+                        btnSaveBill.setEnabled(true);
+                        btnSaveBill.setAlpha(1f);
 
-                    btnSaveBill.setAlpha(1f);
-                    cashsubmitbtn.setAlpha(1f);
-                    cardsubmitbtn.setAlpha(1f);
-                    walltsubmitbtn.setAlpha(1f);
+                        items.setText("");
+                        billtotal.setText("");
+                        paymenttotal.setText("");
+                        balance.setText("");
+                        lvTenderList.setAdapter(null);
 
-                    cashamount.setEnabled(true);
-                    cardamount.setEnabled(true);
-                    walletamount.setEnabled(true);
-                    edtcardname.setEnabled(true);
-                    etAUCode.setEnabled(true);
-                    edtWallet.setEnabled(true);
-                    etAUCodeWallet.setEnabled(true);
+                        btnSaveBill.setEnabled(true);
+                        etAUCode.setEnabled(true);
+                        etAUCodeWallet.setEnabled(true);
+
+                        btnSaveBill.setAlpha(1f);
+                        cashsubmitbtn.setAlpha(1f);
+                        cardsubmitbtn.setAlpha(1f);
+                        walltsubmitbtn.setAlpha(1f);
+
+                        cashamount.setEnabled(true);
+                        cardamount.setEnabled(true);
+                        walletamount.setEnabled(true);
+                        edtcardname.setEnabled(true);
+                        etAUCode.setEnabled(true);
+                        edtWallet.setEnabled(true);
+                        etAUCodeWallet.setEnabled(true);
+                    }
                 }
 
 
@@ -1670,7 +1791,6 @@ public class PaymentActivityNew extends AppCompatActivity {
         }
     }
 
-
     //Added by Pavithra on 29-07-2020
     public void tsErrorMessage(String error_massage){
 
@@ -1724,9 +1844,16 @@ public class PaymentActivityNew extends AppCompatActivity {
             if (progressDialog.isShowing()) {
                 progressDialog.dismiss();
             }
+            if (strSaveBillResponse.equals("httperror")) {
+//                    tsMessages(strErrorMsg);
+                tsErrorMessage("Http error occured\n\n"+strErrorMsg);
+                Toast.makeText(PaymentActivityNew.this, "" + strErrorMsg, Toast.LENGTH_SHORT).show();
+                return;
+            }
 
             if (strSaveBillResponse.equals("") || strSaveBillResponse == null) {
                 Toast.makeText(PaymentActivityNew.this, "No result from web Save", Toast.LENGTH_SHORT).show();
+                tsErrorMessage(""+strErrorMsg);
             } else {
                 try {
                     JSONObject jresponse = new JSONObject(strSaveBillResponse);
@@ -1751,6 +1878,9 @@ public class PaymentActivityNew extends AppCompatActivity {
                         cashsubmitbtn.setAlpha(0.4f); //Added by Pavithra on 02-07-2020
                         cardsubmitbtn.setAlpha(0.4f); //Added by Pavithra on 02-07-2020
                         walltsubmitbtn.setAlpha(0.4f); //Added by Pavithra on 02-07-2020
+                        imgBtnAutofillCashAmt.setAlpha(0.4f); //Added by Pavithra on 18-09-2020
+                        imgBtnAutofillCardAmt.setAlpha(0.4f); //Added by Pavithra on 18-09-2020
+                        imgBtnAutofillWalletAmt.setAlpha(0.4f); //Added by Pavithra on 18-09-2020
                         editor.commit();
 
                         //Added by Pavithra on 15-07-2020
@@ -1763,6 +1893,9 @@ public class PaymentActivityNew extends AppCompatActivity {
                         etAUCodeWallet.setEnabled(false);
                         cardsearchbtn.setEnabled(false);  //Added by Pavithra on 16-07-2020
                         walletsearchbtn.setEnabled(false); //Added by Pavithra on 16-07-2020
+                        imgBtnAutofillCashAmt.setEnabled(false); //Added by Pavithra on 18-09-2020
+                        imgBtnAutofillCardAmt.setEnabled(false); //Added by Pavithra on 18-09-2020
+                        imgBtnAutofillWalletAmt.setEnabled(false); //Added by Pavithra on 18-09-2020
 
                         lvTenderList.setAdapter(paymentTenderListAdapter);//to make delete button disable  //Added by Pavithra on 15-07-2020
                         showPopUP(bill_series + bill_no);
@@ -1779,14 +1912,12 @@ public class PaymentActivityNew extends AppCompatActivity {
         }
     }
 
-
    //Added by Pavithra on 15-07-2020
     @Override
     public void onBackPressed() {
 
         // super.onBackPressed(); // Comment this super call to avoid calling finish() or fragmentmanager's backstack pop operation.
     }
-
 
     public void tsMessage(String str){
 
@@ -1823,7 +1954,6 @@ public class PaymentActivityNew extends AppCompatActivity {
         });
     }
 
-
     public void showPopUP(String billNo){
 
         final Dialog dialog = new Dialog(PaymentActivityNew.this);
@@ -1858,8 +1988,11 @@ public class PaymentActivityNew extends AppCompatActivity {
             }
         });
     }
+
     private void mobPosSaveBill() {
         try {
+            strErrorMsg = "";
+            strSaveBillResponse = "";
 //            URL url = new URL("http://tsmith.co.in/MobPOS/api/SaveBill");
             URL url = new URL(AppConfig.app_url + "SaveBill"); //Modified by Pavithra on 30-05-2020
             HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -1937,42 +2070,69 @@ public class PaymentActivityNew extends AppCompatActivity {
             connection.setRequestProperty("Content-Type", "application/json");
             connection.setRequestProperty("auth_key", "BFD2E5AC-101F-47ED-AB49-C2D18EE5EA97");
             connection.setRequestProperty("user_key", "");
-            connection.setRequestProperty("xml_bill", requestjson);
+//            connection.setRequestProperty("xml_bill", requestjson);  //commented by Pavithra on 30-09-2020
 //            connection.setRequestProperty("cust_detail", "{\"Customer\": {\"CustId\": \"823\",\"CustName\": \"XXX\",\"BillDate\": \"26/07/2019\",\"CustType\": \"LOCAL\",\"StoreId\": \"5\"}}");
+
+//            OutputStream out = null;
+//
+//
+//            out = new BufferedOutputStream(connection.getOutputStream());
+//
+//            BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(out, "UTF-8"));
+//            writer.write(requestjson);
+//            writer.flush();
+//            writer.close();
+//            out.close();
+
             connection.connect();
+
+            //following added by 30-09-2020
+
+            DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
+            wr.writeBytes(requestjson);
+//            wr.writeBytes (String.valueOf(requestjson.getBytes("UTF-8")));
+            wr.flush();
+            wr.close();
 
             //input json
 
-
 //            {"SalesBill":[{"Payment":{"PaymentDetail":[{"CQIssuedBank":"","CardAuthorisationNo":"","CardName":"COD - Blue Dart","CardNo":"","CardOwner":"","CardType":"","ChequeDate":"","ChequeNo":"","CreditType":"0","CurrencyDenom":"","CurrencyId":"","CurrencyNumber":"","CurrencyType":"0","ExchangeRate":"","ForexType":"","PaidAmount":"1035.0","PayType":"1","PlutusId":"0","Tender":"1035.0","WalletId":"0"},{"CQIssuedBank":"","CardAuthorisationNo":"","CardName":"","CardNo":"","CardOwner":"","CardType":"","ChequeDate":"","ChequeNo":"","CreditType":"0","CurrencyDenom":"","CurrencyId":"","CurrencyNumber":"","CurrencyType":"0","ExchangeRate":"","ForexType":"","PaidAmount":"179.0","PayType":"0","PlutusId":"0","Tender":"179.0","WalletId":"0"}],"PaymentSummary":{"BillAmount":"1214.00","PaidAmount":"1235.00","PendingAmt":"21.00"}},"SalesDetail":{"BillRow":[{"Amount":"427.62","BatchCode":"pb-001","BatchId":"1101000547","BillingRate":"427.619","CustType":"LOCAL","DiscPer":"0","FreeFlag":"0","ItemCode":"CC1285","ItemId":"285","ItemName":"Mascara Lush Lash   Lush Lash-01 8 ml","Mrp":"449","QtyInPacks":"1","QtyInUnits":"0","Rate":"449","RowTotal":"449","SlNo":"1","TaxId":"13","TaxPer":"5","TaxType":"INCL","TaxableAmt":"427.62","UPerPack":"1"},{"Amount":"666.67","BatchCode":"CC1994","BatchId":"1000300315","BillingRate":"333.333","CustType":"LOCAL","DiscPer":"0","FreeFlag":"0","ItemCode":"CC1994","ItemId":"994","ItemName":"Lip Gloss - Long Lasting No.-   11 3 ml","Mrp":"350","QtyInPacks":"2","QtyInUnits":"0","Rate":"350","RowTotal":"700","SlNo":"1","TaxId":"13","TaxPer":"5","TaxType":"INCL","TaxableAmt":"666.67","UPerPack":"1"}],"ErrorStatus":0},"SalesSummary":{"Addtions":"0","B2BB2CType":"B2C","BillDate":"2015-10-01","BillNo":"44071","BillSeries":"14S","CardDiscount":"0","Counter":"1","CustId":0,"CustType":"LOCAL","Customer":"Test","DiscountAmt":"134.8","DiscountPer":"10","LoyaltyCardType":"","LoyaltyCode":"","LoyaltyId":"0","NetAmount":"1214","RoundOff":"0.8","SchemeDiscount":"0","Shift":"1","StoreId":"5","SubStore":"1","TaxAmount":"0","TotalAmount":"1348","TotalLinewiseTax":"0"}}]}
 
-            try {
-                InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
-                BufferedReader reader = new BufferedReader(streamReader);
-                StringBuilder sb = new StringBuilder();
-                String inputLine = "";
-                while ((inputLine = reader.readLine()) != null) {
-                    sb.append(inputLine);
-                    break;
-                }
+            int responsecode = connection.getResponseCode();
+            if(responsecode == 200) {
+                try {
+                    InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
+                    BufferedReader reader = new BufferedReader(streamReader);
+                    StringBuilder sb = new StringBuilder();
+                    String inputLine = "";
+                    while ((inputLine = reader.readLine()) != null) {
+                        sb.append(inputLine);
+                        break;
+                    }
 
 
 //                {"BillSeries":null,"BillNo":0,"Billid":0,"ErrorStatus":1,"Message":"Cannot insert duplicate key row in object 'dbo.TaxBreakupDetails' with unique index 'IX_BILLTYPE_BILL_DETROW_TAXTYPE'. The duplicate key value is (0, 688, 1060, 1).:: Message from [PROC_MOBPOS_SaveBill]"}
 
 //                {"BillSeries":null,"BillNo":0,"Billid":0,"ErrorStatus":1,"Message":"Error converting data type nvarchar to float.:: Message from [PROC_MOBPOS_SaveBill]"}
-                reader.close();
-                result = sb.toString();
-                strSaveBillResponse = result;
+                    reader.close();
+                    result = sb.toString();
+                    strSaveBillResponse = result;
 //                {"BillSeries":null,"BillNo":0,"Billid":0,"ErrorStatus":1,"Message":"Cannot insert duplicate key row in object 'dbo.SalesSummary'
 //                with unique index 'X6_SSSERIESNO'. The duplicate key value is (14S, 383).:: Message from [PROC_MOBPOS_IsDataClear]"}
-            } finally {
-                connection.disconnect();
+                } finally {
+                    connection.disconnect();
+                }
+            }else{
+                strErrorMsg = connection.getResponseMessage();
+                strSaveBillResponse="httperror";
             }
         }catch (SocketTimeoutException e){   //This exception added by Pavithra on 05-08-2020
             Log.e("ERROR", e.getMessage(), e);
+            strErrorMsg = e.getMessage();
 
         } catch (Exception e) {
             Log.e("ERROR", e.getMessage(), e);
+            strErrorMsg = e.getMessage();
         }
     }
 
@@ -1984,7 +2144,10 @@ public class PaymentActivityNew extends AppCompatActivity {
         balance.setText("");
     }
 
-    private class CreditcardSearchAsyncTask  extends AsyncTask<String, String, String> {
+    //Added by Pavithra on 05-12-2020
+
+    private class MobPOSCreditCardLookUpTask extends AsyncTask<String,String,String>{
+
 
         ProgressDialog progressDialog = new ProgressDialog(PaymentActivityNew.this);
         @Override
@@ -1995,9 +2158,13 @@ public class PaymentActivityNew extends AppCompatActivity {
         }
         @Override
         protected String doInBackground(String... strings) {
+
+            strErrorMsg = "";
+            result="";
             edtcreditCard=(EditText)findViewById(R.id.edtcreditcard);
 //            Url = "http://tsmith.co.in/MobPOS/api/GetCreditCardLookUp";
-            Url = AppConfig.app_url+"GetCreditCardLookUp"; //Modified by 1165 on 30-05-2020
+//            Url = AppConfig.app_url+"GetCreditCardLookUp"; //Modified by 1165 on 30-05-2020
+            Url = AppConfig.app_url+"CreditCardLookUp"; //Modified by 1165 on 30-05-2020
 
             try {
 
@@ -2008,23 +2175,32 @@ public class PaymentActivityNew extends AppCompatActivity {
                 connection.setConnectTimeout(CONNECTION_TIMEOUT);
                 connection.setRequestMethod("GET");
                 connection.setRequestProperty("user_key", " ");
-                connection.setRequestProperty("auth_key", "BFD2E5AC-101F-47ED-AB49-C2D18EE5EA97");
+                connection.setRequestProperty("auth_key", "6E5C3126-B09C-4236-8E57-73C11BB64106");
                 connection.setRequestProperty("content-type", "application/json");
                 connection.connect();
-                InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
-                BufferedReader reader = new BufferedReader(streamReader);
-                StringBuilder stringBuilder = new StringBuilder();
-                while ((inputLine = reader.readLine()) != null) {
-                    stringBuilder.append(inputLine);
+
+                int responsecode = connection.getResponseCode();   //added by Pavithra on 25-09-2020
+                if(responsecode == 200) {
+                    InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
+                    BufferedReader reader = new BufferedReader(streamReader);
+                    StringBuilder stringBuilder = new StringBuilder();
+                    while ((inputLine = reader.readLine()) != null) {
+                        stringBuilder.append(inputLine);
+                    }
+                    reader.close();
+                    streamReader.close();
+                    result = stringBuilder.toString();
+                }else{
+                    strErrorMsg = connection.getResponseMessage();
+                    result="httperror";
                 }
-                reader.close();
-                streamReader.close();
-                result = stringBuilder.toString();
 
             } catch (ProtocolException e) {
                 e.printStackTrace();
+                strErrorMsg = e.getMessage();
             } catch (IOException e) {
                 e.printStackTrace();
+                strErrorMsg = e.getMessage();
             }
             return result;
 
@@ -2037,73 +2213,239 @@ public class PaymentActivityNew extends AppCompatActivity {
                 if (progressDialog.isShowing()) {
                     progressDialog.dismiss();
                 }
-                gson = new Gson();
-                CREDITCARDLOOKUP creditcardlookup=new CREDITCARDLOOKUP();
 
-                ArrayList<CARD> creditcardlist = new ArrayList<>();
-                CreditCardLookUpResponse creditCardLookUpResponse = new CreditCardLookUpResponse();
-                creditCardLookUpResponse = gson.fromJson(s, CreditCardLookUpResponse.class);
-                ArrayList<CreditCardList> creditcarditems = new ArrayList<>();
-                List<CARD>   Card= creditCardLookUpResponse.CreditCardlookup.Card;
-                // LoyaltyCustomerList[] myListData = new LoyaltyCustomerList[0];
-                // Toast.makeText(CustomerInformation.this, "helloo", Toast.LENGTH_SHORT).show();
-                if(creditcardlookup.ErrorStatus==1)
-                {
-                    tsErrorMessage(creditcardlookup.Message);//Added by Pavithra on 29-07-2020
-                    //Toast.makeText(PaymentActivity.this, ""+CreditCardLookUpResponse.Message, Toast.LENGTH_SHORT).show();
+                if (result.equals("httperror")) {
+//                    tsMessages(strErrorMsg);
+                    tsErrorMessage("Http error occured\n\n" + strErrorMsg);
+                    Toast.makeText(PaymentActivityNew.this, "" + strErrorMsg, Toast.LENGTH_SHORT).show();
+                    return;
                 }
-                //   name=LoyaltyCustomer.get(i).Name;
-                else {
-                    final Dialog dialog = new Dialog(PaymentActivityNew.this);
-                    dialog.setContentView(R.layout.payment_card_lookup_layout);
-                    dialog.setCanceledOnTouchOutside(false);
-                    dialog.setTitle("Credit Card Lookup");
-                    final RecyclerView recyclerView  = (RecyclerView) dialog.findViewById(R.id.cardlist);
-                    final CreditCardLookupAdapter adapter = new CreditCardLookupAdapter(PaymentActivityNew.this,PaymentActivityNew.this,creditcarditems,edtcreditCard,dialog,cardamount);
-                    recyclerView.setAdapter(adapter);
-                    for (int i = 0; i < Card.size(); i++) {
-                        CARD card = Card.get(i);
 
-                        creditcarditems.add(new CreditCardList("" + card.CARDID, "" + card.CARDNAME, "" +card.COMPANY));
-                        adapter.notifyDataSetChanged();
+                if (result.equals("") || result == null) {
+                    Toast.makeText(PaymentActivityNew.this, "No result  from web", Toast.LENGTH_SHORT).show();
+                    tsErrorMessage(""+strErrorMsg);
+                } else {
+                    gson = new Gson();
+                    CARD cardObj = new CARD();
+                    cardObj = gson.fromJson(result,CARD.class);
+
+                    CREDITCARDLOOKUP creditcardlookup = new CREDITCARDLOOKUP();
 
 
-                        // myListData = new LoyaltyCustomerList[]{
-                        //  new LoyaltyCustomerList("" + LoyaltyCustomer.get(i).LoyaltyId, "" + LoyaltyCustomer.get(i).LoyaltyNo, "" + LoyaltyCustomer.get(i).Name, "" + LoyaltyCustomer.get(i).Phone1, "" + LoyaltyCustomer.get(i).Type, "" + LoyaltyCustomer.get(i).EMail)};
-                        //  adapter.notifyDataSetChanged();
+                    ArrayList<CARD> creditcardlist = new ArrayList<>();
+                    CreditCardLookUpResponsePL creditCardLookUpResponse = new CreditCardLookUpResponsePL();
+                    creditCardLookUpResponse = gson.fromJson(s, CreditCardLookUpResponsePL.class);
+                    ArrayList<CreditCardList> creditcarditems = new ArrayList<>();
+//                    List<CARD> Card = creditCardLookUpResponse.CREDITCARDLOOKUP.Card;
+                    List<CARD> Card = creditCardLookUpResponse.CREDITCARDLOOKUP.CARD;
+
+
+//                    ArrayList<CARD> creditcardlist = new ArrayList<>();
+//                    CreditCardLookUpResponse creditCardLookUpResponse = new CreditCardLookUpResponse();
+//                    creditCardLookUpResponse = gson.fromJson(s, CreditCardLookUpResponse.class);
+//                    ArrayList<CreditCardList> creditcarditems = new ArrayList<>();
+//                    List<CARD> Card = creditCardLookUpResponse.CreditCardlookup.Card;
+                    // LoyaltyCustomerList[] myListData = new LoyaltyCustomerList[0];
+                    // Toast.makeText(CustomerInformation.this, "helloo", Toast.LENGTH_SHORT).show();
+                    if (creditcardlookup.ErrorStatus == 1) {
+                        tsErrorMessage(creditcardlookup.Message);//Added by Pavithra on 29-07-2020
+                        //Toast.makeText(PaymentActivity.this, ""+CreditCardLookUpResponse.Message, Toast.LENGTH_SHORT).show();
                     }
+                    //   name=LoyaltyCustomer.get(i).Name;
+                    else {
+                        final Dialog dialog = new Dialog(PaymentActivityNew.this);
+                        dialog.setContentView(R.layout.payment_card_lookup_layout);
+                        dialog.setCanceledOnTouchOutside(false);
+                        dialog.setTitle("Credit Card Lookup");
+                        final RecyclerView recyclerView = (RecyclerView) dialog.findViewById(R.id.cardlist);
+                        final CreditCardLookupAdapter adapter = new CreditCardLookupAdapter(PaymentActivityNew.this, PaymentActivityNew.this, creditcarditems, edtcreditCard, dialog, cardamount);
+                        recyclerView.setAdapter(adapter);
+                        for (int i = 0; i < Card.size(); i++) {
+                            CARD card = Card.get(i);
 
-                    Button closebtn = (Button) dialog.findViewById(R.id.close_dialog);
-                    closebtn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            dialog.dismiss();
+                            creditcarditems.add(new CreditCardList("" + card.CARDID, "" + card.CARDNAME, "" + card.COMPANY));
+                            adapter.notifyDataSetChanged();
+
+
+                            // myListData = new LoyaltyCustomerList[]{
+                            //  new LoyaltyCustomerList("" + LoyaltyCustomer.get(i).LoyaltyId, "" + LoyaltyCustomer.get(i).LoyaltyNo, "" + LoyaltyCustomer.get(i).Name, "" + LoyaltyCustomer.get(i).Phone1, "" + LoyaltyCustomer.get(i).Type, "" + LoyaltyCustomer.get(i).EMail)};
+                            //  adapter.notifyDataSetChanged();
+
                         }
-                    });
-                    recyclerView.setHasFixedSize(true);
-                    recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                    //  View headerView = dialog.getLayoutInflater().inflate(R.layout.loyaltycustomer_header, null);
-                    dialog.show();
+
+                        Button closebtn = (Button) dialog.findViewById(R.id.close_dialog);
+                        closebtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                dialog.dismiss();
+                            }
+                        });
+
+                        recyclerView.setHasFixedSize(true);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                        //  View headerView = dialog.getLayoutInflater().inflate(R.layout.loyaltycustomer_header, null);
+                        dialog.show();
+                    }
                 }
                 //Toast.makeText(PaymentActivity.this, ""+s, Toast.LENGTH_SHORT).show();
             } catch (Exception e) {
 
             }
         }
+
+
     }
 
-    private class WalletSearchAsyncTask extends AsyncTask<String,String,String> {
+//    private class CreditcardSearchAsyncTask  extends AsyncTask<String, String, String> {
+//
+//        ProgressDialog progressDialog = new ProgressDialog(PaymentActivityNew.this);
+//        @Override
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//            progressDialog.setMessage("processing...");
+//            progressDialog.show();
+//        }
+//        @Override
+//        protected String doInBackground(String... strings) {
+//
+//            strErrorMsg = "";
+//            result="";
+//            edtcreditCard=(EditText)findViewById(R.id.edtcreditcard);
+////            Url = "http://tsmith.co.in/MobPOS/api/GetCreditCardLookUp";
+//            Url = AppConfig.app_url+"GetCreditCardLookUp"; //Modified by 1165 on 30-05-2020
+//
+//            try {
+//
+//                URL url = new URL(Url);
+//                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//                connection.setRequestMethod(REQUEST_METHOD);
+//                connection.setReadTimeout(READ_TIMEOUT);
+//                connection.setConnectTimeout(CONNECTION_TIMEOUT);
+//                connection.setRequestMethod("GET");
+//                connection.setRequestProperty("user_key", " ");
+//                connection.setRequestProperty("auth_key", "BFD2E5AC-101F-47ED-AB49-C2D18EE5EA97");
+//                connection.setRequestProperty("content-type", "application/json");
+//                connection.connect();
+//
+//                int responsecode = connection.getResponseCode();   //added by Pavithra on 25-09-2020
+//                if(responsecode == 200) {
+//                    InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
+//                    BufferedReader reader = new BufferedReader(streamReader);
+//                    StringBuilder stringBuilder = new StringBuilder();
+//                    while ((inputLine = reader.readLine()) != null) {
+//                        stringBuilder.append(inputLine);
+//                    }
+//                    reader.close();
+//                    streamReader.close();
+//                    result = stringBuilder.toString();
+//                }else{
+//                    strErrorMsg = connection.getResponseMessage();
+//                    result="httperror";
+//                }
+//
+//            } catch (ProtocolException e) {
+//                e.printStackTrace();
+//                strErrorMsg = e.getMessage();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//                strErrorMsg = e.getMessage();
+//            }
+//            return result;
+//
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String s) {
+//            super.onPostExecute(s);
+//            try {
+//                if (progressDialog.isShowing()) {
+//                    progressDialog.dismiss();
+//                }
+//
+//                if (result.equals("httperror")) {
+////                    tsMessages(strErrorMsg);
+//                    tsErrorMessage("Http error occured\n\n" + strErrorMsg);
+//                    Toast.makeText(PaymentActivityNew.this, "" + strErrorMsg, Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//
+//                if (result.equals("") || result == null) {
+//                    Toast.makeText(PaymentActivityNew.this, "No result  from web", Toast.LENGTH_SHORT).show();
+//                    tsErrorMessage(""+strErrorMsg);
+//                } else {
+//                    gson = new Gson();
+//                    CREDITCARDLOOKUP creditcardlookup = new CREDITCARDLOOKUP();
+//
+//                    ArrayList<CARD> creditcardlist = new ArrayList<>();
+//                    CreditCardLookUpResponse creditCardLookUpResponse = new CreditCardLookUpResponse();
+//                    creditCardLookUpResponse = gson.fromJson(s, CreditCardLookUpResponse.class);
+//                    ArrayList<CreditCardList> creditcarditems = new ArrayList<>();
+//                    List<CARD> Card = creditCardLookUpResponse.CreditCardlookup.Card;
+//                    // LoyaltyCustomerList[] myListData = new LoyaltyCustomerList[0];
+//                    // Toast.makeText(CustomerInformation.this, "helloo", Toast.LENGTH_SHORT).show();
+//                    if (creditcardlookup.ErrorStatus == 1) {
+//                        tsErrorMessage(creditcardlookup.Message);//Added by Pavithra on 29-07-2020
+//                        //Toast.makeText(PaymentActivity.this, ""+CreditCardLookUpResponse.Message, Toast.LENGTH_SHORT).show();
+//                    }
+//                    //   name=LoyaltyCustomer.get(i).Name;
+//                    else {
+//                        final Dialog dialog = new Dialog(PaymentActivityNew.this);
+//                        dialog.setContentView(R.layout.payment_card_lookup_layout);
+//                        dialog.setCanceledOnTouchOutside(false);
+//                        dialog.setTitle("Credit Card Lookup");
+//                        final RecyclerView recyclerView = (RecyclerView) dialog.findViewById(R.id.cardlist);
+//                        final CreditCardLookupAdapter adapter = new CreditCardLookupAdapter(PaymentActivityNew.this, PaymentActivityNew.this, creditcarditems, edtcreditCard, dialog, cardamount);
+//                        recyclerView.setAdapter(adapter);
+//                        for (int i = 0; i < Card.size(); i++) {
+//                            CARD card = Card.get(i);
+//
+//                            creditcarditems.add(new CreditCardList("" + card.CARDID, "" + card.CARDNAME, "" + card.COMPANY));
+//                            adapter.notifyDataSetChanged();
+//
+//
+//                            // myListData = new LoyaltyCustomerList[]{
+//                            //  new LoyaltyCustomerList("" + LoyaltyCustomer.get(i).LoyaltyId, "" + LoyaltyCustomer.get(i).LoyaltyNo, "" + LoyaltyCustomer.get(i).Name, "" + LoyaltyCustomer.get(i).Phone1, "" + LoyaltyCustomer.get(i).Type, "" + LoyaltyCustomer.get(i).EMail)};
+//                            //  adapter.notifyDataSetChanged();
+//                        }
+//
+//                        Button closebtn = (Button) dialog.findViewById(R.id.close_dialog);
+//                        closebtn.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View view) {
+//                                dialog.dismiss();
+//                            }
+//                        });
+//                        recyclerView.setHasFixedSize(true);
+//                        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+//                        //  View headerView = dialog.getLayoutInflater().inflate(R.layout.loyaltycustomer_header, null);
+//                        dialog.show();
+//                    }
+//                }
+//                //Toast.makeText(PaymentActivity.this, ""+s, Toast.LENGTH_SHORT).show();
+//            } catch (Exception e) {
+//
+//            }
+//        }
+//    }
+
+    private class MobPOSWalletLookUpTask extends AsyncTask<String,String,String>{
+
         ProgressDialog progressDialog = new ProgressDialog(PaymentActivityNew.this);
         protected void onPreExecute() {
             super.onPreExecute();
             progressDialog.setMessage("processing...");
             progressDialog.show();
         }
+
         @Override
         protected String doInBackground(String... strings) {
+            strErrorMsg = "";
+            result="";
+
             edtWallet=(EditText)findViewById(R.id.edtwallet);
 //            Url = "http://tsmith.co.in/MobPOS/api/GetWalletLookUp";
-            Url = AppConfig.app_url+"GetWalletLookUp"; //Modified by 1165 on 30-05-2020
+//            Url = AppConfig.app_url+"GetWalletLookUp"; //Modified by 1165 on 30-05-2020
+            Url = AppConfig.app_url+"WalletLookUp";
             try {
                 URL url = new URL(Url);
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
@@ -2112,26 +2454,36 @@ public class PaymentActivityNew extends AppCompatActivity {
                 connection.setConnectTimeout(CONNECTION_TIMEOUT);
                 connection.setRequestMethod("GET");
                 connection.setRequestProperty("user_key", " ");
-                connection.setRequestProperty("auth_key", "BFD2E5AC-101F-47ED-AB49-C2D18EE5EA97");
+                connection.setRequestProperty("auth_key", "6E5C3126-B09C-4236-8E57-73C11BB64106");
                 connection.setRequestProperty("content-type", "application/json");
                 connection.connect();
-                InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
-                BufferedReader reader = new BufferedReader(streamReader);
-                StringBuilder stringBuilder = new StringBuilder();
-                while ((inputLine = reader.readLine()) != null) {
-                    stringBuilder.append(inputLine);
+
+                int responsecode = connection.getResponseCode();   //added by Pavithra on 25-09-2020
+                if(responsecode == 200) {
+
+                    InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
+                    BufferedReader reader = new BufferedReader(streamReader);
+                    StringBuilder stringBuilder = new StringBuilder();
+                    while ((inputLine = reader.readLine()) != null) {
+                        stringBuilder.append(inputLine);
+                    }
+                    reader.close();
+                    streamReader.close();
+                    result = stringBuilder.toString();
+
+                }else {
+                    strErrorMsg = connection.getResponseMessage();
+                    result="httperror";
                 }
-                reader.close();
-                streamReader.close();
-                result = stringBuilder.toString();
 
             } catch (ProtocolException e) {
                 e.printStackTrace();
+                strErrorMsg = e.getMessage();
             } catch (IOException e) {
                 e.printStackTrace();
+                strErrorMsg = e.getMessage();
             }
             return result;
-
         }
 
         @Override
@@ -2141,56 +2493,72 @@ public class PaymentActivityNew extends AppCompatActivity {
                 if (progressDialog.isShowing()) {
                     progressDialog.dismiss();
                 }
-                gson = new Gson();
-                WALLETLOOKUP walletlookup=new WALLETLOOKUP();
-                ArrayList<WALLET> creditcardlist = new ArrayList<>();
-                WalletLookUpResponse walletLookUpResponse = new WalletLookUpResponse();
-                walletLookUpResponse = gson.fromJson(s, WalletLookUpResponse.class);
-                ArrayList<Walletlist> walletlookupitems = new ArrayList<>();
-                List<WALLET> Wallet= walletLookUpResponse.WalletLookUp.Wallet;
-                // LoyaltyCustomerList[] myListData = new LoyaltyCustomerList[0];
-                // Toast.makeText(CustomerInformation.this, "helloo", Toast.LENGTH_SHORT).show();
-                if(walletlookup.ErrorStatus==1)
-                {
 
-                    tsErrorMessage(walletlookup.Message);//Added by Pavithra on 29-07-2020
-                    //Toast.makeText(PaymentActivity.this, ""+CreditCardLookUpResponse.Message, Toast.LENGTH_SHORT).show();
+                if (result.equals("httperror")) {
+//                    tsMessages(strErrorMsg);
+                    tsErrorMessage("Http error occured\n\n"+strErrorMsg);
+                    Toast.makeText(PaymentActivityNew.this, "" + strErrorMsg, Toast.LENGTH_SHORT).show();
+                    return;
                 }
-                //   name=LoyaltyCustomer.get(i).Name;
-                else {
-                    final Dialog dialog = new Dialog(PaymentActivityNew.this);
-                    dialog.setContentView(R.layout.walletlookup);
-                    dialog.setCanceledOnTouchOutside(false);
-                    dialog.setTitle("Wallet Card Lookup");
-                    final RecyclerView recyclerView  = (RecyclerView) dialog.findViewById(R.id.walletlist);
-                    final WalletLookupAdapter adapter = new WalletLookupAdapter(PaymentActivityNew.this,walletlookupitems,edtWallet,dialog,walletamount);
-                    recyclerView.setAdapter(adapter);
-                    for (int i = 0; i < Wallet.size(); i++) {
-                        WALLET wallet = Wallet.get(i);
 
-                        walletlookupitems.add(new Walletlist("" + wallet.WALLETID, "" +wallet.WALLETNAME, "" +wallet.COMPANY));
-                        adapter.notifyDataSetChanged();
+                if (result.equals("") || result == null) {
+                    Toast.makeText(PaymentActivityNew.this, "No result  from web", Toast.LENGTH_SHORT).show();
+                    tsErrorMessage(""+strErrorMsg);
+                } else {
+                    gson = new Gson();
+                    WALLETLOOKUP walletlookup = new WALLETLOOKUP();
+                    ArrayList<WALLET> creditcardlist = new ArrayList<>();
+                    WalletLookUpResponse walletLookUpResponse = new WalletLookUpResponse();
+                    walletLookUpResponse = gson.fromJson(s, WalletLookUpResponse.class);
+                    ArrayList<Walletlist> walletlookupitems = new ArrayList<>();
+                    List<WALLET> Wallet = walletLookUpResponse.WalletLookUp.Wallet;
 
 
-                        // myListData = new LoyaltyCustomerList[]{
-                        //  new LoyaltyCustomerList("" + LoyaltyCustomer.get(i).LoyaltyId, "" + LoyaltyCustomer.get(i).LoyaltyNo, "" + LoyaltyCustomer.get(i).Name, "" + LoyaltyCustomer.get(i).Phone1, "" + LoyaltyCustomer.get(i).Type, "" + LoyaltyCustomer.get(i).EMail)};
-                        //  adapter.notifyDataSetChanged();
+                    // LoyaltyCustomerList[] myListData = new LoyaltyCustomerList[0];
+                    // Toast.makeText(CustomerInformation.this, "helloo", Toast.LENGTH_SHORT).show();
+//                    if (walletlookup.ErrorStatus == 1) { //Commented by Pavithra on 05-12-2020
+                    if (walletLookUpResponse.ErrorStatus == 1) { //Added by Pavithra on 05-12-2020
+
+                        tsErrorMessage(walletLookUpResponse.Message);//Added by Pavithra on 29-07-2020  //Added by Pavithra on 05-12-2020
+//                        tsErrorMessage(walletlookup.Message);//Added by Pavithra on 29-07-2020 //Commented by Pavithra on 05-12-2020
+                        //Toast.makeText(PaymentActivity.this, ""+CreditCardLookUpResponse.Message, Toast.LENGTH_SHORT).show();
                     }
+                    //   name=LoyaltyCustomer.get(i).Name;
+                    else {
+                        final Dialog dialog = new Dialog(PaymentActivityNew.this);
+                        dialog.setContentView(R.layout.walletlookup);
+                        dialog.setCanceledOnTouchOutside(false);
+                        dialog.setTitle("Wallet Card Lookup");
+                        final RecyclerView recyclerView = (RecyclerView) dialog.findViewById(R.id.walletlist);
+                        final WalletLookupAdapter adapter = new WalletLookupAdapter(PaymentActivityNew.this, walletlookupitems, edtWallet, dialog, walletamount);
+                        recyclerView.setAdapter(adapter);
+                        for (int i = 0; i < Wallet.size(); i++) {
+                            WALLET wallet = Wallet.get(i);
 
-                    Button closebtn = (Button) dialog.findViewById(R.id.close_dialog);
-                    closebtn.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View view) {
-                            dialog.dismiss();
+                            walletlookupitems.add(new Walletlist("" + wallet.WALLETID, "" + wallet.WALLETNAME, "" + wallet.COMPANY));
+                            adapter.notifyDataSetChanged();
+
+
+                            // myListData = new LoyaltyCustomerList[]{
+                            //  new LoyaltyCustomerList("" + LoyaltyCustomer.get(i).LoyaltyId, "" + LoyaltyCustomer.get(i).LoyaltyNo, "" + LoyaltyCustomer.get(i).Name, "" + LoyaltyCustomer.get(i).Phone1, "" + LoyaltyCustomer.get(i).Type, "" + LoyaltyCustomer.get(i).EMail)};
+                            //  adapter.notifyDataSetChanged();
                         }
-                    });
-                    recyclerView.setHasFixedSize(true);
-                    recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                    //  View headerView = dialog.getLayoutInflater().inflate(R.layout.loyaltycustomer_header, null);
+
+                        Button closebtn = (Button) dialog.findViewById(R.id.close_dialog);
+                        closebtn.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View view) {
+                                dialog.dismiss();
+                            }
+                        });
+                        recyclerView.setHasFixedSize(true);
+                        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                        //  View headerView = dialog.getLayoutInflater().inflate(R.layout.loyaltycustomer_header, null);
 
 
-                    dialog.show();
-                    // Toast.makeText(CustomerInformation.this, ""+myListData, Toast.LENGTH_SHORT).show();
+                        dialog.show();
+                        // Toast.makeText(CustomerInformation.this, ""+myListData, Toast.LENGTH_SHORT).show();
+                    }
                 }
 
                 // Toast.makeText(PaymentActivity.this, ""+s, Toast.LENGTH_SHORT).show();
@@ -2198,6 +2566,143 @@ public class PaymentActivityNew extends AppCompatActivity {
 
             }
         }
+
     }
+
+
+//    private class WalletSearchAsyncTask extends AsyncTask<String,String,String> {
+//
+//        ProgressDialog progressDialog = new ProgressDialog(PaymentActivityNew.this);
+//        protected void onPreExecute() {
+//            super.onPreExecute();
+//            progressDialog.setMessage("processing...");
+//            progressDialog.show();
+//        }
+//        @Override
+//        protected String doInBackground(String... strings) {
+//
+//            strErrorMsg = "";
+//            result="";
+//
+//            edtWallet=(EditText)findViewById(R.id.edtwallet);
+////            Url = "http://tsmith.co.in/MobPOS/api/GetWalletLookUp";
+//            Url = AppConfig.app_url+"GetWalletLookUp"; //Modified by 1165 on 30-05-2020
+//            try {
+//                URL url = new URL(Url);
+//                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+//                connection.setRequestMethod(REQUEST_METHOD);
+//                connection.setReadTimeout(READ_TIMEOUT);
+//                connection.setConnectTimeout(CONNECTION_TIMEOUT);
+//                connection.setRequestMethod("GET");
+//                connection.setRequestProperty("user_key", " ");
+//                connection.setRequestProperty("auth_key", "BFD2E5AC-101F-47ED-AB49-C2D18EE5EA97");
+//                connection.setRequestProperty("content-type", "application/json");
+//                connection.connect();
+//
+//                int responsecode = connection.getResponseCode();   //added by Pavithra on 25-09-2020
+//                if(responsecode == 200) {
+//
+//                    InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
+//                    BufferedReader reader = new BufferedReader(streamReader);
+//                    StringBuilder stringBuilder = new StringBuilder();
+//                    while ((inputLine = reader.readLine()) != null) {
+//                        stringBuilder.append(inputLine);
+//                    }
+//                    reader.close();
+//                    streamReader.close();
+//                    result = stringBuilder.toString();
+//                }else{
+//                    strErrorMsg = connection.getResponseMessage();
+//                    result="httperror";
+//                }
+//
+//            } catch (ProtocolException e) {
+//                e.printStackTrace();
+//                strErrorMsg = e.getMessage();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//                strErrorMsg = e.getMessage();
+//            }
+//            return result;
+//
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String s) {
+//            super.onPostExecute(s);
+//            try {
+//                if (progressDialog.isShowing()) {
+//                    progressDialog.dismiss();
+//                }
+//
+//                if (result.equals("httperror")) {
+////                    tsMessages(strErrorMsg);
+//                    tsErrorMessage("Http error occured\n\n"+strErrorMsg);
+//                    Toast.makeText(PaymentActivityNew.this, "" + strErrorMsg, Toast.LENGTH_SHORT).show();
+//                    return;
+//                }
+//
+//                if (result.equals("") || result == null) {
+//                    Toast.makeText(PaymentActivityNew.this, "No result  from web", Toast.LENGTH_SHORT).show();
+//                    tsErrorMessage(""+strErrorMsg);
+//                } else {
+//                    gson = new Gson();
+//                    WALLETLOOKUP walletlookup = new WALLETLOOKUP();
+//                    ArrayList<WALLET> creditcardlist = new ArrayList<>();
+//                    WalletLookUpResponse walletLookUpResponse = new WalletLookUpResponse();
+//                    walletLookUpResponse = gson.fromJson(s, WalletLookUpResponse.class);
+//                    ArrayList<Walletlist> walletlookupitems = new ArrayList<>();
+//                    List<WALLET> Wallet = walletLookUpResponse.WalletLookUp.Wallet;
+//                    // LoyaltyCustomerList[] myListData = new LoyaltyCustomerList[0];
+//                    // Toast.makeText(CustomerInformation.this, "helloo", Toast.LENGTH_SHORT).show();
+//                    if (walletlookup.ErrorStatus == 1) {
+//
+//                        tsErrorMessage(walletlookup.Message);//Added by Pavithra on 29-07-2020
+//                        //Toast.makeText(PaymentActivity.this, ""+CreditCardLookUpResponse.Message, Toast.LENGTH_SHORT).show();
+//                    }
+//                    //   name=LoyaltyCustomer.get(i).Name;
+//                    else {
+//                        final Dialog dialog = new Dialog(PaymentActivityNew.this);
+//                        dialog.setContentView(R.layout.walletlookup);
+//                        dialog.setCanceledOnTouchOutside(false);
+//                        dialog.setTitle("Wallet Card Lookup");
+//                        final RecyclerView recyclerView = (RecyclerView) dialog.findViewById(R.id.walletlist);
+//                        final WalletLookupAdapter adapter = new WalletLookupAdapter(PaymentActivityNew.this, walletlookupitems, edtWallet, dialog, walletamount);
+//                        recyclerView.setAdapter(adapter);
+//                        for (int i = 0; i < Wallet.size(); i++) {
+//                            WALLET wallet = Wallet.get(i);
+//
+//                            walletlookupitems.add(new Walletlist("" + wallet.WALLETID, "" + wallet.WALLETNAME, "" + wallet.COMPANY));
+//                            adapter.notifyDataSetChanged();
+//
+//
+//                            // myListData = new LoyaltyCustomerList[]{
+//                            //  new LoyaltyCustomerList("" + LoyaltyCustomer.get(i).LoyaltyId, "" + LoyaltyCustomer.get(i).LoyaltyNo, "" + LoyaltyCustomer.get(i).Name, "" + LoyaltyCustomer.get(i).Phone1, "" + LoyaltyCustomer.get(i).Type, "" + LoyaltyCustomer.get(i).EMail)};
+//                            //  adapter.notifyDataSetChanged();
+//                        }
+//
+//                        Button closebtn = (Button) dialog.findViewById(R.id.close_dialog);
+//                        closebtn.setOnClickListener(new View.OnClickListener() {
+//                            @Override
+//                            public void onClick(View view) {
+//                                dialog.dismiss();
+//                            }
+//                        });
+//                        recyclerView.setHasFixedSize(true);
+//                        recyclerView.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+//                        //  View headerView = dialog.getLayoutInflater().inflate(R.layout.loyaltycustomer_header, null);
+//
+//
+//                        dialog.show();
+//                        // Toast.makeText(CustomerInformation.this, ""+myListData, Toast.LENGTH_SHORT).show();
+//                    }
+//                }
+//
+//                // Toast.makeText(PaymentActivity.this, ""+s, Toast.LENGTH_SHORT).show();
+//            } catch (Exception e) {
+//
+//            }
+//        }
+//    }
 
 }

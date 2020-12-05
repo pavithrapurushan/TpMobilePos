@@ -9,6 +9,7 @@ import android.os.AsyncTask;
 import android.os.Build;
 import android.preference.PreferenceManager;
 import android.support.annotation.RequiresApi;
+import android.support.constraint.solver.GoalRow;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -38,6 +39,8 @@ import java.util.List;
 
 //Modified by Pavithra on 30-05-2020
 //Modified by Pavithra on 30-07-2020
+//Modified by Pavithra on 25-09-2020
+
 
 public class ProductLookupAdapter extends ArrayAdapter<ProductModel> implements View.OnClickListener {
     ArrayList<ProductModel> listProductModel;
@@ -64,6 +67,7 @@ public class ProductLookupAdapter extends ArrayAdapter<ProductModel> implements 
     String strGetPrdetails = "";
     String ProductDetailsResponseJsonStr = "";
     String strGetBatchLookup = "";
+    String strErrorMsg = "";
 
 
     //Added by 1165 on 22-02-2020
@@ -117,7 +121,6 @@ public class ProductLookupAdapter extends ArrayAdapter<ProductModel> implements 
                     pmid = holder.pmid.getText().toString();
                     listBatchModel = new ArrayList<>();
 
-
                     batchdialog = new Dialog(mContext);
                     batchdialog.setContentView(R.layout.activity_batch_selection);
                     batchdialog.setCanceledOnTouchOutside(false);
@@ -128,12 +131,16 @@ public class ProductLookupAdapter extends ArrayAdapter<ProductModel> implements 
                     listBatchModel.clear();
 
                     //Calling ProductDetails AsyncTask
-                    GetProductDetails getProductDetails = new GetProductDetails();
-                    getProductDetails.execute();
+//                    GetProductDetails getProductDetails = new GetProductDetails(); //Commenetd by Pavithra on 04-12-2020
+//                    getProductDetails.execute();
+
+                    new MobPOSProductDetailsTask().execute(); //Added by Pavithra on 04-12-2020
 
                     //Calling BatchLookup AsyncTask
-                    GetBatchLookup getBatchLookup = new GetBatchLookup();
-                    getBatchLookup.execute();
+//                    GetBatchLookup getBatchLookup = new GetBatchLookup(); //Commented by Pavithra on 04-12-2020
+//                    getBatchLookup.execute();
+
+                    new MobPOSBatchLookUpTask().execute(); //added by Pavithra on 04-12-2020
 
 //                    Snackbar.make(((batchdialog) getContext()).getWindow().getDecorView().getRootView(), "Click the pin for more options", Snackbar.LENGTH_LONG).show();
 
@@ -217,63 +224,99 @@ public class ProductLookupAdapter extends ArrayAdapter<ProductModel> implements 
         Log.v("CustomAdapter", "=====Row button clicked=====");
     }
 
-    //AsyncTask to get BatchLookup
+    //Added by Pavithra on 04-12-2020
 
-    private class GetBatchLookup extends AsyncTask<String, String, String> {
+    private class MobPOSBatchLookUpTask extends AsyncTask<String,String,String>{
+
         @Override
         protected String doInBackground(String... strings) {
             strGetBatchLookup = "";
+            strErrorMsg = "";
+
+            BatchlookupRequest batchlookupRequest = new BatchlookupRequest();
+            batchlookupRequest.StoreId = "4";
+            batchlookupRequest.SubStoreId = "4";
+            batchlookupRequest.ItemId = pmid;
+
+            BatchLookupRequestPL batchLookupRequestPL = new BatchLookupRequestPL();
+            batchLookupRequestPL.BatchLookup= batchlookupRequest;
+            gson = new Gson();
+            String strPrRequestJsonStr = gson.toJson(batchLookupRequestPL);
+
             try {
-//                URL url = new URL("http://tsmith.co.in/MobPOS/api/GetBatchLookUp?filter=" + pmid);
-                URL url = new URL(AppConfig.app_url+"GetBatchLookUp?filter=" + pmid); //Modified by Pavithra on 30-05-2020
+//                URL url = new URL(AppConfig.app_url + "GetBatchLookUp?filter=" + pmid); //Modified by Pavithra on 30-05-2020
+                URL url = new URL(AppConfig.app_url + "BatchLookUp"); //Modified by Pavithra on 30-05-2020
                 HttpURLConnection connection = (HttpURLConnection) url.openConnection();
                 connection.setRequestMethod("GET");
                 connection.setReadTimeout(15000);
                 connection.setConnectTimeout(30000);
                 connection.setRequestProperty("Content-Type", "application/json");
-                connection.setRequestProperty("auth_key", "BFD2E5AC-101F-47ED-AB49-C2D18EE5EA97");
+                connection.setRequestProperty("auth_key", "6E5C3126-B09C-4236-8E57-73C11BB64106");
+                connection.setRequestProperty("user_key", "");
+                connection.setRequestProperty("input", strPrRequestJsonStr);
+
+//                 input:{"BatchLookup": {"StoreId": "4","SubStoreId": "4","ItemId": "5917"}}
                 connection.connect();
-                try {
-                    InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
-                    BufferedReader reader = new BufferedReader(streamReader);
-                    StringBuilder sb = new StringBuilder();
-                    String inputLine = "";
-                    while ((inputLine = reader.readLine()) != null) {
-                        sb.append(inputLine);
-                        break;
-                    }
 
-                    reader.close();
+                int responsecode = connection.getResponseCode();   //added by Pavithra on 25-09-2020
+                if (responsecode == 200) {
+                    try {
+                        InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
+                        BufferedReader reader = new BufferedReader(streamReader);
+                        StringBuilder sb = new StringBuilder();
+                        String inputLine = "";
+                        while ((inputLine = reader.readLine()) != null) {
+                            sb.append(inputLine);
+                            break;
+                        }
+
+                        reader.close();
 //                    result = sb.toString();
-                    strGetBatchLookup = sb.toString();
+                        strGetBatchLookup = sb.toString();
 
-                } finally {
-                    connection.disconnect();
+                    } finally {
+                        connection.disconnect();
+                    }
+                } else {
+                    strErrorMsg = connection.getResponseMessage();
+                    strGetBatchLookup = "httperror";
                 }
             } catch (Exception e) {
                 Log.e("ERROR", e.getMessage(), e);
+                strErrorMsg = e.getMessage();
                 return null;
             }
-//            return result;
             return strGetBatchLookup;
-
         }
 
-        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
         @Override
-        protected void onPostExecute(String str) {
-            super.onPostExecute(str);
-            if (pDialog.isShowing())
-                pDialog.dismiss();
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
 
+//            if (pDialog.isShowing())
+//                pDialog.dismiss();
+
+            if (strGetBatchLookup.equals("httperror")) {
+                tsErrorMessage("Http error occured\n\n" + strErrorMsg);
+                Toast.makeText(mContext, "" + strErrorMsg, Toast.LENGTH_SHORT).show();
+                return;
+            }
             if(strGetBatchLookup.equals("")||strGetBatchLookup == null){
                 Toast.makeText(mContext, "No result from GetBatchLookup", Toast.LENGTH_SHORT).show();
+                tsErrorMessage(""+strErrorMsg);
+
             }else {
                 Batchlookup Blookup = new Batchlookup();
                 BatchLookupResponse BResponse = new BatchLookupResponse();
                 gson = new Gson();
                 BResponse = gson.fromJson(strGetBatchLookup, BatchLookupResponse.class);
                 List<Batch> batch = BResponse.Batchlookup.Batch;
+
+                //Added by Pavithra on 04-12-2020
+                SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(mContext);
+                SharedPreferences.Editor editor = prefs.edit();
+                editor.putString("PmId",pmid);
+                editor.commit();
 
                 try {
                     if (BResponse.Batchlookup.ErrorStatus == 0) {
@@ -299,6 +342,105 @@ public class ProductLookupAdapter extends ArrayAdapter<ProductModel> implements 
                 }
             }
         }
+    }
+
+    //AsyncTask to get BatchLookup
+
+    private class GetBatchLookup extends AsyncTask<String, String, String> {
+        @Override
+        protected String doInBackground(String... strings) {
+            strGetBatchLookup = "";
+            strErrorMsg = "";
+            try {
+//                URL url = new URL("http://tsmith.co.in/MobPOS/api/GetBatchLookUp?filter=" + pmid);
+                URL url = new URL(AppConfig.app_url+"GetBatchLookUp?filter=" + pmid); //Modified by Pavithra on 30-05-2020
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                connection.setReadTimeout(15000);
+                connection.setConnectTimeout(30000);
+                connection.setRequestProperty("Content-Type", "application/json");
+                connection.setRequestProperty("auth_key", "BFD2E5AC-101F-47ED-AB49-C2D18EE5EA97");
+                connection.connect();
+
+                int responsecode = connection.getResponseCode();   //added by Pavithra on 25-09-2020
+                if(responsecode == 200) {
+                    try {
+                        InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
+                        BufferedReader reader = new BufferedReader(streamReader);
+                        StringBuilder sb = new StringBuilder();
+                        String inputLine = "";
+                        while ((inputLine = reader.readLine()) != null) {
+                            sb.append(inputLine);
+                            break;
+                        }
+
+                        reader.close();
+//                    result = sb.toString();
+                        strGetBatchLookup = sb.toString();
+
+                    } finally {
+                        connection.disconnect();
+                    }
+                }else{
+                    strErrorMsg = connection.getResponseMessage();
+                    strGetBatchLookup="httperror";
+                }
+            } catch (Exception e) {
+                Log.e("ERROR", e.getMessage(), e);
+                strErrorMsg = e.getMessage();
+                return null;
+            }
+            return strGetBatchLookup;
+
+        }
+
+        @RequiresApi(api = Build.VERSION_CODES.KITKAT)
+        @Override
+        protected void onPostExecute(String str) {
+            super.onPostExecute(str);
+            if (pDialog.isShowing())
+                pDialog.dismiss();
+
+            if (strGetBatchLookup.equals("httperror")) {
+                tsErrorMessage("Http error occured\n\n" + strErrorMsg);
+                Toast.makeText(mContext, "" + strErrorMsg, Toast.LENGTH_SHORT).show();
+                return;
+            }
+            if(strGetBatchLookup.equals("")||strGetBatchLookup == null){
+                Toast.makeText(mContext, "No result from GetBatchLookup", Toast.LENGTH_SHORT).show();
+                tsErrorMessage(""+strErrorMsg);
+
+            }else {
+                Batchlookup Blookup = new Batchlookup();
+                BatchLookupResponse BResponse = new BatchLookupResponse();
+                gson = new Gson();
+                BResponse = gson.fromJson(strGetBatchLookup, BatchLookupResponse.class);
+                List<Batch> batch = BResponse.Batchlookup.Batch;
+
+                try {
+                    if (BResponse.Batchlookup.ErrorStatus == 0) {
+                        slno = 0;   //Added by Pavithra on 10-07-2020
+                        for (int i = 0; i < batch.size(); i++) {
+                            Batch br = batch.get(i);
+                            slno++; //Check this increment on slno
+
+//                            listBatchModel.add(new BatchModel("" + slno, "" + br.Code, "" + br.ExpDate, "" + br.MRP, "" + br.SOH, "" + br.BatchId));
+//                            batchLookupAdapter = new BatchLookupAdapter(listBatchModel, listModel, mContext, l2, billno, numofitems, itemtotal, disctotal, taxtotal, billdisc, billroundoff, billtotal, etproduct, batchdialog, dialog,tvTotalLinewiseDisc); //Added by Pavithra on 10-07-2020
+//
+//                            batchlistview.setAdapter(batchLookupAdapter);
+//                            batchLookupAdapter.notifyDataSetChanged();
+                        }
+
+                    } else {
+                        Toast.makeText(mContext, "" + BResponse.Batchlookup.Message, Toast.LENGTH_SHORT).show();
+                        tsErrorMessage(BResponse.Batchlookup.Message);//Added by Pavithra on 30-07-2020
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
 
         @Override
         protected void onPreExecute() {
@@ -310,12 +452,132 @@ public class ProductLookupAdapter extends ArrayAdapter<ProductModel> implements 
         }
     }
 
-    //AsyncTask to get ProductDetails
 
+    //Added by Pavithra on 04-12-2020
+    private class MobPOSProductDetailsTask extends AsyncTask<String,String,String>{
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected String doInBackground(String... strings) {
+
+
+            Product product = new Product();
+            product.StoreId = "4";
+            product.SubStoreId = "4";
+            product.ItemId = pmid;
+
+            ProductRequest productRequest = new ProductRequest();
+            productRequest.Product = product;
+            gson = new Gson();
+            String strPrRequestJsonStr = gson.toJson(productRequest);
+
+
+            strErrorMsg = "";
+            strGetPrdetails = "";
+            try {
+//                URL url = new URL("http://tsmith.co.in/MobPOS/api/GetProductDetails?filter=" + pmid);
+//                URL url = new URL(AppConfig.app_url + "GetProductDetails?filter=" + pmid); //Modified by Pavithra on 30-05-2020
+                URL url = new URL(AppConfig.app_url + "ProductDetails"); //Modified by Pavithra on 30-05-2020
+                HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+                connection.setRequestMethod("GET");
+                connection.setReadTimeout(15000);
+                connection.setConnectTimeout(30000);
+                connection.setRequestProperty("Content-Type", "application/json");
+                connection.setRequestProperty("auth_key", "6E5C3126-B09C-4236-8E57-73C11BB64106");
+                connection.setRequestProperty("user_key", "");
+                connection.setRequestProperty("input", strPrRequestJsonStr);
+//                input:{"Product" : {"StoreId": "4","SubStoreId": "4","ItemId": "5917"}}
+                connection.connect();
+
+                int responsecode = connection.getResponseCode();   //added by Pavithra on 25-09-2020
+                if(responsecode == 200) {
+
+                    try {
+                        InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
+                        BufferedReader reader = new BufferedReader(streamReader);
+                        StringBuilder sb = new StringBuilder();
+                        String inputLine = "";
+
+
+                        while ((inputLine = reader.readLine()) != null) {
+                            sb.append(inputLine);
+                            break;
+                        }
+
+                        reader.close();
+//                    result1 = sb.toString();
+                        strGetPrdetails = sb.toString();
+
+                    } finally {
+                        connection.disconnect();
+                    }
+                }else{
+                    strErrorMsg = connection.getResponseMessage();
+                    strGetPrdetails="httperror";
+                }
+
+            } catch (Exception e) {
+                Log.e("ERROR", e.getMessage(), e);
+                strErrorMsg = e.getMessage();
+                return null;
+            }
+            return strGetPrdetails;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            if (strGetPrdetails.equals("httperror")) {
+//                    tsMessages(strErrorMsg);
+                tsErrorMessage("Http error occured\n\n"+strErrorMsg);
+                Toast.makeText(mContext, "" + strErrorMsg, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+
+            Prdetail = new ProductDetailsResponsePL();
+            gson = new Gson();
+
+            if(strGetPrdetails.equals("")||strGetPrdetails == null){
+                Toast.makeText(mContext, "No result from GetProductDetailsAsync", Toast.LENGTH_SHORT).show();
+                tsErrorMessage(""+strErrorMsg);
+            }else {
+
+                Prdetail = gson.fromJson(strGetPrdetails, ProductDetailsResponsePL.class);
+                pr = Prdetail.Product; //Pr is the Product class object
+
+                try {
+                    if (Prdetail.ErrorStatus == 0) {
+                        sp = PreferenceManager.getDefaultSharedPreferences(mContext);
+                        ProductDetailsResponseJsonStr = gson.toJson(Prdetail);
+                        editor = sp.edit();
+                        editor.putString("ProductDetail", ProductDetailsResponseJsonStr);
+                        editor.commit();
+
+                    } else {
+                        Toast.makeText(mContext, "" + Prdetail.Message, Toast.LENGTH_SHORT).show();
+                        tsErrorMessage(Prdetail.Message);//Added by Pavithra on 30-07-2020
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+    }
+
+
+
+    //AsyncTask to get ProductDetails
     private class GetProductDetails extends AsyncTask<String, String, String> {
         @Override
         protected String doInBackground(String... strings) {
 
+            strErrorMsg = "";
             strGetPrdetails = "";
             try {
 //                URL url = new URL("http://tsmith.co.in/MobPOS/api/GetProductDetails?filter=" + pmid);
@@ -328,28 +590,36 @@ public class ProductLookupAdapter extends ArrayAdapter<ProductModel> implements 
                 connection.setRequestProperty("auth_key", "BFD2E5AC-101F-47ED-AB49-C2D18EE5EA97");
                 connection.connect();
 
-                try {
-                    InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
-                    BufferedReader reader = new BufferedReader(streamReader);
-                    StringBuilder sb = new StringBuilder();
-                    String inputLine = "";
+                int responsecode = connection.getResponseCode();   //added by Pavithra on 25-09-2020
+                if(responsecode == 200) {
+
+                    try {
+                        InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
+                        BufferedReader reader = new BufferedReader(streamReader);
+                        StringBuilder sb = new StringBuilder();
+                        String inputLine = "";
 
 
-                    while ((inputLine = reader.readLine()) != null) {
-                        sb.append(inputLine);
-                        break;
-                    }
+                        while ((inputLine = reader.readLine()) != null) {
+                            sb.append(inputLine);
+                            break;
+                        }
 
-                    reader.close();
+                        reader.close();
 //                    result1 = sb.toString();
-                    strGetPrdetails = sb.toString();
+                        strGetPrdetails = sb.toString();
 
-                } finally {
-                    connection.disconnect();
+                    } finally {
+                        connection.disconnect();
+                    }
+                }else{
+                    strErrorMsg = connection.getResponseMessage();
+                    strGetPrdetails="httperror";
                 }
 
             } catch (Exception e) {
                 Log.e("ERROR", e.getMessage(), e);
+                strErrorMsg = e.getMessage();
                 return null;
             }
 
@@ -362,11 +632,21 @@ public class ProductLookupAdapter extends ArrayAdapter<ProductModel> implements 
         @Override
         protected void onPostExecute(String str) {
             super.onPostExecute(str);
+
+            if (strGetPrdetails.equals("httperror")) {
+//                    tsMessages(strErrorMsg);
+                tsErrorMessage("Http error occured\n\n"+strErrorMsg);
+                Toast.makeText(mContext, "" + strErrorMsg, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
+
             Prdetail = new ProductDetailsResponsePL();
             gson = new Gson();
 
             if(strGetPrdetails.equals("")||strGetPrdetails == null){
                 Toast.makeText(mContext, "No result from GetProductDetailsAsync", Toast.LENGTH_SHORT).show();
+                tsErrorMessage(""+strErrorMsg);
             }else {
 
                 Prdetail = gson.fromJson(strGetPrdetails, ProductDetailsResponsePL.class);

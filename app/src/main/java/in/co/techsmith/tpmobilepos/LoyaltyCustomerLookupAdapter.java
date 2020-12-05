@@ -5,15 +5,20 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.DisplayMetrics;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 
@@ -39,6 +44,7 @@ public class LoyaltyCustomerLookupAdapter extends RecyclerView.Adapter<LoyaltyCu
     Gson gson;
     String strlcode;
     String Url="",inputLine="",result="";
+    String strErrorMsg = "";
     public static final String REQUEST_METHOD = "GET";
     public static final int READ_TIMEOUT = 15000;//15 sec
     public static final int CONNECTION_TIMEOUT = 30000;//30 sec
@@ -97,7 +103,7 @@ public class LoyaltyCustomerLookupAdapter extends RecyclerView.Adapter<LoyaltyCu
 
         //Modified by Pavithra on 20-08-2020
 
-        holder.textViewid.setText("" + myListData.LoyaltyId);
+        holder.textViewid.setText("" + myListData.ID);
         holder.textViewnumber.setText("" + myListData.LoyaltyNo);
         holder.textViewname.setText("" + myListData.Name);
         holder.textViewpnumber.setText("" + myListData.Phone2);
@@ -109,7 +115,8 @@ public class LoyaltyCustomerLookupAdapter extends RecyclerView.Adapter<LoyaltyCu
             public void onClick(View view) {
                 index=position;
                 strlcode=holder.textViewid.getText().toString();
-                new LoylatyCustomerDetailAsyncTask().execute();
+//                new LoylatyCustomerDetailAsyncTask().execute(); //Masked by Pavithra on 27-11-2020
+                new MobPOSLoyaltyCustomerDetailsTask().execute(); //Added by Pavithra on 27-11-2020
 
               /*  name.setText(myListData.getName());
 
@@ -171,9 +178,150 @@ public class LoyaltyCustomerLookupAdapter extends RecyclerView.Adapter<LoyaltyCu
         }
     }
 
+    private class MobPOSLoyaltyCustomerDetailsTask extends AsyncTask<String,String,String>{
+
+        @Override
+        protected String doInBackground(String... strings) {
+            mobPOSLoyaltyCustomerDetails();
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            try {
+
+                if (result.equals("httperror")) {
+                    tsErrorMessage("Http error occured\n\n"+strErrorMsg);
+                    Toast.makeText(cntxt, "" + strErrorMsg, Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                if (result.equals("") || result == null) {
+                    Toast.makeText(cntxt, "No result from web", Toast.LENGTH_SHORT).show();
+                    tsErrorMessage(""+strErrorMsg);
+
+                } else {
+                    gson = new Gson();
+                    LoyaltycustomerDetailsResponse loyaltycustomerDetailsResponse = new LoyaltycustomerDetailsResponse();
+                    loyaltycustomerDetailsResponse = gson.fromJson(result, LoyaltycustomerDetailsResponse.class);
+                    List<Loyaltycustomerdetail> LoyaltyCustomerDetail = loyaltycustomerDetailsResponse.LoyaltyCustomerDetail;
+                    for (int i = 0; i < LoyaltyCustomerDetail.size(); i++) {
+                        customername = LoyaltyCustomerDetail.get(i).Customer;
+                        mob1 = LoyaltyCustomerDetail.get(i).Phone1;
+                        mob2 = LoyaltyCustomerDetail.get(i).Phone2;
+                        email = LoyaltyCustomerDetail.get(i).EMail;
+                        address1 = LoyaltyCustomerDetail.get(i).Address1;
+                        address2 = LoyaltyCustomerDetail.get(i).Address2;
+                        address3 = LoyaltyCustomerDetail.get(i).Address3;
+                        strloyaltycode = LoyaltyCustomerDetail.get(i).LoyaltyNo;
+
+                        Gson gson = new Gson();
+                        String loyaltycustomerDetailsResponseJsnStr = gson.toJson(loyaltycustomerDetailsResponse);  //Added by Pavithra on 31-07-2020
+
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putString("LoyaltyId", LoyaltyCustomerDetail.get(i).LoyaltyId);
+                        editor.putString("LoyaltyCustDetailsResponseJsnStr", loyaltycustomerDetailsResponseJsnStr);  //Added by Pavithra on 31-07-2020
+                        editor.commit();
+
+                    }
+                    name.setText("" + customername);
+                    name.setTextColor(Color.YELLOW);
+                    name.setTypeface(Typeface.create("sans-serif", Typeface.BOLD));
+
+///                number.setText(""+mob1); //commented by Pavithra on 04-08-2020
+                    number.setText("" + mob2); //Added by Pavithra on 04-08-2020+
+                    number.setTextColor(Color.YELLOW);
+                    number.setTypeface(Typeface.create("sans-serif", Typeface.BOLD));
+
+                    mail.setText("" + email);
+                    mail.setTextColor(Color.YELLOW);
+                    mail.setTypeface(Typeface.create("sans-serif", Typeface.BOLD));
+
+                    loyaltycode.setText("" + strloyaltycode);
+                    loyaltycode.setTextColor(Color.YELLOW);
+                    loyaltycode.setTypeface(Typeface.create("sans-serif", Typeface.BOLD));
+
+                    dialog.dismiss();
+
+                    //  mail.setText(""+email);
+                    //  number.setText(""+mob1);
+
+
+                    // String name=customerDetail.Customer;
+                    //Toast.makeText(context, ""+name, Toast.LENGTH_SHORT).show();
+
+
+                }
+
+            } catch (Exception e) {
+
+            }
+
+
+
+        }
+    }
+
+    private void mobPOSLoyaltyCustomerDetails(){
+
+        strErrorMsg = "";
+        result="";
+
+//            Url = "http://tsmith.co.in/MobPOS/api/GetLoyaltyCustomerDetails?CustomerId="+strlcode;
+        Url = AppConfig.app_url+"LoyaltyCustomerDetails?CustomerId="+strlcode; //Modified by Pavithra on 30-05-2020
+
+        try {
+
+
+            //  mob_number = edtmob.getText().toString();
+            URL url = new URL(Url);
+            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            connection.setRequestMethod(REQUEST_METHOD);
+            connection.setReadTimeout(READ_TIMEOUT);
+            connection.setConnectTimeout(CONNECTION_TIMEOUT);
+            connection.setRequestMethod("GET");
+            connection.setRequestProperty("user_key", " ");
+            connection.setRequestProperty("auth_key", "6E5C3126-B09C-4236-8E57-73C11BB64106");
+            connection.setRequestProperty("content-type", "application/json");
+            connection.connect();
+
+            int responsecode = connection.getResponseCode();   //Added by Pavithra on 25-09-2020
+            if(responsecode == 200) {
+
+                InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
+                BufferedReader reader = new BufferedReader(streamReader);
+                StringBuilder stringBuilder = new StringBuilder();
+                while ((inputLine = reader.readLine()) != null) {
+                    stringBuilder.append(inputLine);
+                }
+                reader.close();
+                streamReader.close();
+                result = stringBuilder.toString();
+            }else{
+                strErrorMsg = connection.getResponseMessage();
+                result="httperror";
+            }
+
+        } catch (ProtocolException e) {
+            e.printStackTrace();
+            strErrorMsg = e.getMessage();
+        } catch (IOException e) {
+            e.printStackTrace();
+            strErrorMsg = e.getMessage();
+        }
+
+
+
+    }
+
     private class LoylatyCustomerDetailAsyncTask  extends AsyncTask<String, String, String> {
         @Override
         protected String doInBackground(String... strings) {
+
+            strErrorMsg = "";
+            result="";
+
 //            Url = "http://tsmith.co.in/MobPOS/api/GetLoyaltyCustomerDetails?CustomerId="+strlcode;
             Url = AppConfig.app_url+"GetLoyaltyCustomerDetails?CustomerId="+strlcode; //Modified by Pavithra on 30-05-2020
 
@@ -191,21 +339,30 @@ public class LoyaltyCustomerLookupAdapter extends RecyclerView.Adapter<LoyaltyCu
                 connection.setRequestProperty("auth_key", "BFD2E5AC-101F-47ED-AB49-C2D18EE5EA97");
                 connection.setRequestProperty("content-type", "application/json");
                 connection.connect();
-                InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
-                BufferedReader reader = new BufferedReader(streamReader);
-                StringBuilder stringBuilder = new StringBuilder();
-                while ((inputLine = reader.readLine()) != null) {
-                    stringBuilder.append(inputLine);
-                }
-                reader.close();
-                streamReader.close();
-                result = stringBuilder.toString();
 
-            } catch (ProtocolException
-                    e) {
+                int responsecode = connection.getResponseCode();   //added by Pavithra on 25-09-2020
+                if(responsecode == 200) {
+
+                    InputStreamReader streamReader = new InputStreamReader(connection.getInputStream());
+                    BufferedReader reader = new BufferedReader(streamReader);
+                    StringBuilder stringBuilder = new StringBuilder();
+                    while ((inputLine = reader.readLine()) != null) {
+                        stringBuilder.append(inputLine);
+                    }
+                    reader.close();
+                    streamReader.close();
+                    result = stringBuilder.toString();
+                }else{
+                    strErrorMsg = connection.getResponseMessage();
+                    result="httperror";
+                }
+
+            } catch (ProtocolException e) {
                 e.printStackTrace();
+                strErrorMsg = e.getMessage();
             } catch (IOException e) {
                 e.printStackTrace();
+                strErrorMsg = e.getMessage();
             }
             return result;
 
@@ -216,66 +373,139 @@ public class LoyaltyCustomerLookupAdapter extends RecyclerView.Adapter<LoyaltyCu
             super.onPostExecute(s);
             try {
 
-                gson = new Gson();
-                LoyaltycustomerDetailsResponse loyaltycustomerDetailsResponse = new LoyaltycustomerDetailsResponse();
-                loyaltycustomerDetailsResponse = gson.fromJson(result, LoyaltycustomerDetailsResponse.class);
-                 List<Loyaltycustomerdetail> LoyaltyCustomerDetail=loyaltycustomerDetailsResponse.LoyaltyCustomerDetail;
-                 for(int i=0;i<LoyaltyCustomerDetail.size();i++)
-                 {
-                     customername=LoyaltyCustomerDetail.get(i).Customer;
-                     mob1=LoyaltyCustomerDetail.get(i).Phone1;
-                     mob2=LoyaltyCustomerDetail.get(i).Phone2;
-                     email=LoyaltyCustomerDetail.get(i).EMail;
-                     address1=LoyaltyCustomerDetail.get(i).Address1;
-                     address2=LoyaltyCustomerDetail.get(i).Address2;
-                     address3=LoyaltyCustomerDetail.get(i).Address3;
-                     strloyaltycode=LoyaltyCustomerDetail.get(i).LoyaltyNo;
+                if (result.equals("httperror")) {
+                    tsErrorMessage("Http error occured\n\n"+strErrorMsg);
+                    Toast.makeText(cntxt, "" + strErrorMsg, Toast.LENGTH_SHORT).show();
+                    return;
+                }
 
-                     Gson gson = new Gson();
-                     String loyaltycustomerDetailsResponseJsnStr = gson.toJson(loyaltycustomerDetailsResponse);  //Added by Pavithra on 31-07-2020
+                if (result.equals("") || result == null) {
+                    Toast.makeText(cntxt, "No result from web", Toast.LENGTH_SHORT).show();
+                    tsErrorMessage(""+strErrorMsg);
 
-                    SharedPreferences.Editor editor = prefs.edit();
-                    editor.putString("LoyaltyId",LoyaltyCustomerDetail.get(i).LoyaltyId);
-                    editor.putString("LoyaltyCustDetailsResponseJsnStr",loyaltycustomerDetailsResponseJsnStr);  //Added by Pavithra on 31-07-2020
-                    editor.commit();
+                } else {
+                    gson = new Gson();
+                    LoyaltycustomerDetailsResponse loyaltycustomerDetailsResponse = new LoyaltycustomerDetailsResponse();
+                    loyaltycustomerDetailsResponse = gson.fromJson(result, LoyaltycustomerDetailsResponse.class);
+                    List<Loyaltycustomerdetail> LoyaltyCustomerDetail = loyaltycustomerDetailsResponse.LoyaltyCustomerDetail;
+                    for (int i = 0; i < LoyaltyCustomerDetail.size(); i++) {
+                        customername = LoyaltyCustomerDetail.get(i).Customer;
+                        mob1 = LoyaltyCustomerDetail.get(i).Phone1;
+                        mob2 = LoyaltyCustomerDetail.get(i).Phone2;
+                        email = LoyaltyCustomerDetail.get(i).EMail;
+                        address1 = LoyaltyCustomerDetail.get(i).Address1;
+                        address2 = LoyaltyCustomerDetail.get(i).Address2;
+                        address3 = LoyaltyCustomerDetail.get(i).Address3;
+                        strloyaltycode = LoyaltyCustomerDetail.get(i).LoyaltyNo;
 
-                 }
-                name.setText(""+customername);
-                name.setTextColor(Color.YELLOW);
-                name.setTypeface(Typeface.create("sans-serif", Typeface.BOLD));
+                        Gson gson = new Gson();
+                        String loyaltycustomerDetailsResponseJsnStr = gson.toJson(loyaltycustomerDetailsResponse);  //Added by Pavithra on 31-07-2020
+
+                        SharedPreferences.Editor editor = prefs.edit();
+                        editor.putString("LoyaltyId", LoyaltyCustomerDetail.get(i).LoyaltyId);
+                        editor.putString("LoyaltyCustDetailsResponseJsnStr", loyaltycustomerDetailsResponseJsnStr);  //Added by Pavithra on 31-07-2020
+                        editor.commit();
+
+                    }
+                    name.setText("" + customername);
+                    name.setTextColor(Color.YELLOW);
+                    name.setTypeface(Typeface.create("sans-serif", Typeface.BOLD));
 
 ///                number.setText(""+mob1); //commented by Pavithra on 04-08-2020
-                number.setText(""+mob2); //Added by Pavithra on 04-08-2020+
-                number.setTextColor(Color.YELLOW);
-                number.setTypeface(Typeface.create("sans-serif", Typeface.BOLD));
+                    number.setText("" + mob2); //Added by Pavithra on 04-08-2020+
+                    number.setTextColor(Color.YELLOW);
+                    number.setTypeface(Typeface.create("sans-serif", Typeface.BOLD));
 
-                mail.setText(""+email);
-                mail.setTextColor(Color.YELLOW);
-                mail.setTypeface(Typeface.create("sans-serif", Typeface.BOLD));
+                    mail.setText("" + email);
+                    mail.setTextColor(Color.YELLOW);
+                    mail.setTypeface(Typeface.create("sans-serif", Typeface.BOLD));
 
-                loyaltycode.setText(""+strloyaltycode);
-                loyaltycode.setTextColor(Color.YELLOW);
-                loyaltycode.setTypeface(Typeface.create("sans-serif", Typeface.BOLD));
+                    loyaltycode.setText("" + strloyaltycode);
+                    loyaltycode.setTextColor(Color.YELLOW);
+                    loyaltycode.setTypeface(Typeface.create("sans-serif", Typeface.BOLD));
 
-                dialog.dismiss();
+                    dialog.dismiss();
 
-                //  mail.setText(""+email);
-               //  number.setText(""+mob1);
-
-
+                    //  mail.setText(""+email);
+                    //  number.setText(""+mob1);
 
 
-               // String name=customerDetail.Customer;
-                //Toast.makeText(context, ""+name, Toast.LENGTH_SHORT).show();
+                    // String name=customerDetail.Customer;
+                    //Toast.makeText(context, ""+name, Toast.LENGTH_SHORT).show();
 
 
+                }
 
             } catch (Exception e) {
 
             }
 
 
+
         }
+    }
+
+
+    public void tsErrorMessage(String error_massage) {
+
+        final Dialog dialog = new Dialog(cntxt);
+        dialog.setContentView(R.layout.custom_save_popup);
+        final String title = "Message";
+
+        TextView dialogTitle = (TextView) dialog.findViewById(R.id.txvSaveTitleDialog);
+        dialogTitle.setText(title);
+        dialog.getWindow().setBackgroundDrawableResource(R.color.colorPrimary);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+//Commented by Pavithra on 20-08-2020 followin 2 lines
+//        int height_of_popup = 500;
+//        int width_of_popup = 400;
+//        int height_of_popup = 700;
+//        int width_of_popup = 500;
+
+//        DisplayMetrics displayMetrics = new DisplayMetrics();
+//        getWindowManager().getDefaultDisplay().getMetrics(displayMetrics);
+
+        DisplayMetrics displayMetrics = cntxt.getResources().getDisplayMetrics();
+//        int screen_height = displayMetrics.heightPixels;
+        int screen_height = displayMetrics.heightPixels;
+        int screen_width = displayMetrics.widthPixels;
+
+
+
+        WindowManager.LayoutParams layoutParams = new WindowManager.LayoutParams();
+        layoutParams.copyFrom(dialog.getWindow().getAttributes());
+        int dialogWindowWidth = (int) (screen_width * 0.3f);
+        int dialogWindowHeight = (int) (screen_height * 0.3f);
+        layoutParams.width = dialogWindowWidth;
+        layoutParams.height = dialogWindowHeight;
+        dialog.getWindow().setAttributes(layoutParams);
+
+
+//        int height_of_popup = (int) ((screen_height * 40) / 100);
+//        int width_of_popup = (int) ((screen_width * 25) / 100);
+
+
+//        int width = (int)(getResources().getDisplayMetrics().widthPixels*0.90);
+//        int height = (int)(getResources().getDisplayMetrics().heightPixels*0.90);
+//
+//        dialog.getWindow().setLayout(width,  ViewGroup.LayoutParams.MATCH_PARENT);
+
+
+//        dialog.getWindow().setLayout(width_of_popup, height_of_popup);
+        dialog.show();
+
+        final TextView tvSaveStatus = (TextView) dialog.findViewById(R.id.tvSaveStatus);
+//        tvSaveStatus.setText("Successfully saved \n Token No = "+tokenNo);
+        tvSaveStatus.setText("" + error_massage);
+
+        Button btnOkPopup = (Button) dialog.findViewById(R.id.btnOkPopUp);
+
+        btnOkPopup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                dialog.dismiss();
+            }
+        });
     }
 }
 

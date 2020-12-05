@@ -20,6 +20,7 @@ public class SettingsActivity extends AppCompatActivity {
     TextView tvDeviceIdValue;
     TextView tvScreenResolnValue;
     TextView tvVersionValue;
+    TextView tvUrlValue;
     TsCommonMethods tsCommonMethods;
     String deviceId = "";
 
@@ -33,6 +34,7 @@ public class SettingsActivity extends AppCompatActivity {
         tvDeviceIdValue = (TextView) findViewById(R.id.tvDeviceIdValue);
         tvScreenResolnValue = (TextView) findViewById(R.id.tvScreenResolnValue);
         tvVersionValue = (TextView) findViewById(R.id.tvVersionValue);
+        tvUrlValue = (TextView) findViewById(R.id.tvUrlValue);
 
         //Added by Pavithra on 18-08-2020
         try {
@@ -47,6 +49,7 @@ public class SettingsActivity extends AppCompatActivity {
 
         String temp =  getScreenResolution(SettingsActivity.this);
         tvScreenResolnValue.setText(temp);
+        tvUrlValue.setText(""+AppConfig.app_url);
 
 
         int screenSize = getResources().getConfiguration().screenLayout &
